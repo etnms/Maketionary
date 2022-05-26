@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+:root {
+  --font: -apple-system, BlinkMacSystemFont, 'Poppins', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif; 
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-size: 18px;
+  --nav-height: 7vh;
+  --main-height: 92vh;
+  --create-menu-width: 25vw;
+  --main-width: 75vw;
+  color-scheme: light;
+  --bg: #f8f8f8;
+  --bg-secondary: white;
+  --bg-secondary-selected: #f2f2f293;
+  --primary: #7A69BF;
+  --primary-hover: #7161B0;
+  --secondary:#A24ECC;
+  --tertiary: #3F2D63;
+  --quaternary: #D732FC;
+  --quintary: #1B1725;
+  --shadow: 0px 0px 12px -3px rgba(0, 0, 0, 0.5);
+}
+
+html[date-color-scheme="light"] {
+  color-scheme: light;
+}
+html[data-color-scheme="dark"] {
+  color-scheme: dark;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Poppins', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+

@@ -1,0 +1,13 @@
+import express from "express";
+import { deletelanguage, editLanguage, getLanguage, postLanguage } from "../controllers/languageController.js";
+import verifyToken from "../verifyToken.js";
+
+const router = express.Router();
+
+const deleteLanguageRoute = router.delete("/api/language", verifyToken, deletelanguage);
+const editLanguageRoute = router.put("/api/language", verifyToken, editLanguage);
+const getlanguageRoute = router.get("/api/language", verifyToken, getLanguage);
+const postLanguageRoute = router.post("/api/language", verifyToken, postLanguage);
+
+
+export { deleteLanguageRoute, editLanguageRoute, getlanguageRoute, postLanguageRoute };

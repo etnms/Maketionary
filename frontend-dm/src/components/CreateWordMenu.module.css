@@ -1,0 +1,65 @@
+.create-word {
+  height: 90vh;
+  background-color: white;
+  width: var(--create-menu-width);
+  margin: 0.2rem 0.4rem;
+  box-shadow: var(--shadow);
+  border-radius: 4px;
+  position: sticky;
+  top: 9%;
+  z-index: 0;
+}
+
+.form-word {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.title {
+  padding: 0;
+  margin: 10px;
+}
+
+.form-word > input,
+select, textarea {
+  width: 80%;
+  font-size: 1rem;
+  border-radius: 3px;
+  outline: none;
+  border: 2px solid var(--primary);
+  padding: 2px;
+  outline: none;
+  font-family: var(--font);
+}
+
+.example, .definition {
+  height: 3rem;
+  resize: none;
+}
+
+.form-word > label {
+  width: 80%;
+  text-align: left;
+}
+
+.form-word > input:focus,textarea:focus {
+  box-shadow: 0px 0px 6px -1px var(--primary);
+  transition: all 100ms linear;
+
+}
+
+.btn-submit {
+  border: none;
+  border-radius: 12px;
+  margin: 5px;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-submit:hover {
+  background-color: var(--primary-hover);
+}

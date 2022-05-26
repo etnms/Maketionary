@@ -1,0 +1,63 @@
+.main {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.menu {
+  box-shadow: var(--shadow);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 60vh;
+  width: 40vw;
+  gap: 1rem;
+}
+
+.list-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.language-li {
+  list-style: none;
+  cursor: default;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  margin: 0.2rem;
+  border: 2px solid black;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  min-width: 20vw;
+  transition: 300ms;
+}
+
+.wrapper-edit-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selected-project {
+  background-color: var(--secondary);
+  color: white;
+  transform: scale(1.025);
+  transition: 300ms;
+}
+
+.edit-btn, .delete-btn {
+  transition: 300ms;
+  cursor: pointer;
+}
+
+.edit-btn:hover, .delete-btn:hover {
+  transform: scale(1.1);
+  transition: 300ms;
+}

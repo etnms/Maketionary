@@ -1,0 +1,8 @@
+.App {
+  background-color: var(--bg);
+}
+.wrapper-main {
+  display: flex;
+  gap: 0.3rem;
+  position: relative;
+}
