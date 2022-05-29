@@ -1,9 +1,9 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const navigate = useNavigate();
 

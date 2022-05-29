@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../app/store'
-import IWord from '../interfaces/interfaceWord';
+import { IWordDb } from '../interfaces/interfaceWord';
 
 // Define a type for the slice state
 interface IArrayWordsState {
-  value: Array<any>;
+  value: Array<IWordDb>;
 }
 
 // Define the initial state using that type
@@ -17,17 +17,16 @@ export const arrayWordSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    updateWord: (state, action: PayloadAction<Array<IWord>>) => {
+    updateWordList: (state, action: PayloadAction<Array<IWordDb>>) => {
       state.value = (action.payload)
     },
-    // Use the PayloadAction type to declare the contents of `action.payload`
-    addWord: (state, action: PayloadAction<Array<IWord>>) => {
+    addWord: (state, action: PayloadAction<IWordDb>) => {
       state.value.push(action.payload)
-    }
+    },
   }
 })
 
-export const { addWord, updateWord } = arrayWordSlice.actions
+export const { addWord, updateWordList } = arrayWordSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectAddWord = (state: RootState) => state.arrayWords.value;

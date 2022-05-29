@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { addWord, updateWord } from "../features/arrayWordsSlice";
-import IWord from "../interfaces/interfaceWord";
+import { updateWordList } from "../features/arrayWordsSlice";
+import { IWordDb } from "../interfaces/interfaceWord";
 import styles from "./ListWords.module.css";
 import Word from "./Word";
 
@@ -10,9 +10,16 @@ const ListWords = () => {
   const token = localStorage.getItem("token");
   const projectID = localStorage.getItem("project");
 
-  const listWord = useAppSelector(state => state.arrayWords.value)
-  const dispatch = useAppDispatch()
-  const [listWords, setListWords] = useState<Array<IWord>>([]);
+  const [filteredResults, setFilteredResults] = useState<IWordDb[]>();
+
+  const listWord = useAppSelector((state) => state.arrayWords.value);
+  const searchInput = useAppSelector((state) => state.search.searchInput);
+
+  // Sort array; first make copy to avoid reference issues
+  // Memoize values
+  const sortedArray = useMemo(() => [...listWord], [listWord]);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     axios({
@@ -22,19 +29,42 @@ const ListWords = () => {
       params: { projectID },
     })
       .then((res) => {
-        dispatch(updateWord(res.data.results.words));
-        //setListWords(res.data.results.words);
+        dispatch(updateWordList(res.data.results.words));
       })
       .catch((err) => console.log(err));
   }, [projectID, token, dispatch]);
 
   useEffect(() => {
     console.log("hey");
-  }, [listWord])
+    // Copy the sorted array to avoid reference issues
+    const list = [...sortedArray];
+    // Filter the list
+    const filtered = list.filter((word: any) => word.word.includes(searchInput));
+    // Update filtered results to be displayed
+    setFilteredResults(filtered);
+  }, [sortedArray, searchInput]);
 
   const displayWords = () => {
-    return listWord.map((word: any) => (
-      <Word key={word._id}
+    // Sort the array
+    sortedArray.sort((a: IWordDb, b: IWordDb) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
+    return sortedArray.map((word: IWordDb) => (
+      <Word
+        key={word._id}
+        _id={word._id}
+        word={word.word}
+        translation={word.translation}
+        definition={word.definition}
+        example={word.example}
+        pos={word.pos}
+        gloss={word.gloss}
+      />
+    ));
+  };
+
+  const filterResults = () => {
+    return filteredResults!.map((word: IWordDb) => (
+      <Word
+        key={word._id}
         _id={word._id}
         word={word.word}
         translation={word.translation}
@@ -50,7 +80,8 @@ const ListWords = () => {
     <main className={styles.main}>
       <ul className={styles.list}>
         <li className={`${styles.listitem} ${styles.titles}`} key={"titles"}>
-          <span className={styles["wrapper-edit"]}></span> {/* Empty element to create space in the view but no need to edit titles*/}
+          <span className={styles["wrapper-edit"]}></span>{" "}
+          {/* Empty element to create space in the view but no need to edit titles*/}
           <span className={styles.word}>Word</span>
           <span className={styles.translation}>Translation</span>
           <span className={styles.definition}>Definition</span>
@@ -58,7 +89,7 @@ const ListWords = () => {
           <span className={styles.pos}>POS</span>
           <span className={styles.gloss}>Gloss</span>
         </li>
-        {displayWords()}
+        {searchInput === "" ? displayWords() : filterResults()}
       </ul>
     </main>
   );

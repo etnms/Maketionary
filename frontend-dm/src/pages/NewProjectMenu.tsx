@@ -17,7 +17,11 @@ const NewProjectMenu = () => {
         { language },
         { headers: { Authorization: token! } }
       )
-      .then((res) =>{localStorage.setItem("project", res.data._id ); navigate("/")})
+      .then((res) => {
+        localStorage.setItem("project", res.data._id);
+        localStorage.setItem("projectName", res.data.name);
+        navigate("/");
+      })
       .catch((err) => console.log(err.message));
   };
 

@@ -44,7 +44,7 @@ const postLanguage = (req, res) => {
             user: result,
           }).save((err, result) => {
             if (err) return res.status(400).json({ error: "Error field empty" });
-            else return res.status(200).json({ message: "Collection created", _id: result._id });
+            else return res.status(200).json({ message: "Collection created", _id: result._id, name: result.name });
           });
         }
       });

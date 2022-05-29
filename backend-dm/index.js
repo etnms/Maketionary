@@ -7,7 +7,7 @@ import { login, signup } from "./routes/authRoute.js";
 import { dashboard } from "./routes/dashboardRoute.js";
 import { deleteLanguageRoute, editLanguageRoute, getlanguageRoute, postLanguageRoute } from "./routes/languageRoute.js";
 import { deleteWordRoute, getWordRoute, postWordRoute, updateWordRoute } from "./routes/wordRoute.js";
-import { downloadJSONRoute } from "./routes/downloadRoute.js";
+import { downloadJSONRoute, downloadRTFRoute } from "./routes/downloadRoute.js";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -46,6 +46,7 @@ app.use("/", updateWordRoute);
 
 // Download
 app.use("/", downloadJSONRoute);
+app.use("/", downloadRTFRoute);
 
 const server = app.listen(PORT, () => {
   console.log(`app is listening on port ${PORT}`);

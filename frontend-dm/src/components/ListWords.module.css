@@ -2,7 +2,7 @@
   min-height: var(--main-height);
   background-color: var(--bg);
   width: var(--main-width);
-  background-color: white;
+  background-color: var(--bg-secondary);;
   border-radius: 4px;
   box-shadow: var(--shadow);
   margin: 0.7rem 0.3rem;
@@ -13,16 +13,16 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-secondary);;
   gap: 0.8rem;
 }
 
 .listitem {
   display: flex;
   text-align: left;
-  background-color: white;
+  background-color: var(--bg-tertiary);
   border-radius: 6px;
-  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.295);
+  box-shadow: var(--shadow-item);
   min-height: 8vh;
   align-items: center;
   transition: all 300ms;
@@ -31,7 +31,9 @@
 .listitem > * {
   padding: 0 0.1rem;
   height: fit-content;
-  word-break: break-all;
+  word-wrap: break-word;
+  width: auto;
+  min-width: 10px;
 }
 
 .titles {
@@ -44,7 +46,7 @@
 .selected {
   transition: 300ms;
   transform: scale(1.01);
-  background-color: var(--bg-secondary-selected);
+  background-color: var(--bg-tertiary-selected);
   height: fit-content;
 }
 
@@ -82,16 +84,18 @@
   resize: none;
   border-radius: 4px;
   padding: 0.1rem;
-  border: 1.5px solid black;
+  border: 1.5px solid var(--primary);
   font-family: var(--font);
+  outline: none;
 }
 
 .edit-example {
   min-height: 15vh;
 }
+
 .edit:focus {
-  transform: scale(1.025);
-  transition: 300ms;
+  box-shadow: 0px 0px 6px -1px var(--primary);
+  transition: 200ms;
 }
 
 .word {
@@ -109,6 +113,7 @@
 .example {
   flex: 2;
 }
+
 .pos {
   flex: 1.2;
 }

@@ -1,9 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import arrayWordsReducer from "../features/arrayWordsSlice";
+import editModeReducer from "../features/editModeSlice";
+import searchReducer from "../features/searchSlice";
 
 export const store = configureStore({
   reducer: {
     arrayWords: arrayWordsReducer,
+    editMode: editModeReducer,
+    search: searchReducer,
   },
 });
 

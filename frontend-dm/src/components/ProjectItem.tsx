@@ -4,30 +4,24 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import React, { useState } from "react";
 import styles from "../styles/OpenProject.module.css";
-
-interface IProjectItem {
-  _id: string;
-  language: string;
-  setSelectedProject: Function;
-}
+import { IProjectItem } from "../interfaces/interfaceProjectItem";
 
 const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
-  const { _id, language, setSelectedProject } = props;
+  const { _id, name, setSelectedProject, setSelectedProjectName } = props;
   const token = localStorage.getItem("token");
 
-  const [projectValue, setProjectValue] = useState(language);
-  const [edit, setEdit] = useState(false);
+  const [projectValue, setProjectValue] = useState<string>(name);
+  const [edit, setEdit] = useState<boolean>(false);
 
   const updateProjectName = () => {
     const newName = (document.querySelector("input[name='edit-project']") as HTMLInputElement).value;
-    console.log(newName)
     axios
       .put(
         `${process.env.REACT_APP_BACKEND}/api/language`,
         { newName, _id },
         { headers: { Authorization: token! } }
       )
-      .then((res) =>{setEdit(false); console.log(res)})
+      .then((res) =>{setEdit(false); localStorage.setItem("projectName", newName)})
       .catch((err) => {setEdit(false); console.log(err)});
   };
 
@@ -41,7 +35,7 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
       .catch((err) => console.log(err));
   };
 
-  const selectProject = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, language: string) => {
+  const selectProject = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, _id: string, name: string) => {
     const el = e.currentTarget;
     // Select previous selected element to remove style
     const previousEl = document.querySelector(`.${styles["selected-project"]}`);
@@ -49,11 +43,12 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
     // Add selected style to item
     el.classList.add(`${styles["selected-project"]}`);
 
-    setSelectedProject(language);
+    setSelectedProject(_id);
+    setSelectedProjectName(name);
   };
 
   return (
-    <li className={styles["language-li"]} onClick={(e) => selectProject(e, _id)}>
+    <li className={styles["language-li"]} onClick={(e) => selectProject(e, _id, name)}>
       {edit ? (
         <input
           name="edit-project"

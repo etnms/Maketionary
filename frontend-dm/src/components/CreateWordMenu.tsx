@@ -37,8 +37,6 @@ const CreateWordMenu = () => {
     (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value = "";
     (document.querySelector("select[name='pos']") as HTMLSelectElement).value = "Noun";
     (document.querySelector("select[name='gloss']") as HTMLSelectElement).value = "ABE";
-
-
   };
 
   return (

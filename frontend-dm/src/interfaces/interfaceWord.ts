@@ -7,3 +7,15 @@ export default interface IWord {
   pos: string;
   gloss: string;
 }
+
+export interface IWordDb {
+  definition: string,
+  example: string,
+  gloss: string,
+  language: string,
+  pos: string,
+  translation: string,
+  word: string,
+  __v: string,
+  _id: string
+}

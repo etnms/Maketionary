@@ -39,6 +39,22 @@
   transition: 300ms;
 }
 
+.input-project {
+  width: 80%;
+  font-size: 1rem;
+  border-radius: 3px;
+  outline: none;
+  border: 2px solid var(--primary);
+  padding: 2px;
+  outline: none;
+  font-family: var(--font);
+  transition: all 300ms linear;
+}
+.input-project:focus {
+  transform: scale(1.025);
+  transition: all 300ms linear;
+}
+
 .wrapper-edit-btns {
   display: flex;
   align-items: center;

@@ -1,9 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
 
 :root {
-  --font: -apple-system, BlinkMacSystemFont, 'Poppins', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif; 
+  --font: -apple-system, BlinkMacSystemFont, "Poppins", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
@@ -12,24 +11,42 @@
   --main-height: 92vh;
   --create-menu-width: 25vw;
   --main-width: 75vw;
+}
+
+html[data-color-scheme="light"] {
   color-scheme: light;
   --bg: #f8f8f8;
   --bg-secondary: white;
-  --bg-secondary-selected: #f2f2f293;
-  --primary: #7A69BF;
-  --primary-hover: #7161B0;
-  --secondary:#A24ECC;
-  --tertiary: #3F2D63;
-  --quaternary: #D732FC;
-  --quintary: #1B1725;
+  --bg-tertiary: white;
+  --bg-tertiary-selected: #f2f2f293;
+  --primary: #7a69bf;
+  --primary-hover: #564a87;
+  --secondary: #d732fc;
+  --tertiary: #3f2d63;
+  --quaternary: #843ECC;
+  --quintary: #1b1725;
+  --color-text: white;
   --shadow: 0px 0px 12px -3px rgba(0, 0, 0, 0.5);
-}
-
-html[date-color-scheme="light"] {
-  color-scheme: light;
+  --shadow-item: 0px 2px 5px 1px rgba(0, 0, 0, 0.295);
+  --shadow-primary: 0px 2px 4px 0px var(--primary);
 }
 html[data-color-scheme="dark"] {
   color-scheme: dark;
+  --bg: #121212;
+  --bg-secondary: #242424;
+  --bg-tertiary: #303030;
+  --bg-tertiary-selected: #464646;
+  --primary: #9984F0;
+  --primary-hover: #564a87;
+  --secondary: #9a5db9;
+  --tertiary: #3f2d63;
+  --quaternary: #843ECC;
+  --quintary: #1b1725;
+  --color-text: black;
+  --shadow: 0px 0px 12px -3px rgba(34, 34, 34, 0.5);
+  --shadow-item: 0;
+  --shadow-primary: 0;
+
 }
 
 * {
@@ -39,10 +56,8 @@ html[data-color-scheme="dark"] {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Poppins', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Poppins", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-

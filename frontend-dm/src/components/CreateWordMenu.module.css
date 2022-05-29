@@ -1,6 +1,6 @@
 .create-word {
   height: 90vh;
-  background-color: white;
+  background-color: var(--bg-secondary);
   width: var(--create-menu-width);
   margin: 0.2rem 0.4rem;
   box-shadow: var(--shadow);
@@ -47,7 +47,6 @@ select, textarea {
 .form-word > input:focus,textarea:focus {
   box-shadow: 0px 0px 6px -1px var(--primary);
   transition: all 100ms linear;
-
 }
 
 .btn-submit {
@@ -57,7 +56,8 @@ select, textarea {
   padding: 0.5rem 1rem;
   font-size: 1.2rem;
   background-color: var(--primary);
-  color: white;
+  color: var(--color-text);
+  box-shadow: var(--shadow-primary);
 }
 
 .btn-submit:hover {

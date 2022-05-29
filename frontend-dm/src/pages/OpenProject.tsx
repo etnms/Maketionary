@@ -4,15 +4,16 @@ import { useNavigate } from "react-router-dom";
 import styles from "../styles/OpenProject.module.css";
 import buttons from "../styles/Buttons.module.css";
 import ProjectItem from "../components/ProjectItem";
-
+import { IProjectItem } from "../interfaces/interfaceProjectItem";
 
 const OpenProject = () => {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
-  const [languageList, setLanguageList] = useState<any[]>([]);
+  const [languageList, setLanguageList] = useState<IProjectItem[]>([]);
 
-  const [selectedProject, setSelectedProject] = useState("");
+  const [selectedProject, setSelectedProject] = useState<string>("");
+  const [selectedProjectName, setSelectedProjectName] = useState<string>("");
 
   useEffect(() => {
     axios
@@ -23,13 +24,20 @@ const OpenProject = () => {
 
   const displayListProject = () => {
     return languageList.map((language) => (
-      <ProjectItem key={language._id} _id={language._id} language={language.name} setSelectedProject={setSelectedProject}/>
+      <ProjectItem
+        key={language._id}
+        _id={language._id}
+        name={language.name}
+        setSelectedProject={setSelectedProject}
+        setSelectedProjectName={setSelectedProjectName}
+      />
     ));
   };
 
-  const openProject = (projectID: string) => {
+  const openProject = (projectID: string, projectName: string) => {
     if (projectID === "") return; //error
     localStorage.setItem("project", projectID);
+    localStorage.setItem("projectName", projectName);
     navigate("/");
   };
 
@@ -44,7 +52,9 @@ const OpenProject = () => {
         )}
         <span className={buttons["wrapper-btns"]}>
           {languageList === [] ? null : (
-            <button onClick={() => openProject(selectedProject)} className={buttons["btn-open"]}>
+            <button
+              onClick={() => openProject(selectedProject, selectedProjectName)}
+              className={buttons["btn-open"]}>
               Open
             </button>
           )}

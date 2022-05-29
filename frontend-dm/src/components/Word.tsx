@@ -6,27 +6,49 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
 import { renderGlossOptions, renderPOSOptions } from "../helpers/renderSelect";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { selectWordEdit, setEditMode } from "../features/editModeSlice";
+
+// need function that cancel edit / restores tmp value to current value
 
 const Word = (props: React.PropsWithChildren<IWord>) => {
   const { _id, word, translation, definition, example, pos, gloss } = props;
 
   const token = localStorage.getItem("token");
-  const [editMode, setEditMode] = useState(false);
+
+  // Using redux to determine the status of the edit mode
+  // But also checking which word is currently select to show only one edit at a time (for current word)
+  const dispatch = useAppDispatch();
+  const editMode = useAppSelector(state => state.editMode.value);
+  const wordToEdit = useAppSelector(state => state.editMode.wordToEdit);
 
   // Define all the values in state for an entry to use them for edit and display
-  const [wordValue, setWordValue] = useState(word);
-  const [translationValue, setTranslationValue] = useState(translation);
-  const [definitionValue, setDefinitionValue] = useState(definition);
-  const [exampleValue, setExampleValue] = useState(example);
-  const [posValue, setPosValue] = useState(pos);
-  const [glossValue, setGlossValue] = useState(gloss);
+  const [wordValue, setWordValue] = useState<string>(word);
+  const [translationValue, setTranslationValue] = useState<string>(translation);
+  const [definitionValue, setDefinitionValue] = useState<string>(definition);
+  const [exampleValue, setExampleValue] = useState<string>(example);
+  const [posValue, setPosValue] = useState<string>(pos);
+  const [glossValue, setGlossValue] = useState<string>(gloss);
+
+  // Temp values for editing purposes
+  const [wordTmp, setWordTmp] = useState<string>(word);
+  const [translationTmp, setTranslationTmp] = useState<string>(translation);
+  const [definitionTmp, setDefinitionTmp] = useState<string>(definition);
+  const [exampleTmp, setExampleTmp] = useState<string>(example);
+  const [posTmp, setPosTmp] = useState<string>(pos);
+  const [glossTmp, setGlossTmp] = useState<string>(gloss);
 
   const selectLine = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    setEditMode(false);
+    dispatch(setEditMode(false));
+    dispatch(selectWordEdit(_id));
+    //setCurrentElement(true)
     const el = e.currentTarget;
+
     // Select previous selected element
     const previousEl = document.querySelector(`.${styles.selected}`);
-
+    // If same element then reset the edit values 
+    if (el === previousEl) cancelChange();
+   // if (el !== previousEl) setCurrentElement(true);
     // Add selected style to item
     el.classList.add(`${styles.selected}`);
     el.children[0].children[0].classList.add(`${styles["wrapper-btns-reveal"]}`);
@@ -36,20 +58,26 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     previousEl?.children[0].children[0].classList.remove(`${styles["wrapper-btns-reveal"]}`);
   };
 
-  const deleteWord = () => {
+  const deleteWord = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    const el = e.currentTarget;
+    const liToDelete = el.parentElement?.parentElement?.parentElement; // get the li element
+    const ul = liToDelete?.parentElement; // Get the parent (ul element)
+
     axios
       .delete(`${process.env.REACT_APP_BACKEND}/api/word`, {
         data: { _id },
         headers: { Authorization: token! },
       })
-      .then((res) => console.log(res))
+      .then(() => {
+        ul?.removeChild(liToDelete!);
+      })
       .catch((err) => console.log(err));
   };
 
   const updateWord = () => {
     const word = (document.querySelector("input[name='edit-word']") as HTMLInputElement).value;
     const translation = (document.querySelector("input[name='edit-translation']") as HTMLInputElement).value;
-    const definition = (document.querySelector("input[name='edit-definition']") as HTMLInputElement).value;
+    const definition = (document.querySelector("textarea[name='edit-definition']") as HTMLTextAreaElement).value;
     const example = (document.querySelector("textarea[name='edit-example']") as HTMLTextAreaElement).value;
     const pos = (document.querySelector("select[name='edit-pos']") as HTMLSelectElement).value;
     const gloss = (document.querySelector("select[name='edit-gloss']") as HTMLSelectElement).value;
@@ -60,55 +88,74 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
         { word, translation, definition, example, pos, gloss, _id },
         { headers: { Authorization: token! } }
       )
-      .then((res) => {
-        console.log(res);
-        setEditMode(false);
+      .then(() => {
+        // Tmp values are applied to the actual value once validated
+        setWordValue(wordTmp);
+        setDefinitionValue(definitionTmp);
+        setTranslationValue(translationTmp);
+        setExampleValue(exampleTmp);
+        setGlossValue(glossTmp);
+        setPosValue(posTmp);
+        dispatch(setEditMode(false));
       })
       .catch((err) => console.log(err));
   };
 
+  // Hangle the change of each tmp value: allows to see changes directly
   const handleChange = (e: React.ChangeEvent<HTMLElement>, elementName: string) => {
     switch (elementName) {
       case "word":
-        setWordValue((e.target as HTMLInputElement).value);
+        setWordTmp((e.target as HTMLInputElement).value);
         break;
       case "translation":
-        setTranslationValue((e.target as HTMLInputElement).value);
+        setTranslationTmp((e.target as HTMLInputElement).value);
         break;
       case "definition":
-        setDefinitionValue((e.target as HTMLInputElement).value);
+        setDefinitionTmp((e.target as HTMLTextAreaElement).value);
         break;
       case "example":
-        setExampleValue((e.target as HTMLTextAreaElement).value);
+        setExampleTmp((e.target as HTMLTextAreaElement).value);
         break;
       case "pos":
-        setPosValue((e.target as HTMLSelectElement).value);
+        setPosTmp((e.target as HTMLSelectElement).value);
         break;
       case "gloss":
-        setGlossValue((e.target as HTMLSelectElement).value);
+        setGlossTmp((e.target as HTMLSelectElement).value);
         break;
       default:
         return;
     }
   };
 
+  const cancelChange = () => {
+    setWordTmp(wordValue);
+    setDefinitionTmp(definitionValue);
+    setTranslationTmp(translationValue);
+    setExampleTmp(exampleValue);
+    setGlossTmp(glossValue);
+    setPosTmp(posValue);
+  };
+
   return (
     <li className={styles.listitem} onDoubleClick={(e) => selectLine(e)}>
       <div className={styles["wrapper-edit"]}>
         <div className={styles["wrapper-btns"]}>
-          <DeleteIcon className={styles["btn"]} onClick={deleteWord} />
+          <DeleteIcon className={styles["btn"]} onClick={(e) => deleteWord(e)} />
           {editMode ? (
             <CheckCircleIcon className={styles["btn"]} onClick={updateWord} />
           ) : (
-            <EditIcon className={styles["btn"]} onClick={() => setEditMode(true)} />
+            <EditIcon className={styles["btn"]} onClick={() => dispatch(setEditMode(true))} />
           )}
         </div>
       </div>
-      {editMode ? (
+      {/* Check to see if edit mode is on but also if the selected word is the correct one.
+      This allows for one edit at a time and not showing multiple on accident. 
+      Repeat for every field.*/}
+      {editMode && (wordToEdit === _id) ? (
         <span className={`${styles.word}`}>
           <input
             name="edit-word"
-            value={wordValue}
+            value={wordTmp}
             className={`${styles.edit}`}
             onChange={(e) => handleChange(e, "word")}
           />
@@ -116,11 +163,11 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
       ) : (
         <span className={styles.word}>{wordValue}</span>
       )}
-      {editMode ? (
+      {editMode && (wordToEdit === _id) ? (
         <span className={`${styles.translation}`}>
           <input
             name="edit-translation"
-            value={translationValue}
+            value={translationTmp}
             className={`${styles.edit}`}
             onChange={(e) => handleChange(e, "translation")}
           />
@@ -128,34 +175,34 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
       ) : (
         <span className={styles.translation}>{translationValue}</span>
       )}
-      {editMode ? (
+      {editMode && (wordToEdit === _id) ? (
         <span className={`${styles.definition}`}>
-          <input
+          <textarea
             name="edit-definition"
-            value={definitionValue}
-            className={`${styles.edit}`}
-            onChange={(e) => handleChange(e, "definition")}
-          />
+            value={definitionTmp}
+            className={`${styles.edit} ${styles["edit-example"]}`}
+            onChange={(e) => handleChange(e, "definition")}>
+          </textarea>
         </span>
       ) : (
         <span className={styles.definition}>{definitionValue}</span>
       )}
-      {editMode ? (
+      {editMode && (wordToEdit === _id) ? (
         <span className={styles.example}>
           <textarea
             name="edit-example"
-            value={exampleValue}
+            value={exampleTmp}
             className={`${styles.edit} ${styles["edit-example"]}`}
             onChange={(e) => handleChange(e, "example")}></textarea>
         </span>
       ) : (
         <span className={styles.example}>{exampleValue}</span>
       )}
-      {editMode ? (
+      {editMode && (wordToEdit === _id) ? (
         <span className={styles.pos}>
           <select
             name="edit-pos"
-            value={posValue}
+            value={posTmp}
             className={styles.pos}
             onChange={(e) => handleChange(e, "pos")}>
             {renderPOSOptions("edit")}
@@ -164,11 +211,11 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
       ) : (
         <span className={styles.pos}>{posValue}</span>
       )}
-      {editMode ? (
+      {editMode && (wordToEdit === _id) ? (
         <span className={styles.gloss}>
           <select
             name="edit-gloss"
-            value={glossValue}
+            value={glossTmp}
             className={styles.gloss}
             onChange={(e) => handleChange(e, "gloss")}>
             {renderGlossOptions("edit")}
