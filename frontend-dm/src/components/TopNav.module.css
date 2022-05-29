@@ -31,13 +31,13 @@
 }
 
 .dropdown:hover {
-  background-color: #e0e0e08f;
+  background-color: var(--bg-secondary-selected);
 }
 
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #ffffff;
+  background-color: var(--bg-secondary);
   min-width: 100px;
   z-index: 1;
   top: 100%;
@@ -53,7 +53,7 @@
   border: none;
   font-size: 1.2rem;
   min-width: 150px;
-  background-color: #ffffff;
+  background-color: var(--bg-secondary);
   padding: 0.3rem 0.1rem;
   text-align: left;
 }
@@ -66,27 +66,28 @@
 }
 
 .nav-btn:hover {
-  background-color: #ebebeb;
+  background-color: var(--bg-secondary-selected);
 }
 
 .current-project {
   padding: 2px;
   border-bottom: 1px solid black;
 }
+
 .btn-logout {
-  background-color: white;
+  background-color: var(--bg-tertiary);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
   padding: 0.4rem 0.8rem;
   cursor: pointer;
-  box-shadow: 0px 2px 4px 0px var(--primary);
+  box-shadow: var(--shadow-primary);
   color: var(--primary);
   transition: all 200ms;
 }
 
 .btn-logout:hover {
-  box-shadow: 0px 2px 4px 0px var(--primary-hover);
+  box-shadow: var(--shadow-primary);
   color: var(--primary-hover);
   transition: all 200ms;
 }

@@ -11,10 +11,13 @@ const Home = () => {
   const [username, setUsername] = useState("");
 
   useEffect(() => {
+
+    // Toggle darktheme
     if (localStorage.getItem("darktheme") === "darktheme")
       document.documentElement.setAttribute("data-color-scheme", "dark");
     else document.documentElement.setAttribute("data-color-scheme", "light");
 
+    // Request for username
     axios
       .get(`${process.env.REACT_APP_BACKEND}/api/dashboard`, { headers: { authorization: token! } })
       .then((res) => setUsername(res.data))

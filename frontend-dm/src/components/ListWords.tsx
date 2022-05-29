@@ -35,7 +35,6 @@ const ListWords = () => {
   }, [projectID, token, dispatch]);
 
   useEffect(() => {
-    console.log("hey");
     // Copy the sorted array to avoid reference issues
     const list = [...sortedArray];
     // Filter the list

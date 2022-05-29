@@ -17,6 +17,7 @@ html[data-color-scheme="light"] {
   color-scheme: light;
   --bg: #f8f8f8;
   --bg-secondary: white;
+  --bg-secondary-selected: #eeeeee;
   --bg-tertiary: white;
   --bg-tertiary-selected: #f2f2f293;
   --primary: #7a69bf;
@@ -34,10 +35,11 @@ html[data-color-scheme="dark"] {
   color-scheme: dark;
   --bg: #121212;
   --bg-secondary: #242424;
+  --bg-secondary-selected: #414141;
   --bg-tertiary: #303030;
   --bg-tertiary-selected: #464646;
   --primary: #9984F0;
-  --primary-hover: #564a87;
+  --primary-hover: #B5A4FF;
   --secondary: #9a5db9;
   --tertiary: #3f2d63;
   --quaternary: #843ECC;
