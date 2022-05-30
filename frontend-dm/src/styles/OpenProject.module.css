@@ -39,6 +39,11 @@
   transition: 300ms;
 }
 
+.language-li:focus-visible     {
+  outline: 1.3px solid black;
+  transition: 100ms;
+}
+
 .input-project {
   width: 80%;
   font-size: 1rem;
@@ -71,6 +76,8 @@
 .edit-btn, .delete-btn {
   transition: 300ms;
   cursor: pointer;
+  background-color: transparent;
+  border: none;
 }
 
 .edit-btn:hover, .delete-btn:hover {

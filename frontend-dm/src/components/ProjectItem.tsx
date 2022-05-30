@@ -21,8 +21,14 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
         { newName, _id },
         { headers: { Authorization: token! } }
       )
-      .then((res) =>{setEdit(false); localStorage.setItem("projectName", newName)})
-      .catch((err) => {setEdit(false); console.log(err)});
+      .then((res) => {
+        setEdit(false);
+        localStorage.setItem("projectName", newName);
+      })
+      .catch((err) => {
+        setEdit(false);
+        console.log(err);
+      });
   };
 
   const deleteProject = (_id: string) => {
@@ -35,7 +41,7 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
       .catch((err) => console.log(err));
   };
 
-  const selectProject = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, _id: string, name: string) => {
+  const selectProject = (e: React.MouseEvent<HTMLLIElement, MouseEvent> | React.KeyboardEvent<HTMLLIElement>, _id: string, name: string) => {
     const el = e.currentTarget;
     // Select previous selected element to remove style
     const previousEl = document.querySelector(`.${styles["selected-project"]}`);
@@ -47,8 +53,12 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
     setSelectedProjectName(name);
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLLIElement>, _id: string, name: string) => {
+    if (e.key === "Enter")selectProject(e, _id,name); 
+  }
+
   return (
-    <li className={styles["language-li"]} onClick={(e) => selectProject(e, _id, name)}>
+    <li className={styles["language-li"]} onClick={(e) => selectProject(e, _id, name)} onKeyDown={(e) => handleKeyPress(e, _id, name)} tabIndex={0} >
       {edit ? (
         <input
           name="edit-project"
@@ -59,13 +69,22 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
       ) : (
         `${projectValue}`
       )}
-      <span className={styles["wrapper-edit-btns"]}>
+      <span className={styles["wrapper-edit-btns"]} >
         {edit ? (
-          <CheckCircleIcon onClick={updateProjectName} className={styles["edit-btn"]} />
+          <button onClick={updateProjectName} className={styles["edit-btn"]} aria-label="edit confirm button">
+            <CheckCircleIcon />
+          </button>
         ) : (
-          <EditIcon className={styles["edit-btn"]} onClick={() => setEdit(true)} />
+          <button className={styles["edit-btn"]} onClick={() => setEdit(true)} aria-label="edit button">
+            <EditIcon />
+          </button>
         )}
-        <DeleteIcon onClick={() => deleteProject(_id)} className={styles["delete-btn"]} />
+        <button
+          onClick={() => deleteProject(_id)}
+          className={styles["delete-btn"]}
+          aria-label="delete confirm button">
+          <DeleteIcon />
+        </button>
       </span>
     </li>
   );

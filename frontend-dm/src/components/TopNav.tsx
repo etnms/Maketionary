@@ -3,7 +3,7 @@ import styles from "./TopNav.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SearchBar from "./SearchBar";
-import IWord from "../interfaces/interfaceWord";
+import IWord, { IWordDb } from "../interfaces/interfaceWord";
 import DarkThemeToggle from "./DarkThemeToggle";
 
 interface ITopNav {
@@ -19,7 +19,9 @@ const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
 
   const navigate = useNavigate();
 
-  const displayDropdown = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+  const displayDropdown = (
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.KeyboardEvent<HTMLSpanElement>
+  ) => {
     // Get all elements that previously had the display dropdown class
     const displayDropdownEls = document.querySelector(`.${styles["display-dropdown"]}`);
 
@@ -42,8 +44,10 @@ const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
     })
       .then((res) => {
         const fileName = projectName;
-        // Sort data 
-        const sortedData = res.data.results.words.sort((a: any,b: any) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1))
+        // Sort data
+        const sortedData = res.data.results.words.sort((a: IWordDb, b: IWordDb) =>
+          a.word > b.word ? 1 : a.word === b.word ? 0 : -1
+        );
         // Stringify
         const json = JSON.stringify(sortedData);
         const blob = new Blob([json], { type: "application/json" });
@@ -80,10 +84,19 @@ const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
       .catch((err) => console.log(err));
   };
 
+  // For accessiblity, add press enter option on span element
+  // The span element acts as a button since its children are already buttons
+  const handleKeypress = (e: React.KeyboardEvent<HTMLSpanElement>) => {
+    if (e.key === "Enter") displayDropdown(e);
+  };
   return (
     <nav className={styles.nav}>
       <div className={styles["wrapper-nav"]}>
-        <span className={styles.dropdown} onClick={(e) => displayDropdown(e)}>
+        <span
+          tabIndex={0}
+          className={styles.dropdown}
+          onClick={(e) => displayDropdown(e)}
+          onKeyDown={(e) => handleKeypress(e)}>
           <span>File</span>
           <div className={styles["dropdown-content"]}>
             <button className={styles["nav-btn"]} onClick={() => navigate("/new-project")}>
@@ -94,7 +107,7 @@ const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
             </button>
           </div>
         </span>
-        <span className={styles.dropdown} onClick={(e) => displayDropdown(e)}>
+        <span tabIndex={0} className={styles.dropdown} onClick={(e) => displayDropdown(e)} onKeyDown={(e) => handleKeypress(e)}>
           <span>Export</span>
           <div className={styles["dropdown-content"]}>
             <button className={styles["nav-btn"]} onClick={downloadJSON}>
@@ -105,7 +118,7 @@ const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
             </button>
           </div>
         </span>
-        <span className={styles.dropdown} onClick={(e) => displayDropdown(e)}>
+        <span tabIndex={0} className={styles.dropdown} onClick={(e) => displayDropdown(e)} onKeyDown={(e) => handleKeypress(e)}>
           <span>Settings</span>
           <div className={styles["dropdown-content"]}>
             <button className={styles["nav-btn"]}>xx</button>
@@ -113,10 +126,12 @@ const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
           </div>
         </span>
       </div>
-      <SearchBar/>
-      <DarkThemeToggle/>
+      <SearchBar />
+      <DarkThemeToggle />
       <div className={styles["wrapper-user"]}>
-        <span>Current project: <span className={styles["current-project"]}>{projectName}</span></span>
+        <span>
+          Current project: <span className={styles["current-project"]}>{projectName}</span>
+        </span>
         <span>Welcome, {username}</span>
         <button className={styles["btn-logout"]}>Sign out</button>
       </div>

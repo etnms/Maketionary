@@ -40,7 +40,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   const [posTmp, setPosTmp] = useState<string>(pos);
   const [glossTmp, setGlossTmp] = useState<string>(gloss);
 
-  const selectLine = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+  const selectLine = (e: React.MouseEvent<HTMLLIElement, MouseEvent> | React.KeyboardEvent<HTMLLIElement>) => {
     dispatch(setEditMode(false));
     dispatch(selectWordEdit(_id));
     //setCurrentElement(true)
@@ -60,7 +60,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     previousEl?.children[0].children[0].classList.remove(`${styles["wrapper-btns-reveal"]}`);
   };
 
-  const deleteWord = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+  const deleteWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent> ) => {
     axios
       .delete(`${process.env.REACT_APP_BACKEND}/api/word`, {
         data: { _id },
@@ -68,7 +68,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
       })
       .then(() => {
         // Filter list to remove deleted item
-        const updatedList = listWord.filter((word: any) => word._id !== _id);
+        const updatedList = listWord.filter((word: IWord) => word._id !== _id);
         // Update the list for new render
         dispatch(updateWordList(updatedList));
       })
@@ -104,7 +104,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   };
 
   // Hangle the change of each tmp value: allows to see changes directly
-  const handleChange = (e: React.ChangeEvent<HTMLElement>, elementName: string) => {
+  const handleChange = (e: React.ChangeEvent<HTMLElement> , elementName: string) => {
     switch (elementName) {
       case "word":
         setWordTmp((e.target as HTMLInputElement).value);
@@ -138,15 +138,22 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     setPosTmp(posValue);
   };
 
+  const handleKeypress = (e: React.KeyboardEvent<HTMLLIElement>) => {
+    if (e.key === "Enter") selectLine(e);
+  }
   return (
-    <li className={styles.listitem} onDoubleClick={(e) => selectLine(e)}>
+    <li className={styles.listitem} onDoubleClick={(e) => selectLine(e)} tabIndex={0} onKeyDown={(e) => handleKeypress(e)}>
       <div className={styles["wrapper-edit"]}>
         <div className={styles["wrapper-btns"]}>
-          <DeleteIcon className={styles["btn"]} onClick={(e) => deleteWord(e)} />
+          <button className={styles["btn"]} onClick={(e) => deleteWord(e)} aria-label="delete button" >
+          <DeleteIcon />
+          </button>
           {editMode ? (
-            <CheckCircleIcon className={styles["btn"]} onClick={updateWord} />
+            <button className={styles["btn"]} onClick={updateWord} aria-label="confirm edit button" >
+            <CheckCircleIcon /></button>
           ) : (
-            <EditIcon className={styles["btn"]} onClick={() => dispatch(setEditMode(true))} />
+            <button  className={styles["btn"]} onClick={() => dispatch(setEditMode(true))} aria-label="edit button"  >
+            <EditIcon/></button>
           )}
         </div>
       </div>

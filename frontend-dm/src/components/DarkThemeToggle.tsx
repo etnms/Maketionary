@@ -17,7 +17,7 @@ const DarkThemeToggle = () => {
     <div className={styles["dark-theme-toggle"]}>
       <LightModeIcon />
       <label className={styles.switch}>
-        <input type="checkbox" name="toggle-darktheme" onChange={(e) => toggleDarkTheme(e)} />
+        <input type="checkbox" name="toggle-darktheme" onChange={(e) => toggleDarkTheme(e)}/>
         <span className={`${styles.slider} ${styles.round}`}></span>
       </label>
       <DarkModeIcon />

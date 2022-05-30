@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0 1rem;
+  padding: 0 0.4rem;
   box-sizing: border-box;
   position: sticky;
   top: 0;
@@ -67,11 +67,6 @@
 
 .nav-btn:hover {
   background-color: var(--bg-secondary-selected);
-}
-
-.current-project {
-  padding: 2px;
-  border-bottom: 1px solid black;
 }
 
 .btn-logout {
