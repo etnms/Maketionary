@@ -31,7 +31,6 @@ select, textarea {
   border: 2px solid var(--primary);
   padding: 2px;
   outline: none;
-  font-family: var(--font);
 }
 
 .example, .definition {
@@ -54,10 +53,13 @@ select, textarea {
   border-radius: 12px;
   margin: 5px;
   padding: 0.5rem 1rem;
+  font-family: var(--second-font);
   font-size: 1.2rem;
   background-color: var(--primary);
   color: var(--color-text);
   box-shadow: var(--shadow-primary);
+  cursor: pointer;
+
 }
 
 .btn-submit:hover {

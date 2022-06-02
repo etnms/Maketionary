@@ -1,11 +1,21 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import authStyle from "../styles/Login.module.css";
+import buttons from "../styles/Buttons.module.css";
 
 const Signup = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "Maketionary - Sign up";
+    // Toggle darktheme
+    if (localStorage.getItem("darktheme") === "darktheme")
+      document.documentElement.setAttribute("data-color-scheme", "dark");
+    else document.documentElement.setAttribute("data-color-scheme", "light");
+  });
 
   const navigateIndex = () => {
     navigate("/");
@@ -83,39 +93,39 @@ const Signup = () => {
     }
   };
   return (
-    <div className="bg">
-      <form onSubmit={(e) => signup(e)} className="form form-auth">
-        <h1 className="title">Sign up</h1>
-        <div className="wrapper-input-auth">
-          <label htmlFor="email" className="input-label">
+    <div className={authStyle.bg}>
+      <form onSubmit={(e) => signup(e)}className={authStyle.auth}>
+        <h1 className={authStyle.title}>Sign up</h1>
+        <div className={authStyle["wrapper-input"]}>
+          <label htmlFor="email" className={authStyle["input-label"]}>
             Email
           </label>
-          <input type="email" name="email" className="input-text" onChange={() => handleChange()} />
-          <label htmlFor="username" className="input-label">
+          <input type="email" name="email" className={authStyle["input-text"]} onChange={() => handleChange()} />
+          <label htmlFor="username" className={authStyle["input-label"]}>
             Username
           </label>
-          <input type="text" name="username" className="input-text" onChange={() => handleChange()} />
-          <label htmlFor="password" className="input-label">
+          <input type="text" name="username" className={authStyle["input-text"]} onChange={() => handleChange()} />
+          <label htmlFor="password" className={authStyle["input-label"]}>
             Password
           </label>
-          <input type="password" name="password" className="input-text" onChange={() => handleChange()} />
-          <label htmlFor="confirm-password" className="input-label">
+          <input type="password" name="password"className={authStyle["input-text"]}onChange={() => handleChange()} />
+          <label htmlFor="confirm-password" className={authStyle["input-label"]}>
             Confirm Password
           </label>
           <input
             type="password"
             name="confirm-password"
-            className="input-text"
+            className={authStyle["input-text"]}
             onChange={() => handleChange()}
           />
         </div>
         {errorMessage !== "" ? "error" : null}
-        <span className="wrapper-button-auth">
-          <button type="submit" className="btn-primary">
+        <span className={buttons["wrapper-btns"]}>
+          <button type="submit" className={buttons["btn-open"]}>
             Sign up
           </button>
-          <button className="btn-white btn-border" onClick={() => navigateIndex()}>
-            {"Home"}
+          <button className={buttons["btn-cancel"]} onClick={() => navigateIndex()}>
+            Home
           </button>
         </span>
       </form>

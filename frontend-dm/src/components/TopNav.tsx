@@ -3,8 +3,9 @@ import styles from "./TopNav.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SearchBar from "./SearchBar";
-import IWord, { IWordDb } from "../interfaces/interfaceWord";
-import DarkThemeToggle from "./DarkThemeToggle";
+import { IWordDb } from "../interfaces/interfaceWord";
+import settingsStyles from "./Settings.module.css";
+import { useAppSelector } from "../app/hooks";
 
 interface ITopNav {
   username: string;
@@ -13,7 +14,7 @@ interface ITopNav {
 const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
   const { username } = props;
 
-  const token = localStorage.getItem("token");
+  const token = useAppSelector(state => state.auth.token);
   const projectID = localStorage.getItem("project");
   const projectName = localStorage.getItem("projectName");
 
@@ -33,6 +34,13 @@ const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
     if (displayDropdownEls) {
       displayDropdownEls?.classList.remove(`${styles["display-dropdown"]}`);
     }
+  };
+
+  const openSettings = () => {
+    // Get settings element and add css to display it
+    const settings = document.querySelector("[data-settings='settings-menu']");
+    settings?.classList.add(`${settingsStyles["show-settings"]}`);
+
   };
 
   const downloadJSON = () => {
@@ -107,7 +115,11 @@ const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
             </button>
           </div>
         </span>
-        <span tabIndex={0} className={styles.dropdown} onClick={(e) => displayDropdown(e)} onKeyDown={(e) => handleKeypress(e)}>
+        <span
+          tabIndex={0}
+          className={styles.dropdown}
+          onClick={(e) => displayDropdown(e)}
+          onKeyDown={(e) => handleKeypress(e)}>
           <span>Export</span>
           <div className={styles["dropdown-content"]}>
             <button className={styles["nav-btn"]} onClick={downloadJSON}>
@@ -118,16 +130,10 @@ const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
             </button>
           </div>
         </span>
-        <span tabIndex={0} className={styles.dropdown} onClick={(e) => displayDropdown(e)} onKeyDown={(e) => handleKeypress(e)}>
-          <span>Settings</span>
-          <div className={styles["dropdown-content"]}>
-            <button className={styles["nav-btn"]}>xx</button>
-            <button className={styles["nav-btn"]}>yy</button>
-          </div>
-        </span>
+        <button onClick={() => openSettings()} className={styles["btn-settings"]}>Settings</button>
       </div>
       <SearchBar />
-      <DarkThemeToggle />
+     
       <div className={styles["wrapper-user"]}>
         <span>
           Current project: <span className={styles["current-project"]}>{projectName}</span>

@@ -1,8 +1,25 @@
 .app {
   background-color: var(--bg);
+  position: relative;
 }
 .wrapper-main {
   display: flex;
   gap: 0.3rem;
   position: relative;
+}
+
+.wrapper-no-project {
+  background-color: var(--bg-secondary);
+  height: var(--main-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box {
+  background-color: var(--bg-secondary);
+  box-shadow: var(--shadow);
+  border-radius: 6px;
+  padding: 5rem;
+  font-size: 1.5rem;
 }

@@ -1,12 +1,13 @@
 import axios from "axios";
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { addWord } from "../features/arrayWordsSlice";
 import { renderGlossOptions, renderPOSOptions } from "../helpers/renderSelect";
 import styles from "./CreateWordMenu.module.css";
 
 
 const CreateWordMenu = () => {
-  const token = localStorage.getItem("token");
+  
+  const token = useAppSelector(state => state.auth.token);
 
   const dispatch = useAppDispatch();
 

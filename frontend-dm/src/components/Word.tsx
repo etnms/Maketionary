@@ -15,7 +15,7 @@ import { updateWordList } from "../features/arrayWordsSlice";
 const Word = (props: React.PropsWithChildren<IWord>) => {
   const { _id, word, translation, definition, example, pos, gloss } = props;
 
-  const token = localStorage.getItem("token");
+  const token = useAppSelector(state => state.auth.token);
 
   const listWord = useAppSelector((state) => state.arrayWords.value);
   // Using global state to determine the status of the edit mode
@@ -43,14 +43,12 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   const selectLine = (e: React.MouseEvent<HTMLLIElement, MouseEvent> | React.KeyboardEvent<HTMLLIElement>) => {
     dispatch(setEditMode(false));
     dispatch(selectWordEdit(_id));
-    //setCurrentElement(true)
     const el = e.currentTarget;
 
     // Select previous selected element
     const previousEl = document.querySelector(`.${styles.selected}`);
     // If same element then reset the edit values
     if (el === previousEl) cancelChange();
-    // if (el !== previousEl) setCurrentElement(true);
     // Add selected style to item
     el.classList.add(`${styles.selected}`);
     el.children[0].children[0].classList.add(`${styles["wrapper-btns-reveal"]}`);
@@ -145,14 +143,14 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     <li className={styles.listitem} onDoubleClick={(e) => selectLine(e)} tabIndex={0} onKeyDown={(e) => handleKeypress(e)}>
       <div className={styles["wrapper-edit"]}>
         <div className={styles["wrapper-btns"]}>
-          <button className={styles["btn"]} onClick={(e) => deleteWord(e)} aria-label="delete button" >
+          <button className={styles["btn"]} onClick={(e) => deleteWord(e)} aria-label="delete" >
           <DeleteIcon />
           </button>
           {editMode ? (
-            <button className={styles["btn"]} onClick={updateWord} aria-label="confirm edit button" >
+            <button className={styles["btn"]} onClick={updateWord} aria-label="confirm edit" >
             <CheckCircleIcon /></button>
           ) : (
-            <button  className={styles["btn"]} onClick={() => dispatch(setEditMode(true))} aria-label="edit button"  >
+            <button  className={styles["btn"]} onClick={() => dispatch(setEditMode(true))} aria-label="edit"  >
             <EditIcon/></button>
           )}
         </div>

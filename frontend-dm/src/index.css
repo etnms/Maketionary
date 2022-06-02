@@ -1,9 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&family=Hind+Madurai&family=Roboto&display=swap");
 
 :root {
   --font: -apple-system, BlinkMacSystemFont, "Poppins", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
     "Droid Sans", "Helvetica Neue", sans-serif;
   box-sizing: border-box;
+  --second-font: "Hind Madurai", "Poppins","Roboto", sans-serif;
   padding: 0;
   margin: 0;
   font-size: 18px;
@@ -11,6 +12,8 @@
   --main-height: 92vh;
   --create-menu-width: 25vw;
   --main-width: 75vw;
+  --red: #cc3939;
+  --red-hover: #ba3434;
 }
 
 html[data-color-scheme="light"] {
@@ -22,11 +25,12 @@ html[data-color-scheme="light"] {
   --bg-tertiary-selected: #f2f2f293;
   --primary: #7a69bf;
   --primary-hover: #564a87;
-  --secondary: #d732fc;
+  --secondary: #BB2CDB;
   --tertiary: #3f2d63;
-  --quaternary: #843ECC;
+  --quaternary: #843ecc;
   --quintary: #1b1725;
   --color-text: white;
+  --main: black;
   --shadow: 0px 0px 12px -3px rgba(0, 0, 0, 0.5);
   --shadow-item: 0px 2px 5px 1px rgba(0, 0, 0, 0.295);
   --shadow-primary: 0px 2px 4px 0px var(--primary);
@@ -38,22 +42,23 @@ html[data-color-scheme="dark"] {
   --bg-secondary-selected: #414141;
   --bg-tertiary: #303030;
   --bg-tertiary-selected: #464646;
-  --primary: #9984F0;
-  --primary-hover: #B5A4FF;
+  --primary: #9984f0;
+  --primary-hover: #b5a4ff;
   --secondary: #9a5db9;
   --tertiary: #3f2d63;
-  --quaternary: #843ECC;
+  --quaternary: #843ecc;
   --quintary: #1b1725;
   --color-text: black;
+  --main: white;
   --shadow: 0px 0px 12px -3px rgba(34, 34, 34, 0.5);
   --shadow-item: 0;
   --shadow-primary: 0;
-
 }
 
 * {
   padding: 0;
   margin: 0;
+  font-family: var(--font);
 }
 
 body {

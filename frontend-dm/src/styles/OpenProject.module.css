@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  position: relative;
 }
 
 .menu {
@@ -13,7 +14,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 60vh;
+  height: 70vh;
   width: 40vw;
   gap: 1rem;
 }
@@ -22,6 +23,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-height: 60%;
+  overflow-y: auto;
 }
 
 .language-li {
@@ -31,16 +34,17 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
-  margin: 0.2rem;
-  border: 2px solid black;
+  margin: 0.2rem 1.5rem;
+  border: 2px solid var(--main);
   border-radius: 4px;
   font-size: 1.2rem;
   min-width: 20vw;
   transition: 300ms;
+  gap: 0.5rem;
 }
 
 .language-li:focus-visible     {
-  outline: 1.3px solid black;
+  outline: 1.3px solid var(--main);
   transition: 100ms;
 }
 
@@ -49,12 +53,12 @@
   font-size: 1rem;
   border-radius: 3px;
   outline: none;
-  border: 2px solid var(--primary);
+  border: 2px solid var(--main);
   padding: 2px;
   outline: none;
-  font-family: var(--font);
   transition: all 300ms linear;
 }
+
 .input-project:focus {
   transform: scale(1.025);
   transition: all 300ms linear;
@@ -78,9 +82,11 @@
   cursor: pointer;
   background-color: transparent;
   border: none;
+  color: white;
 }
 
 .edit-btn:hover, .delete-btn:hover {
   transform: scale(1.1);
   transition: 300ms;
 }
+

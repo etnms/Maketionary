@@ -7,7 +7,8 @@ import styles from "./ListWords.module.css";
 import Word from "./Word";
 
 const ListWords = () => {
-  const token = localStorage.getItem("token");
+  
+  const token = useAppSelector(state => state.auth.token);
   const projectID = localStorage.getItem("project");
 
   const [filteredResults, setFilteredResults] = useState<IWordDb[]>();
@@ -35,10 +36,9 @@ const ListWords = () => {
   }, [projectID, token, dispatch]);
 
   useEffect(() => {
-    // Copy the sorted array to avoid reference issues
-    const list = [...sortedArray];
-    // Filter the list
-    const filtered = list.filter((word: any) => word.word.includes(searchInput));
+    // Copy the sorted array to avoid reference issues & filter
+    const filtered = [...sortedArray.filter((word: any) => word.word.startsWith(searchInput))];
+
     // Update filtered results to be displayed
     setFilteredResults(filtered);
   }, [sortedArray, searchInput]);

@@ -5,13 +5,21 @@ import EditIcon from "@mui/icons-material/Edit";
 import React, { useState } from "react";
 import styles from "../styles/OpenProject.module.css";
 import { IProjectItem } from "../interfaces/interfaceProjectItem";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import confirmDeleteStyle from "./ConfirmDelete.module.css";
+import { setProjectID, setProjectName } from "../features/projectItemSlice";
 
 const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
-  const { _id, name, setSelectedProject, setSelectedProjectName } = props;
-  const token = localStorage.getItem("token");
+  const { _id, name } = props;
+
+  const token = useAppSelector((state) => state.auth.token);
 
   const [projectValue, setProjectValue] = useState<string>(name);
   const [edit, setEdit] = useState<boolean>(false);
+
+  const stateID = useAppSelector((state) => state.projectItem.projectID);
+
+  const dispatch = useAppDispatch();
 
   const updateProjectName = () => {
     const newName = (document.querySelector("input[name='edit-project']") as HTMLInputElement).value;
@@ -21,7 +29,7 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
         { newName, _id },
         { headers: { Authorization: token! } }
       )
-      .then((res) => {
+      .then(() => {
         setEdit(false);
         localStorage.setItem("projectName", newName);
       })
@@ -31,35 +39,44 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
       });
   };
 
-  const deleteProject = (_id: string) => {
-    axios
-      .delete(`${process.env.REACT_APP_BACKEND}/api/language`, {
-        data: { _id },
-        headers: { Authorization: token! },
-      })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+  const openConfirmDelete = () => {
+    // Display the confirmation menu to delete a project
+    const confirmWindow = document.querySelector("[data-confirm-delete='window']");
+    confirmWindow?.classList.add(`${confirmDeleteStyle.show}`);
   };
 
-  const selectProject = (e: React.MouseEvent<HTMLLIElement, MouseEvent> | React.KeyboardEvent<HTMLLIElement>, _id: string, name: string) => {
+  const selectProject = (
+    e: React.MouseEvent<HTMLLIElement, MouseEvent> | React.KeyboardEvent<HTMLLIElement>,
+    _id: string,
+    name: string
+  ) => {
     const el = e.currentTarget;
     // Select previous selected element to remove style
     const previousEl = document.querySelector(`.${styles["selected-project"]}`);
     previousEl?.classList.remove(`${styles["selected-project"]}`);
     // Add selected style to item
     el.classList.add(`${styles["selected-project"]}`);
-
-    setSelectedProject(_id);
-    setSelectedProjectName(name);
+    setEdit(false);
+    dispatch(setProjectID(_id));
+    dispatch(setProjectName(name));
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLLIElement>, _id: string, name: string) => {
-    if (e.key === "Enter")selectProject(e, _id,name); 
+    if (e.key === "Enter") selectProject(e, _id, name);
+  };
+
+  const allowEditMode = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation()
+    setEdit(true)
   }
 
   return (
-    <li className={styles["language-li"]} onClick={(e) => selectProject(e, _id, name)} onKeyDown={(e) => handleKeyPress(e, _id, name)} tabIndex={0} >
-      {edit ? (
+    <li
+      className={styles["language-li"]}
+      onClick={(e) => selectProject(e, _id, name)}
+      onKeyDown={(e) => handleKeyPress(e, _id, name)}
+      tabIndex={0}>
+      {edit && stateID === _id? (
         <input
           name="edit-project"
           value={projectValue}
@@ -69,23 +86,22 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
       ) : (
         `${projectValue}`
       )}
-      <span className={styles["wrapper-edit-btns"]} >
-        {edit ? (
-          <button onClick={updateProjectName} className={styles["edit-btn"]} aria-label="edit confirm button">
-            <CheckCircleIcon />
+      {stateID === _id ? (
+        <span className={styles["wrapper-edit-btns"]}>
+          {edit ? (
+            <button onClick={updateProjectName} className={styles["edit-btn"]} aria-label="edit confirm">
+              <CheckCircleIcon />
+            </button>
+          ) : (
+            <button className={styles["edit-btn"]} onClick={(e) => allowEditMode(e)} aria-label="edit">
+              <EditIcon />
+            </button>
+          )}
+          <button onClick={openConfirmDelete} className={styles["delete-btn"]} aria-label="delete">
+            <DeleteIcon />
           </button>
-        ) : (
-          <button className={styles["edit-btn"]} onClick={() => setEdit(true)} aria-label="edit button">
-            <EditIcon />
-          </button>
-        )}
-        <button
-          onClick={() => deleteProject(_id)}
-          className={styles["delete-btn"]}
-          aria-label="delete confirm button">
-          <DeleteIcon />
-        </button>
-      </span>
+        </span>
+      ) : null}
     </li>
   );
 };

@@ -2,11 +2,17 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/ProjectMenu.module.css";
 import buttons from "../styles/Buttons.module.css";
+import { useAppSelector } from "../app/hooks";
+import { useEffect } from "react";
 
 const NewProjectMenu = () => {
-  const token = localStorage.getItem("token");
+  const token = useAppSelector((state) => state.auth.token);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "Maketionary - New project";
+  });
 
   const createNewProject = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

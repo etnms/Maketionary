@@ -68,7 +68,6 @@ const deletelanguage = (req, res) => {
           Word.deleteMany({ language: result }, (err, result) => {
             if (err) return res.status(400).json({ error: "Error deleting" });
             else {
-              console.log(result);
               return res.status(200).json({ message: "Successfully deleted" });
             }
           });

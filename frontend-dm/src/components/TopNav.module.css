@@ -28,9 +28,18 @@
   text-align: center;
   display: flex;
   align-items: center;
+  font-family: var(--font);
+}
+.btn-settings {
+  border: none;
+  background-color: transparent;
+  font-size: 1.3rem;
+  font-family: var(--font);
+  border-radius: 8px;
+  padding: 0 0.3rem;
 }
 
-.dropdown:hover {
+.dropdown:hover, .btn-settings:hover {
   background-color: var(--bg-secondary-selected);
 }
 
@@ -86,3 +95,4 @@
   color: var(--primary-hover);
   transition: all 200ms;
 }
+

@@ -1,9 +1,19 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import authStyle from "../styles/Login.module.css";
+import buttons from "../styles/Buttons.module.css";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "Maketionary - Login";
+    // Toggle darktheme
+    if (localStorage.getItem("darktheme") === "darktheme")
+      document.documentElement.setAttribute("data-color-scheme", "dark");
+    else document.documentElement.setAttribute("data-color-scheme", "light");
+  });
 
   const login = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,35 +31,33 @@ const Login = () => {
       });
   };
   return (
-    <div className="bg">
-      <form onSubmit={(e) => login(e)} className="form form-auth">
-        <h1 className="title">Login</h1>
-        <div className="wrapper-input-auth">
-          <label htmlFor="username" className="input-label">
+    <div className={authStyle.bg}>
+      <form onSubmit={(e) => login(e)} className={authStyle.auth}>
+        <h1 className={authStyle.title}>Login</h1>
+        <div className={authStyle["wrapper-input"]}>
+          <label htmlFor="username" className={authStyle["input-label"]}>
             Username
           </label>
-          <input type="text" name="username" className="input-text" />
-          <div className="wrapper-password-text">
-            <label htmlFor="password" className="input-label">
+          <input type="text" name="username" className={authStyle["input-text"]} />
+          <div className={authStyle["wrapper-password-text"]}>
+            <label htmlFor="password" className={authStyle["input-label"]}>
               Password
             </label>
-            <span className="tooltip">
-              ?{" "}
-              <span className="tooltiptext">
-                {" "}
+            <span className={authStyle.tooltip}>
+              ?
+              <span className={authStyle.tooltiptext}>
                 Passwords contain 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.
               </span>
             </span>
           </div>
-          <input type="password" name="password" className="input-text" />
+          <input type="password" name="password" className={authStyle["input-text"]} />
         </div>
-
-        <span className="wrapper-button-auth">
-          <button type="submit" className="btn-primary">
+        <span className={buttons["wrapper-btns"]}>
+          <button type="submit" className={buttons["btn-open"]}>
             Login
           </button>
-          <button className="btn-white btn-border" onClick={() => navigate("/")}>
-            {"Home"}
+          <button className={buttons["btn-cancel"]} onClick={() => navigate("/")}>
+            Home
           </button>
         </span>
       </form>

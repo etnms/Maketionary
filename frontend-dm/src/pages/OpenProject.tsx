@@ -5,17 +5,23 @@ import styles from "../styles/OpenProject.module.css";
 import buttons from "../styles/Buttons.module.css";
 import ProjectItem from "../components/ProjectItem";
 import { IProjectItem } from "../interfaces/interfaceProjectItem";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import ConfirmDelete from "../components/ConfirmDelete";
+import { setProjectID, setProjectName } from "../features/projectItemSlice";
 
 const OpenProject = () => {
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
+  const token = useAppSelector((state) => state.auth.token);
   const [languageList, setLanguageList] = useState<IProjectItem[]>([]);
 
-  const [selectedProject, setSelectedProject] = useState<string>("");
-  const [selectedProjectName, setSelectedProjectName] = useState<string>("");
+  const projectID = useAppSelector(state => state.projectItem.projectID);
+  const projectName = useAppSelector(state => state.projectItem.projectName);
 
+  const dispatch = useAppDispatch();
   useEffect(() => {
+    document.title = "Maketionary - Open project";
+
     axios
       .get(`${process.env.REACT_APP_BACKEND}/api/language`, { headers: { Authorization: token! } })
       .then((res) => setLanguageList(res.data.results.languages))
@@ -28,8 +34,6 @@ const OpenProject = () => {
         key={language._id}
         _id={language._id}
         name={language.name}
-        setSelectedProject={setSelectedProject}
-        setSelectedProjectName={setSelectedProjectName}
       />
     ));
   };
@@ -38,6 +42,8 @@ const OpenProject = () => {
     if (projectID === "") return; //error
     localStorage.setItem("project", projectID);
     localStorage.setItem("projectName", projectName);
+    dispatch(setProjectName(""));
+    dispatch(setProjectID(""));
     navigate("/");
   };
 
@@ -53,7 +59,7 @@ const OpenProject = () => {
         <span className={buttons["wrapper-btns"]}>
           {languageList === [] ? null : (
             <button
-              onClick={() => openProject(selectedProject, selectedProjectName)}
+              onClick={() => openProject(projectID, projectName)}
               className={buttons["btn-open"]}>
               Open
             </button>
@@ -63,6 +69,7 @@ const OpenProject = () => {
           </button>
         </span>
       </div>
+      {projectID ===""? null : <ConfirmDelete languageList={languageList} setLanguageList={setLanguageList}/>}
     </main>
   );
 };
