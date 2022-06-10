@@ -8,6 +8,7 @@ import { IProjectItem } from "../interfaces/interfaceProjectItem";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import confirmDeleteStyle from "./ConfirmDelete.module.css";
 import { setProjectID, setProjectName } from "../features/projectItemSlice";
+import { useTranslation } from "react-i18next";
 
 const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
   const { _id, name } = props;
@@ -20,6 +21,7 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
   const stateID = useAppSelector((state) => state.projectItem.projectID);
 
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
 
   const updateProjectName = () => {
     const newName = (document.querySelector("input[name='edit-project']") as HTMLInputElement).value;
@@ -90,15 +92,15 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
       {stateID === _id ? (
         <span className={styles["wrapper-edit-btns"]}>
           {edit ? (
-            <button onClick={updateProjectName} className={styles["edit-btn"]} aria-label="edit confirm">
+            <button onClick={updateProjectName} className={styles["edit-btn"]} aria-label={t("ariaLabels.editConfirm")}>
               <CheckCircleIcon />
             </button>
           ) : (
-            <button className={styles["edit-btn"]} onClick={(e) => allowEditMode(e)} aria-label="edit">
+            <button className={styles["edit-btn"]} onClick={(e) => allowEditMode(e)} aria-label={t("ariaLabels.edit")}>
               <EditIcon />
             </button>
           )}
-          <button onClick={openConfirmDelete} className={styles["delete-btn"]} aria-label="delete">
+          <button onClick={openConfirmDelete} className={styles["delete-btn"]} aria-label={t("ariaLabels.delete")}>
             <DeleteIcon />
           </button>
         </span>

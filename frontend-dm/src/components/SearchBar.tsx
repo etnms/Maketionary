@@ -37,7 +37,7 @@ const SearchBar = () => {
         className={styles["search-bar"]}
         onChange={(e) => searchItems(e.target.value)}
         placeholder={`${t('nav.search')}`}
-        aria-label="search-bar"
+        aria-label={t("ariaLabels.searchBar")}
         ref={ref}
       />
       <SearchIcon className={styles["search-icon"]} />

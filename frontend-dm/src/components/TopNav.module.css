@@ -83,11 +83,11 @@
 }
 
 .btn-logout {
-  background-color: var(--bg-tertiary);
+  background-color: var(--bg-secondary);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
-  padding: 0.4rem 0.8rem;
+  padding: 0.3rem 0.8rem;
   cursor: pointer;
   box-shadow: var(--shadow-primary);
   color: var(--primary);
@@ -98,5 +98,6 @@
   box-shadow: var(--shadow-primary);
   color: var(--primary-hover);
   transition: all 200ms;
+  background-color: var(--bg-secondary-selected);
 }
 

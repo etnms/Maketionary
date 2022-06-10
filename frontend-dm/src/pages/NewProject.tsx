@@ -15,7 +15,11 @@ const NewProjectMenu = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
-    document.title = "Maketionary - New project";
+    document.title = t("pageTitles.newProject");
+
+    if (localStorage.getItem("darktheme") === "darktheme")
+      document.documentElement.setAttribute("data-color-scheme", "dark");
+    else document.documentElement.setAttribute("data-color-scheme", "light");
   });
 
   const createNewProject = (e: React.FormEvent<HTMLFormElement>) => {

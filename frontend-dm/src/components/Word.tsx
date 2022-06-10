@@ -9,6 +9,7 @@ import { renderGlossOptions, renderPOSOptions } from "../helpers/renderSelect";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectWordEdit, setEditMode } from "../features/editModeSlice";
 import { updateWordList } from "../features/arrayWordsSlice";
+import { useTranslation } from "react-i18next";
 
 // need function that cancel edit / restores tmp value to current value
 
@@ -16,6 +17,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   const { _id, word, translation, definition, example, pos, gloss } = props;
 
   const token = localStorage.getItem("token");
+  const {t} = useTranslation();
 
   const listWord = useAppSelector((state) => state.arrayWords.value);
   // Using global state to determine the status of the edit mode
@@ -143,14 +145,14 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     <li className={styles.listitem} onDoubleClick={(e) => selectLine(e)} tabIndex={0} onKeyDown={(e) => handleKeypress(e)}>
       <div className={styles["wrapper-edit"]}>
         <div className={styles["wrapper-btns"]}>
-          <button className={styles["btn"]} onClick={(e) => deleteWord(e)} aria-label="delete" >
+          <button className={styles["btn"]} onClick={(e) => deleteWord(e)} aria-label={t("ariaLabels.delete")} >
           <DeleteIcon />
           </button>
           {editMode ? (
-            <button className={styles["btn"]} onClick={updateWord} aria-label="confirm edit" >
+            <button className={styles["btn"]} onClick={updateWord} aria-label={t("ariaLabels.editConfirm")} >
             <CheckCircleIcon /></button>
           ) : (
-            <button  className={styles["btn"]} onClick={() => dispatch(setEditMode(true))} aria-label="edit"  >
+            <button  className={styles["btn"]} onClick={() => dispatch(setEditMode(true))} aria-label={t("ariaLabels.edit")}  >
             <EditIcon/></button>
           )}
         </div>

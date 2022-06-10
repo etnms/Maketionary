@@ -13,7 +13,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
-    document.title = "Maketionary - Login";
+    document.title = t("pageTitles.login");
     // Toggle darktheme
     if (localStorage.getItem("darktheme") === "darktheme")
       document.documentElement.setAttribute("data-color-scheme", "dark");

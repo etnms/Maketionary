@@ -5,9 +5,10 @@ import styles from "../styles/PageNotFound.module.css";
 
 const PageNotFound = () => {
   const navigate = useNavigate();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
+
   useEffect(() => {
-    document.title = " 404 - Page not found";
+    document.title = t("pageTitles.pageNotFound");
     if (localStorage.getItem("darktheme") === "darktheme")
       document.documentElement.setAttribute("data-color-scheme", "dark");
     else document.documentElement.setAttribute("data-color-scheme", "light");
@@ -16,7 +17,7 @@ const PageNotFound = () => {
     <div className={styles.page}>
       <p className={styles.text}>{t("404.title")}</p>
       <button className={styles.btn} onClick={() => navigate("/")}>
-      {t("404.btnHome")}
+        {t("404.btnHome")}
       </button>
     </div>
   );

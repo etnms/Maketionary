@@ -23,7 +23,7 @@ const OpenProject = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    document.title = "Maketionary - Open project";
+    document.title = t("pageTitles.openProject");
 
     if (localStorage.getItem("darktheme") === "darktheme")
       document.documentElement.setAttribute("data-color-scheme", "dark");
@@ -33,7 +33,7 @@ const OpenProject = () => {
       .get(`${process.env.REACT_APP_BACKEND}/api/language`, { headers: { Authorization: token! } })
       .then((res) => setLanguageList(res.data.results.languages))
       .catch((err) => console.log(err));
-  }, [token]);
+  }, [token, t]);
 
   const displayListProject = () => {
     return languageList.map((language) => (

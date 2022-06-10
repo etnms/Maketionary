@@ -88,5 +88,19 @@
   "404": {
     "title": "Cette page n'existe pas.",
     "btnHome": "Page principale"
+  },
+  "ariaLabels": {
+    "edit": "éditer",
+    "editConfirm" : "confirmer les changements",
+    "delete" : "supprimer",
+    "searchBar" : "barre de recherche"
+  },
+  "pageTitles": {
+    "login": "Maketionary - Se connecter",
+    "signup": "Maketionary - Créer un compte",
+    "newProject": "Maketionary - Nouveau projet",
+    "openProject": "Maketionary - Ouvrir un projet",
+    "expiredSession": "Session expirée",
+    "pageNotFound": "404 - Page introuvable"
   }
 }
