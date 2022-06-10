@@ -1,0 +1,92 @@
+{
+  "login": {
+    "title": "Login",
+    "username": "Username",
+    "password": "Password",
+    "tooltip": "Passwords contain at least 6 characters, including 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.",
+    "loginBtn": "Login",
+    "homeBtn": "Home"
+  },
+  "signup": {
+    "title": "Sign up",
+    "email": "Email",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "tooltip": "Passwords must contain at least 6 characters, including 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.",
+    "signupBtn": "Sign up",
+    "homeBtn": "Home"
+  },
+  "nav": {
+    "file": "File",
+    "newProject": "New project",
+    "openProject": "Open project",
+    "export": "Export",
+    "exportJson": "Export as JSON",
+    "exportRtf": "Export as RTF",
+    "settings": "Settings",
+    "search": "Search",
+    "current": "Current project: ",
+    "welcome": "Welcome, ",
+    "signout": "Sign out"
+  },
+  "projects": {
+    "newProjectTitle": "New project",
+    "openProjectTitle": "Open project",
+    "loading": "Loading your projects...",
+    "createBtn": "Create",
+    "openBtn": "Open",
+    "cancelBtn": "Cancel",
+    "deleteConfirmText": "Are you sure you want to delete the following project:",
+    "yesBtn": "Yes",
+    "noBTn": "No"
+  },
+  "newWord": {
+    "title": "Add new word",
+    "word": "Word",
+    "translation": "Translation",
+    "definition": "Definition",
+    "example": "Example",
+    "pos": "Part of speech",
+    "gloss": "Gloss",
+    "addWordBtn": "Add word"
+  },
+  "main": {
+    "word": "Word",
+    "translation": "Translation",
+    "definition": "Definition",
+    "example": "Example",
+    "pos": "POS",
+    "gloss": "Gloss",
+    "noProjectOpen": "No project is currently open."
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "language": "Language"
+  },
+  "errorMessages": {
+    "emptyFields": "Error: one of the fields is empty.",
+    "errorIncorrectAuthCreds": "Error: incorrect username or password.",
+    "errorEmptyUsername": "Error: username is empty",
+    "errorExistingUsername": "Error: username is not available.",
+    "errorExistingEmail": "Error: email is already being used.",
+    "errorEmptyEmail": "Error: you need to enter an email adress.",
+    "errorPasswordLength": "Error: your password needs to be at least 6 characters long.",
+    "errorPasswordCharacters":  "Error: your password must contain 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.",
+    "errorPasswordMatch": "Error: passwords need to match.",
+    "errorNameTooLong": "Error: the name of the project is too long.",
+    "errorProjectNameEmpty" : "Error: the name is empty.",
+    "errorWord": "Error: the word field cannot be empty.",
+    "errorProblem": "Error: there was a problem."
+  },
+  "expired": {
+    "title": "Your session has expired.",
+    "redirectP1": "You will be redirected in ",
+    "redirectP2": " second(s)."
+  },
+  "404": {
+    "title": "This page does not exist.",
+    "btnHome": "Home"
+  }
+}

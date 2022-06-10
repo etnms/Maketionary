@@ -5,19 +5,18 @@ import CreateWordMenu from "../components/CreateWordMenu";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Settings from "../components/Settings";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { setToken } from "../features/authSlice";
+import { useAppDispatch } from "../app/hooks";
 import { setIsDarkModeToggled } from "../features/settingsSlice";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
+
   const dispatch = useAppDispatch();
 
-  // Get the token and put it in state, to be retrieved in each component
-  dispatch(setToken(localStorage.getItem("token")!));
-
-  const token = useAppSelector((state) => state.auth.token);
-
+  const token = localStorage.getItem("token");
   const projectID = localStorage.getItem("project");
+
+  const { t } = useTranslation();
 
   const [username, setUsername] = useState<string>("");
 
@@ -34,7 +33,7 @@ const Dashboard = () => {
 
     // Request for username
     axios
-      .get(`${process.env.REACT_APP_BACKEND}/api/dashboard`, { headers: { authorization: token } })
+      .get(`${process.env.REACT_APP_BACKEND}/api/dashboard`, { headers: { authorization: token! } })
       .then((res) => setUsername(res.data))
       .catch((err) => console.log(err));
   });
@@ -50,7 +49,7 @@ const Dashboard = () => {
         </main>
       ) : (
         <main className={styles["wrapper-no-project"]}>
-          <p className={styles.box}>No project is currently open.</p>
+          <p className={styles.box}>{t("main.noProjectOpen")}</p>
         </main>
       )}
       <Settings />

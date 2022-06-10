@@ -44,7 +44,7 @@ const createWord = (req, res) => {
         gloss,
         language: result,
       }).save((err, results) => {
-        if (err) return res.status(400).json({ message: "Error empty field" });
+        if (err) return res.status(400).json("Error empty field");
         else {
           jwt.verify(req.token, process.env.JWTKEY, (err) => {
             if (err) return res.sendStatus(403);

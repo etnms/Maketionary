@@ -5,7 +5,7 @@ import axios from "axios";
 import SearchBar from "./SearchBar";
 import { IWordDb } from "../interfaces/interfaceWord";
 import settingsStyles from "./Settings.module.css";
-import { useAppSelector } from "../app/hooks";
+import { useTranslation } from "react-i18next";
 
 interface ITopNav {
   username: string;
@@ -14,11 +14,12 @@ interface ITopNav {
 const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
   const { username } = props;
 
-  const token = useAppSelector(state => state.auth.token);
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const token = localStorage.getItem("token");
   const projectID = localStorage.getItem("project");
   const projectName = localStorage.getItem("projectName");
-
-  const navigate = useNavigate();
 
   const displayDropdown = (
     e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.KeyboardEvent<HTMLSpanElement>
@@ -40,7 +41,6 @@ const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
     // Get settings element and add css to display it
     const settings = document.querySelector("[data-settings='settings-menu']");
     settings?.classList.add(`${settingsStyles["show-settings"]}`);
-
   };
 
   const downloadJSON = () => {
@@ -105,13 +105,13 @@ const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
           className={styles.dropdown}
           onClick={(e) => displayDropdown(e)}
           onKeyDown={(e) => handleKeypress(e)}>
-          <span>File</span>
+          <span>{t("nav.file")}</span>
           <div className={styles["dropdown-content"]}>
             <button className={styles["nav-btn"]} onClick={() => navigate("/new-project")}>
-              New project
+            {t('nav.newProject')}
             </button>
             <button className={styles["nav-btn"]} onClick={() => navigate("/open-project")}>
-              Open project
+            {t('nav.openProject')}
             </button>
           </div>
         </span>
@@ -120,26 +120,29 @@ const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
           className={styles.dropdown}
           onClick={(e) => displayDropdown(e)}
           onKeyDown={(e) => handleKeypress(e)}>
-          <span>Export</span>
+          <span>{t('nav.export')}</span>
           <div className={styles["dropdown-content"]}>
             <button className={styles["nav-btn"]} onClick={downloadJSON}>
-              Export as JSON
+            {t('nav.exportJson')}
             </button>
             <button className={styles["nav-btn"]} onClick={downloadRTF}>
-              Export as RTF
+            {t('nav.exportRtf')}
             </button>
           </div>
         </span>
-        <button onClick={() => openSettings()} className={styles["btn-settings"]}>Settings</button>
+        <button onClick={() => openSettings()} className={styles["btn-settings"]}>
+        {t('nav.settings')}
+        </button>
       </div>
       <SearchBar />
-     
+
       <div className={styles["wrapper-user"]}>
-        <span>
-          Current project: <span className={styles["current-project"]}>{projectName}</span>
-        </span>
-        <span>Welcome, {username}</span>
-        <button className={styles["btn-logout"]}>Sign out</button>
+        {projectID !== null ? // Display only is a project is open
+        <span className={styles["current-project"]}>     
+          {t('nav.current')} <em>{projectName}</em>
+        </span> : null}
+        <span>{t('nav.welcome')}{username}</span>
+        <button className={styles["btn-logout"]}>{t('nav.signout')}</button>
       </div>
     </nav>
   );

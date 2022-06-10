@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/ExpiredSession.module.css";
 
 const ExpiredSession = () => {
   const navigate = useNavigate();
+  const {t} = useTranslation();
   const [count, setCount] = useState<number>(5);
   useEffect(() => {
     document.title = "Session expired";
@@ -18,8 +20,8 @@ const ExpiredSession = () => {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        <p>Your session has expired.</p>
-        <p>You will be redirected in {count} seconds.</p>
+        <p>{t("expired.title")}</p>
+        <p>{t("expired.redirectP1")}{count}{t("expired.redirectP2")}</p>
       </div>
     </div>
   );

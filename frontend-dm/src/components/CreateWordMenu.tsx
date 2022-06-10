@@ -1,25 +1,39 @@
 import axios from "axios";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useAppDispatch } from "../app/hooks";
 import { addWord } from "../features/arrayWordsSlice";
 import { renderGlossOptions, renderPOSOptions } from "../helpers/renderSelect";
 import styles from "./CreateWordMenu.module.css";
-
+import ErrorMessage from "./ErrorMessage";
 
 const CreateWordMenu = () => {
-  
-  const token = useAppSelector(state => state.auth.token);
+  const token = localStorage.getItem("token");
 
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const createWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    // Get all parameters
     e.preventDefault();
-    const word = (document.querySelector("input[name='word']") as HTMLInputElement).value;
-    const translation = (document.querySelector("input[name='translation']") as HTMLInputElement).value;
-    const definition = (document.querySelector("textarea[name='definition']") as HTMLTextAreaElement).value;
-    const example = (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value;
+    // Get all parameters
+    // Remove any upper case letters for word/translation
+    const word = (document.querySelector("input[name='word']") as HTMLInputElement).value.toLowerCase();
+    const translation = (
+      document.querySelector("input[name='translation']") as HTMLInputElement
+    ).value.toLowerCase();
+    // Uppercase the first letter for definition and examples
+    let definition = (document.querySelector("textarea[name='definition']") as HTMLTextAreaElement).value;
+    // Making sure the field is not empty, if not uppercase it
+    if (definition !== "") definition = definition[0].toUpperCase() + definition.slice(1);
+    let example = (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value;
+    // Making sure the field is not empty, if not uppercase it
+    if (example !== "") example = example[0].toUpperCase() + example.slice(1);
+    //pos and gloss don't require changes since they are select values
     const pos = (document.querySelector("select[name='pos']") as HTMLSelectElement).value;
     const gloss = (document.querySelector("select[name='gloss']") as HTMLSelectElement).value;
+    //Get the ID
     const languageID = localStorage.getItem("project");
 
     axios
@@ -29,7 +43,10 @@ const CreateWordMenu = () => {
         { headers: { Authorization: token! } }
       )
       .then((res) => dispatch(addWord(res.data.results)))
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        if (err.response.data === "Error empty field") setErrorMessage(t("errorMessages.errorWord"));
+        else setErrorMessage(t("errorMessages.errorProblem"));
+      });
 
     // Reset values to default
     (document.querySelector("input[name='word']") as HTMLInputElement).value = "";
@@ -40,24 +57,33 @@ const CreateWordMenu = () => {
     (document.querySelector("select[name='gloss']") as HTMLSelectElement).value = "ABE";
   };
 
+  // Handle the change to the word value to remove error message
+  const handleWordChange = () => {
+    const word = (document.querySelector("input[name='word']") as HTMLInputElement).value;
+    if (errorMessage === t("errorMessages.errorWord")){
+      if (word !== "") setErrorMessage("")
+    }
+  }
+
   return (
     <aside className={styles["create-word"]}>
       <form className={styles["form-word"]}>
-        <h2 className={styles.title}>Add new word</h2>
-        <label htmlFor="word">Word</label>
-        <input name="word" />
-        <label htmlFor="translation">Translation</label>
+        <h2 className={styles.title}>{t("newWord.title")}</h2>
+        <label htmlFor="word">{t("newWord.word")}</label>
+        <input name="word" onChange={handleWordChange}/>
+        <label htmlFor="translation">{t("newWord.translation")}</label>
         <input name="translation" />
-        <label htmlFor="definition">Definition</label>
+        <label htmlFor="definition">{t("newWord.definition")}</label>
         <textarea name="definition" className={styles.definition} />
-        <label htmlFor="example">Example</label>
+        <label htmlFor="example">{t("newWord.example")}</label>
         <textarea name="example" className={styles.example} />
-        <label htmlFor="pos">Part of Speech</label>
+        <label htmlFor="pos">{t("newWord.pos")}</label>
         <select name="pos">{renderPOSOptions("create")}</select>
-        <label htmlFor="gloss">Gloss</label>
+        <label htmlFor="gloss">{t("newWord.gloss")}</label>
         <select name="gloss">{renderGlossOptions("create")}</select>
+        {errorMessage === "" ? null : <ErrorMessage message={errorMessage} />}
         <button type="submit" className={styles["btn-submit"]} onClick={(e) => createWord(e)}>
-          Add word
+          {t("newWord.addWordBtn")}
         </button>
       </form>
     </aside>

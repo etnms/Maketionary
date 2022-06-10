@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateWordList } from "../features/arrayWordsSlice";
 import { IWordDb } from "../interfaces/interfaceWord";
@@ -8,8 +9,10 @@ import Word from "./Word";
 
 const ListWords = () => {
   
-  const token = useAppSelector(state => state.auth.token);
+  const token = localStorage.getItem("token");
   const projectID = localStorage.getItem("project");
+
+  const {t} = useTranslation();
 
   const [filteredResults, setFilteredResults] = useState<IWordDb[]>();
 
@@ -81,12 +84,12 @@ const ListWords = () => {
         <li className={`${styles.listitem} ${styles.titles}`} key={"titles"}>
           <span className={styles["wrapper-edit"]}></span>{" "}
           {/* Empty element to create space in the view but no need to edit titles*/}
-          <span className={styles.word}>Word</span>
-          <span className={styles.translation}>Translation</span>
-          <span className={styles.definition}>Definition</span>
-          <span className={styles.example}>Example</span>
-          <span className={styles.pos}>POS</span>
-          <span className={styles.gloss}>Gloss</span>
+          <span className={styles.word}>{t('main.word')}</span>
+          <span className={styles.translation}>{t('main.translation')}</span>
+          <span className={styles.definition}>{t('main.definition')}</span>
+          <span className={styles.example}>{t('main.example')}</span>
+          <span className={styles.pos}>{t('main.pos')}</span>
+          <span className={styles.gloss}>{t('main.gloss')}</span>
         </li>
         {searchInput === "" ? displayWords() : filterResults()}
       </ul>

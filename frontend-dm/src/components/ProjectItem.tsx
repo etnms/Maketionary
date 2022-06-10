@@ -12,7 +12,7 @@ import { setProjectID, setProjectName } from "../features/projectItemSlice";
 const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
   const { _id, name } = props;
 
-  const token = useAppSelector((state) => state.auth.token);
+  const token = localStorage.getItem("token");
 
   const [projectValue, setProjectValue] = useState<string>(name);
   const [edit, setEdit] = useState<boolean>(false);
@@ -82,6 +82,7 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
           value={projectValue}
           className={styles["input-project"]}
           onChange={(e) => setProjectValue((e.currentTarget as HTMLInputElement).value)}
+          onClick={(e) => e.stopPropagation()}
         />
       ) : (
         `${projectValue}`

@@ -3,9 +3,11 @@ import { setSearchInput } from "../features/searchSlice";
 import styles from "./SearchBar.module.css";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 const SearchBar = () => {
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
 
   const searchItems = (searchValue: string) => {
     dispatch(setSearchInput(searchValue));
@@ -34,7 +36,7 @@ const SearchBar = () => {
         name="search-bar"
         className={styles["search-bar"]}
         onChange={(e) => searchItems(e.target.value)}
-        placeholder="Search"
+        placeholder={`${t('nav.search')}`}
         aria-label="search-bar"
         ref={ref}
       />

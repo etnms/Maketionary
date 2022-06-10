@@ -78,6 +78,10 @@
   background-color: var(--bg-secondary-selected);
 }
 
+.current-project {
+  max-width: 30vw;
+}
+
 .btn-logout {
   background-color: var(--bg-tertiary);
   border: none;

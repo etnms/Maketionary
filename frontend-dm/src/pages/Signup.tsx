@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authStyle from "../styles/Login.module.css";
 import buttons from "../styles/Buttons.module.css";
+import { useTranslation } from "react-i18next";
+import ErrorMessage from "../components/ErrorMessage";
 
 const Signup = () => {
-  const [errorMessage, setErrorMessage] = useState<string>("");
-
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
     document.title = "Maketionary - Sign up";
@@ -21,7 +24,6 @@ const Signup = () => {
     navigate("/");
   };
 
-
   const signup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const email = (document.querySelector("input[name='email']") as HTMLInputElement).value;
@@ -34,36 +36,36 @@ const Signup = () => {
       .post(`${process.env.REACT_APP_BACKEND}/api/signup`, { email, username, password, confirmPassword })
       .then((res) => {
         if (res.data.message === "User created") {
-            console.log(res);
+          console.log(res);
           localStorage.setItem("token", res.data.token);
           navigateIndex();
         }
       })
       .catch((err) => {
-          console.log(err);
         switch (err.response.data) {
           case "Empty username":
-            return setErrorMessage("Error: username is empty");
+            return setErrorMessage(t("errorMessages.errorEmptyUsername"));
           case "There was a problem":
-            return setErrorMessage("Error: there was a problem.");
+            return setErrorMessage(t("errorMessages.errorProblem"));
           case "Username already exists":
-            return setErrorMessage("Error: username is already being used.");
+            return setErrorMessage(t("errorMessages.errorExistingUsername"));
           case "Email already exists":
-            return setErrorMessage("Error: email is already being used");
+            return setErrorMessage(t("errorMessages.errorExistingEmail"));
           case "email":
-            return setErrorMessage("Error: you need to enter your email adress.");
+            return setErrorMessage(t("errorMessages.errorEmptyEmail"));
           case "password":
-            return setErrorMessage("Error: your password needs to be at least 6 characters long.");
+            return setErrorMessage(t("errorMessages.errorPasswordLength"));
           case "Passwords special characters":
-            return setErrorMessage(
-              "Error: your password must contain 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character."
-            );
+            return setErrorMessage(t("errorMessages.errorPasswordCharacters"));
           case "Passwords need to match":
-            return setErrorMessage("Error: passwords need to match.");
+            return setErrorMessage(t("errorMessages.errorPasswordMatch"));
+          default:
+            return setErrorMessage(t("errorMessages.errorProblem"));
         }
       });
   };
 
+  // Handle change to check if fields corresponds to their supposed values
   const handleChange = () => {
     const email = (document.querySelector("input[name='email']") as HTMLInputElement).value;
     const username = (document.querySelector("input[name='username']") as HTMLInputElement).value;
@@ -71,19 +73,19 @@ const Signup = () => {
     const confirmPassword = (document.querySelector("input[name='confirm-password']") as HTMLInputElement)
       .value;
     switch (errorMessage) {
-      case "Error: Username is empty":
+      case t("errorMessages.errorEmptyUsername"):
         if (username !== "") setErrorMessage("");
         break;
-      case "Error: passwords need to match.":
+      case t("errorMessages.errorPasswordMatch"):
         if (password === confirmPassword) setErrorMessage("");
         break;
-      case "Error: you need to enter your email adress.":
+      case t("errorMessages.errorEmptyEmail"):
         if (email !== "") setErrorMessage("");
         break;
-      case "Error: your password needs to be at least 6 characters long.":
+      case t("errorMessages.errorPasswordLength"):
         if (password.length > 6) setErrorMessage("");
         break;
-      case "Error: your password must contain 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.":
+      case t("errorMessages.errorPasswordCharacters"):
         const regexPattern = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])");
         const checkPattern = regexPattern.test(password);
         if (checkPattern) setErrorMessage("");
@@ -94,23 +96,43 @@ const Signup = () => {
   };
   return (
     <div className={authStyle.bg}>
-      <form onSubmit={(e) => signup(e)}className={authStyle.auth}>
-        <h1 className={authStyle.title}>Sign up</h1>
+      <form onSubmit={(e) => signup(e)} className={authStyle.auth}>
+        <h1 className={authStyle.title}>{t("signup.title")}</h1>
         <div className={authStyle["wrapper-input"]}>
           <label htmlFor="email" className={authStyle["input-label"]}>
-            Email
+            {t("signup.email")}
           </label>
-          <input type="email" name="email" className={authStyle["input-text"]} onChange={() => handleChange()} />
+          <input
+            type="email"
+            name="email"
+            className={authStyle["input-text"]}
+            onChange={() => handleChange()}
+          />
           <label htmlFor="username" className={authStyle["input-label"]}>
-            Username
+            {t("signup.username")}
           </label>
-          <input type="text" name="username" className={authStyle["input-text"]} onChange={() => handleChange()} />
-          <label htmlFor="password" className={authStyle["input-label"]}>
-            Password
-          </label>
-          <input type="password" name="password"className={authStyle["input-text"]}onChange={() => handleChange()} />
+          <input
+            type="text"
+            name="username"
+            className={authStyle["input-text"]}
+            onChange={() => handleChange()}
+          />
+          <div className={authStyle["wrapper-password-text"]}>
+            <label htmlFor="password" className={authStyle["input-label"]}>
+              {t("signup.password")}
+            </label>
+            <span className={authStyle.tooltip}>
+              ?<span className={authStyle.tooltiptext}>{t("signup.tooltip")}</span>
+            </span>
+          </div>
+          <input
+            type="password"
+            name="password"
+            className={authStyle["input-text"]}
+            onChange={() => handleChange()}
+          />
           <label htmlFor="confirm-password" className={authStyle["input-label"]}>
-            Confirm Password
+            {t("signup.confirmPassword")}
           </label>
           <input
             type="password"
@@ -119,13 +141,13 @@ const Signup = () => {
             onChange={() => handleChange()}
           />
         </div>
-        {errorMessage !== "" ? "error" : null}
+        {errorMessage === "" ? null : <ErrorMessage message={errorMessage} />}
         <span className={buttons["wrapper-btns"]}>
           <button type="submit" className={buttons["btn-open"]}>
-            Sign up
+            {t("signup.signupBtn")}
           </button>
           <button className={buttons["btn-cancel"]} onClick={() => navigateIndex()}>
-            Home
+            {t("signup.homeBtn")}
           </button>
         </span>
       </form>

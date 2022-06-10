@@ -1,0 +1,92 @@
+{
+  "login": {
+    "title": "Connexion",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "tooltip": "Les mots de passe contiennent au moins 6 caractères dont 1 lettre majuscule, 1 lettre minuscule, 1 chiffre et 1 caractère spécial.",
+    "loginBtn": "Se connecter",
+    "homeBtn": "Page principale"
+  },
+  "signup": {
+    "title":"Création d'un compte",
+    "email": "Email",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmation du mot de passe",
+    "tooltip": "Les mots de passe doivent contenir au moins 6 caractères dont 1 lettre majuscule, 1 lettre minuscule, 1 chiffre et 1 caractère spécial.",
+    "signupBtn": "Créer son compte",
+    "homeBtn": "Page principale"
+  },
+  "nav": {
+    "file": "Fichier",
+    "newProject": "Nouveau projet",
+    "openProject": "Ouvrir projet",
+    "export": "Exporter",
+    "exportJson": "Exporter comme JSON",
+    "exportRtf": "Exporter comme RTF",
+    "settings": "Paramètres",
+    "search": "Chercher",
+    "current": "Projet : ",
+    "welcome": "Bienvenue, ",
+    "signout": "Se déconnecter"
+  },
+  "projects": {
+    "newProjectTitle": "Nouveau projet",
+    "openProjectTitle": "Ouvrir projet",
+    "loading": "Chargement des projets...",
+    "createBtn": "Créer",
+    "openBtn": "Ouvrir",
+    "cancelBtn": "Annuler",
+    "deleteConfirmText": "Etes-vous sur de vouloir supprimer le projet suivant:",
+    "yesBtn": "Oui",
+    "noBtn": "Non"
+  },
+  "newWord": {
+    "title": "Ajouter un mot",
+    "word": "Mot",
+    "translation": "Traduction",
+    "definition": "Définition",
+    "example": "Exemple",
+    "pos": "Partie du discours",
+    "gloss": "Glose",
+    "addWordBtn": "Ajouter"
+  },
+  "main": {
+    "word": "Mot",
+    "translation": "Traduction",
+    "definition": "Définition",
+    "example": "Exemple",
+    "pos": "PDD",
+    "gloss": "Glose",
+    "noProjectOpen": "Aucun projet n'est ouvert pour le moment."
+  },
+  "settings": {
+    "title": "Paramètres",
+    "theme": "Thème",
+    "language": "Langue"
+  },
+  "errorMessages": {
+    "emptyFields": "Erreur: l'un des champs est vide.",
+    "errorIncorrectAuthCreds": "Erreur: nom d'utilisateur ou mot de passe incorrect.",
+    "errorEmptyUsername": "Erreur: nom d'utilisateur est vide",
+    "errorExistingUsername": "Erreur: ce nom d'utilisateur n'est pas disponible.",
+    "errorExistingEmail": "Erreur: cet email est déjà utilisé.",
+    "errorEmptyEmail": "Erreur: vous devez entrer une adresse email.",
+    "errorPasswordLength": "Erreur: votre mot de passe doit être long d'au minimum 6 caractères.",
+    "errorPasswordCharacters":  "Erreur: votre mot de passe doit contenir au moins 1 lettre majuscule, 1 lettre minuscule, 1 chiffre et 1 caractère spécial.",
+    "errorPasswordMatch": "Erreur: les mots de passes ne correspondent pas.",
+    "errorNameTooLong": "Erreur: le nom du projet est trop long.",
+    "errorProjectNameEmpty" : "Erreur: le nom est vide.",
+    "errorWord": "Erreur: le champt mot ne peut pas être vide.",
+    "errorProblem": "Erreurr: il y a eu un problème."
+  },
+  "expired": {
+    "title": "Votre session a expiré.",
+    "redirectP1": "Vous allez être automatiquement redirigé dans ",
+    "redirectP2": " seconde(s)."
+  },
+  "404": {
+    "title": "Cette page n'existe pas.",
+    "btnHome": "Page principale"
+  }
+}

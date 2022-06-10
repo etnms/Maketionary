@@ -1,5 +1,6 @@
 .create-word {
   height: 90vh;
+  overflow-y: auto;
   background-color: var(--bg-secondary);
   width: var(--create-menu-width);
   margin: 0.2rem 0.4rem;
@@ -19,7 +20,7 @@
 
 .title {
   padding: 0;
-  margin: 10px;
+  margin: 8px;
 }
 
 .form-word > input,
@@ -51,7 +52,7 @@ select, textarea {
 .btn-submit {
   border: none;
   border-radius: 12px;
-  margin: 5px;
+  margin: 10px;
   padding: 0.5rem 1rem;
   font-family: var(--second-font);
   font-size: 1.2rem;

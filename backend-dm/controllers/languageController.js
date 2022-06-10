@@ -30,21 +30,25 @@ const getLanguage = (req, res) => {
 const postLanguage = (req, res) => {
   const language = req.body.language;
 
-  if (language.length > 50) return res.status(400).json({ error: "Name too long" });
+  // Prevent long name
+  if (language.length > 30) return res.status(400).json("Name too long");
 
   jwt.verify(req.token, process.env.JWTKEY, (err, authData) => {
     if (err) return res.sendStatus(403);
     else {
       User.findOne({ username: authData.user.username }).exec((err, result) => {
-        if (err) return res.status(400).json({ error: "Error creation collection" });
+        if (err) return res.status(400).json("Error creation collection");
 
         if (result) {
           new Language({
             name: language,
             user: result,
           }).save((err, result) => {
-            if (err) return res.status(400).json({ error: "Error field empty" });
-            else return res.status(200).json({ message: "Collection created", _id: result._id, name: result.name });
+            if (err) return res.status(400).json("Error field empty");
+            else
+              return res
+                .status(200)
+                .json({ message: "Collection created", _id: result._id, name: result.name });
           });
         }
       });
@@ -80,6 +84,9 @@ const deletelanguage = (req, res) => {
 const editLanguage = (req, res) => {
   const _id = req.body._id;
   const name = req.body.newName;
+
+  // Prevent long name
+  if (name.length > 30) return res.status(400).json({ error: "Name too long" });
 
   jwt.verify(req.token, process.env.JWTKEY, (err) => {
     if (err) {

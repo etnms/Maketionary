@@ -15,7 +15,7 @@ import { updateWordList } from "../features/arrayWordsSlice";
 const Word = (props: React.PropsWithChildren<IWord>) => {
   const { _id, word, translation, definition, example, pos, gloss } = props;
 
-  const token = useAppSelector(state => state.auth.token);
+  const token = localStorage.getItem("token");
 
   const listWord = useAppSelector((state) => state.arrayWords.value);
   // Using global state to determine the status of the edit mode

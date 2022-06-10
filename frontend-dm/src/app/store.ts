@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import arrayWordsReducer from "../features/arrayWordsSlice";
 import editModeReducer from "../features/editModeSlice";
 import searchReducer from "../features/searchSlice";
-import authReducer from "../features/authSlice";
 import projectItemReducer from "../features/projectItemSlice";
 import settingsReducer from "../features/settingsSlice";
 
@@ -11,7 +10,6 @@ export const store = configureStore({
     arrayWords: arrayWordsReducer,
     editMode: editModeReducer,
     search: searchReducer,
-    auth: authReducer,
     projectItem: projectItemReducer,
     settings: settingsReducer,
   },

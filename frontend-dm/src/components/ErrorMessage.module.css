@@ -1,0 +1,33 @@
+.message {
+    color: red;
+    animation: shake 300ms ;
+    width: 80%;
+    text-align: center;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(3px, 0);
+      }
+      12.5% {
+        transform: translate(0px, 0);
+      }
+      25% {
+        transform: translate(-3px, 0);
+      }
+      50% {
+        transform: translate(0px, 0);
+      }
+      62.5% {
+        transform: translate(3px, 0);
+      }
+      75% {
+        transform: translate(0px, 0);
+      }
+      87.5% {
+        transform: translate(-2px, 0);
+      }
+      100% {
+        transform: translate(0px, 0);
+      }
+}
