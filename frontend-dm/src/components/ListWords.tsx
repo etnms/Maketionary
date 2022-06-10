@@ -84,12 +84,14 @@ const ListWords = () => {
         <li className={`${styles.listitem} ${styles.titles}`} key={"titles"}>
           <span className={styles["wrapper-edit"]}></span>{" "}
           {/* Empty element to create space in the view but no need to edit titles*/}
+          <div className={styles["wrapper-content"]}>
           <span className={styles.word}>{t('main.word')}</span>
           <span className={styles.translation}>{t('main.translation')}</span>
           <span className={styles.definition}>{t('main.definition')}</span>
           <span className={styles.example}>{t('main.example')}</span>
           <span className={styles.pos}>{t('main.pos')}</span>
           <span className={styles.gloss}>{t('main.gloss')}</span>
+          </div>
         </li>
         {searchInput === "" ? displayWords() : filterResults()}
       </ul>

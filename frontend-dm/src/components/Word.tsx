@@ -76,6 +76,9 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   };
 
   const updateWord = () => {
+    // Updating a word function
+    // This function does not uppercase/lowercase entries as opposed to the create word one
+    // This is for the simple purpose of letting users change entries as they wish for scenarios where casing can be an issue
     const word = (document.querySelector("input[name='edit-word']") as HTMLInputElement).value;
     const translation = (document.querySelector("input[name='edit-translation']") as HTMLInputElement).value;
     const definition = (document.querySelector("textarea[name='edit-definition']") as HTMLTextAreaElement)
@@ -161,6 +164,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
       This allows for one edit at a time and not showing multiple on accident. 
       Repeat for every field.*/}
       {editMode && wordToEdit === _id ? (
+        <div className={styles["wrapper-content"]}>
         <span className={`${styles.word}`}>
           <input
             name="edit-word"
@@ -169,10 +173,6 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             onChange={(e) => handleChange(e, "word")}
           />
         </span>
-      ) : (
-        <span className={styles.word}>{wordValue}</span>
-      )}
-      {editMode && wordToEdit === _id ? (
         <span className={`${styles.translation}`}>
           <input
             name="edit-translation"
@@ -181,10 +181,6 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             onChange={(e) => handleChange(e, "translation")}
           />
         </span>
-      ) : (
-        <span className={styles.translation}>{translationValue}</span>
-      )}
-      {editMode && wordToEdit === _id ? (
         <span className={`${styles.definition}`}>
           <textarea
             name="edit-definition"
@@ -192,10 +188,6 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             className={`${styles.edit} ${styles["edit-example"]}`}
             onChange={(e) => handleChange(e, "definition")}></textarea>
         </span>
-      ) : (
-        <span className={styles.definition}>{definitionValue}</span>
-      )}
-      {editMode && wordToEdit === _id ? (
         <span className={styles.example}>
           <textarea
             name="edit-example"
@@ -203,10 +195,6 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             className={`${styles.edit} ${styles["edit-example"]}`}
             onChange={(e) => handleChange(e, "example")}></textarea>
         </span>
-      ) : (
-        <span className={styles.example}>{exampleValue}</span>
-      )}
-      {editMode && wordToEdit === _id ? (
         <span className={styles.pos}>
           <select
             name="edit-pos"
@@ -216,10 +204,6 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             {renderPOSOptions("edit")}
           </select>
         </span>
-      ) : (
-        <span className={styles.pos}>{posValue}</span>
-      )}
-      {editMode && wordToEdit === _id ? (
         <span className={styles.gloss}>
           <select
             name="edit-gloss"
@@ -229,8 +213,16 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             {renderGlossOptions("edit")}
           </select>
         </span>
+        </div>
       ) : (
+        <div className={styles["wrapper-content"]}>
+        <span className={styles.word}>{wordValue}</span>
+        <span className={styles.translation}>{translationValue}</span>
+        <span className={styles.definition}>{definitionValue}</span>
+        <span className={styles.example}>{exampleValue}</span>
+        <span className={styles.pos}>{posValue}</span>
         <span className={styles.gloss}>{glossValue}</span>
+        </div>
       )}
     </li>
   );
