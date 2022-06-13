@@ -11,6 +11,7 @@ import ExpiredSession from "./pages/ExpiredSession";
 import Home from "./pages/Home";
 import { Suspense } from "react";
 import HomeLoader from "./components/HomeLoader";
+import Settings from "./components/Settings";
 
 function App() {
   return (
@@ -20,7 +21,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="settings" element={<Settings/>}/>
+          </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/new-project" element={<NewProjectMenu />} />

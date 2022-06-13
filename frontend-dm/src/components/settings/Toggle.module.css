@@ -11,8 +11,9 @@
   height: 24px;
 }
 
+
 /* Hide default HTML checkbox */
-.switch input {
+.toggle {
   opacity: 0;
   width: 0;
   height: 0;
@@ -41,11 +42,11 @@
   transition: 0.4s;
 }
 
-input:checked + .slider {
+.toggle:checked + .slider {
   background-color: var(--primary);
 }
 
-input:checked + .slider:before {
+.toggle:checked + .slider:before {
   transform: translateX(33px);
 }
 
@@ -57,3 +58,5 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+

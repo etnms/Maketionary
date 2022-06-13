@@ -1,14 +1,20 @@
 import styles from "./DarkThemeToggle.module.css";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { setIsDarkModeToggled } from "../features/settingsSlice";
+import { useEffect } from "react";
 
 const DarkThemeToggle = () => {
-  /// Although this toggle component work pretty much the same way as the toggle one they are slight differences like 
+  /// Although this toggle component work pretty much the same way as the toggle one they are slight differences like
   // setAttribute; this probably could be used as one common toggle component later on.
-  const isDarkThemeToggled = useAppSelector((state) => state.settings.isDarkModeToggled);
-  const dispatch = useAppDispatch();
+
+  const currentValue = localStorage.getItem("darktheme");
+
+  useEffect(() => {
+    // Get toggle value
+    const toggle = document.querySelector("input[name='toggle-darktheme") as HTMLInputElement;
+    if (currentValue === "lighttheme") toggle.checked = false;
+    else toggle.checked = true;
+  }, [currentValue]);
 
   const toggleDarkTheme = (
     e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>
@@ -20,7 +26,6 @@ const DarkThemeToggle = () => {
       localStorage.setItem("darktheme", "lighttheme");
       document.documentElement.setAttribute("data-color-scheme", "light");
     }
-    dispatch(setIsDarkModeToggled(!isDarkThemeToggled));
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -40,7 +45,7 @@ const DarkThemeToggle = () => {
           name="toggle-darktheme"
           onChange={(e) => toggleDarkTheme(e)}
           onKeyDown={(e) => handleKeyPress(e)}
-          checked={isDarkThemeToggled}
+          aria-label="switch"
         />
         <span className={`${styles.slider} ${styles.round}`}></span>
       </label>

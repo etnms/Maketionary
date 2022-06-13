@@ -6,15 +6,11 @@
   transform: translate(50%, -50%);
   height: 100%;
   width: 100%;
-  display: none;
-  background-color: transparent;
-  backdrop-filter: blur(3.3px);
-}
-
-.show-settings {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: transparent;
+  backdrop-filter: blur(3.3px);
 }
 
 .settings-box {
