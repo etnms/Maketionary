@@ -132,3 +132,11 @@
 .gloss {
   flex: 0.9;
 }
+
+/* Loader */
+
+.wrapper-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

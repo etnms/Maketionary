@@ -6,6 +6,7 @@ import { addWord } from "../features/arrayWordsSlice";
 import { renderGlossOptions, renderPOSOptions } from "../helpers/renderSelect";
 import styles from "./CreateWordMenu.module.css";
 import ErrorMessage from "./ErrorMessage";
+import Loader from "./Loader";
 
 const CreateWordMenu = () => {
   const token = localStorage.getItem("token");
@@ -14,6 +15,8 @@ const CreateWordMenu = () => {
   const { t } = useTranslation();
 
   const [errorMessage, setErrorMessage] = useState<string>("");
+  // Boolean for the loader component
+  const [loading, setLoading] = useState<boolean>(false);
 
   const createWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
@@ -35,15 +38,20 @@ const CreateWordMenu = () => {
     const gloss = (document.querySelector("select[name='gloss']") as HTMLSelectElement).value;
     //Get the ID
     const languageID = localStorage.getItem("project");
-
+    // Create loader to wait for answer from the server
+    setLoading(true);
     axios
       .post(
         `${process.env.REACT_APP_BACKEND}/api/word`,
         { word, translation, definition, example, pos, gloss, languageID },
         { headers: { Authorization: token! } }
       )
-      .then((res) => dispatch(addWord(res.data.results)))
+      .then((res) => {
+        dispatch(addWord(res.data.results));
+        setLoading(false);
+      })
       .catch((err) => {
+        setLoading(false);
         if (err.response.data === "Error empty field") setErrorMessage(t("errorMessages.errorWord"));
         else setErrorMessage(t("errorMessages.errorProblem"));
       });
@@ -60,17 +68,17 @@ const CreateWordMenu = () => {
   // Handle the change to the word value to remove error message
   const handleWordChange = () => {
     const word = (document.querySelector("input[name='word']") as HTMLInputElement).value;
-    if (errorMessage === t("errorMessages.errorWord")){
-      if (word !== "") setErrorMessage("")
+    if (errorMessage === t("errorMessages.errorWord")) {
+      if (word !== "") setErrorMessage("");
     }
-  }
+  };
 
   return (
     <aside className={styles["create-word"]}>
       <form className={styles["form-word"]}>
         <h2 className={styles.title}>{t("newWord.title")}</h2>
         <label htmlFor="word">{t("newWord.word")}</label>
-        <input name="word" onChange={handleWordChange}/>
+        <input name="word" onChange={handleWordChange} />
         <label htmlFor="translation">{t("newWord.translation")}</label>
         <input name="translation" />
         <label htmlFor="definition">{t("newWord.definition")}</label>
@@ -82,9 +90,10 @@ const CreateWordMenu = () => {
         <label htmlFor="gloss">{t("newWord.gloss")}</label>
         <select name="gloss">{renderGlossOptions("create")}</select>
         {errorMessage === "" ? null : <ErrorMessage message={errorMessage} />}
+        {!loading? // Loader after word submission
         <button type="submit" className={styles["btn-submit"]} onClick={(e) => createWord(e)}>
           {t("newWord.addWordBtn")}
-        </button>
+        </button> : <div className={styles["wrapper-loader"]}><Loader/></div>}
       </form>
     </aside>
   );

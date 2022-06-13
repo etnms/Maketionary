@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectWordEdit, setEditMode } from "../features/editModeSlice";
 import { updateWordList } from "../features/arrayWordsSlice";
 import { useTranslation } from "react-i18next";
+import Loader from "./Loader";
 
 // need function that cancel edit / restores tmp value to current value
 
@@ -147,10 +148,11 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   return (
     <li className={styles.listitem} onDoubleClick={(e) => selectLine(e)} tabIndex={0} onKeyDown={(e) => handleKeypress(e)}>
       <div className={styles["wrapper-edit"]}>
+      
         <div className={styles["wrapper-btns"]}>
           <button className={styles["btn"]} onClick={(e) => deleteWord(e)} aria-label={t("ariaLabels.delete")} >
           <DeleteIcon />
-          </button>
+          </button> 
           {editMode ? (
             <button className={styles["btn"]} onClick={updateWord} aria-label={t("ariaLabels.editConfirm")} >
             <CheckCircleIcon /></button>
@@ -158,7 +160,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             <button  className={styles["btn"]} onClick={() => dispatch(setEditMode(true))} aria-label={t("ariaLabels.edit")}  >
             <EditIcon/></button>
           )}
-        </div>
+        </div> 
       </div>
       {/* Check to see if edit mode is on but also if the selected word is the correct one.
       This allows for one edit at a time and not showing multiple on accident. 

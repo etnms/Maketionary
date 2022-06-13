@@ -1,4 +1,9 @@
 {
+  "home": {
+    "title": "Maketionary",
+    "subtitle": "Créer vos propres dictionnaires. Quand vous voulez. Où vous voulez. Gratuitement.",
+    "getStarted": "Commencer"
+  },
   "login": {
     "title": "Connexion",
     "username": "Nom d'utilisateur",
@@ -63,7 +68,9 @@
   "settings": {
     "title": "Paramètres",
     "theme": "Thème",
-    "language": "Langue"
+    "language": "Langue",
+    "autoOpenProject": "Ouvrir le dernier projet automatiquement",
+    "userSignin": "Se connecter automatiquement"
   },
   "errorMessages": {
     "emptyFields": "Erreur: l'un des champs est vide.",

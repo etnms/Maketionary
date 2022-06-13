@@ -20,10 +20,6 @@ const Signup = () => {
     else document.documentElement.setAttribute("data-color-scheme", "light");
   });
 
-  const navigateIndex = () => {
-    navigate("/");
-  };
-
   const signup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const email = (document.querySelector("input[name='email']") as HTMLInputElement).value;
@@ -38,7 +34,7 @@ const Signup = () => {
         if (res.data.message === "User created") {
           console.log(res);
           localStorage.setItem("token", res.data.token);
-          navigateIndex();
+          navigate("/dashboard");
         }
       })
       .catch((err) => {
@@ -146,7 +142,7 @@ const Signup = () => {
           <button type="submit" className={buttons["btn-open"]}>
             {t("signup.signupBtn")}
           </button>
-          <button className={buttons["btn-cancel"]} onClick={() => navigateIndex()}>
+          <button className={buttons["btn-cancel"]} onClick={() => navigate("/")}>
             {t("signup.homeBtn")}
           </button>
         </span>

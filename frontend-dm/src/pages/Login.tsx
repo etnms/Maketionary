@@ -29,7 +29,7 @@ const Login = () => {
       .then((res) => {
         console.log(res);
         localStorage.setItem("token", res.data.token);
-        navigate("/");
+        navigate("/dashboard");
       })
       .catch((err) => {
         switch (err.response.data) {

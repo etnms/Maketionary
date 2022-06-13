@@ -1,25 +1,63 @@
-.app {
-  background-color: var(--bg);
-  position: relative;
-}
-.wrapper-main {
-  display: flex;
-  gap: 0.3rem;
-  position: relative;
-}
-
-.wrapper-no-project {
-  background-color: var(--bg-secondary);
-  height: var(--main-height);
+.page {
+  height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  background: linear-gradient(rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.7)), url("../assets/book_bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
-.box {
-  background-color: var(--bg-secondary);
-  box-shadow: var(--shadow);
+.nav {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem 0 ;
+  width: 100%;
+}
+
+.nav > button {
+  border: none;
   border-radius: 6px;
-  padding: 5rem;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  margin-right: 1rem;
+  border: none !important; /* Erasing the style from the button module */
+}
+
+.title {
+  font-size: 10vh;
+  margin: 2rem;
+  color: white;
+}
+
+.subtitle {
+  font-size: 5vh;
+  color: white;
+  text-align: center;
+  width: 70%;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+  width: 100%;
+  height: 100%;
+}
+
+.btn-get-started {
+  border: none;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-secondary);
+  cursor: pointer;
+  font-family: var(--second-font);
+  margin: 2rem;
+}
+
+.btn-get-started:hover {
+  background-color: var(--bg-secondary-selected);
 }

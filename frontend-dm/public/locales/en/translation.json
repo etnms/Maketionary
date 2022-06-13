@@ -1,4 +1,9 @@
 {
+  "home": {
+    "title": "Maketionary",
+    "subtitle": "Create your own dictionaries. Anytime. Anywhere. For free.",
+    "getStarted": "Get started"
+  },
   "login": {
     "title": "Login",
     "username": "Username",
@@ -39,7 +44,7 @@
     "cancelBtn": "Cancel",
     "deleteConfirmText": "Are you sure you want to delete the following project:",
     "yesBtn": "Yes",
-    "noBTn": "No"
+    "noBtn": "No"
   },
   "newWord": {
     "title": "Add new word",
@@ -63,7 +68,9 @@
   "settings": {
     "title": "Settings",
     "theme": "Theme",
-    "language": "Language"
+    "language": "Language",
+    "autoOpenProject": "Automatically load previous project",
+    "userSignin": "Sign in automatically"
   },
   "errorMessages": {
     "emptyFields": "Error: one of the fields is empty.",

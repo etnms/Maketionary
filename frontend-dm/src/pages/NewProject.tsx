@@ -5,6 +5,7 @@ import buttons from "../styles/Buttons.module.css";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ErrorMessage from "../components/ErrorMessage";
+import Loader from "../components/Loader";
 
 const NewProjectMenu = () => {
   const token = localStorage.getItem("token");
@@ -13,6 +14,8 @@ const NewProjectMenu = () => {
   const { t } = useTranslation();
 
   const [errorMessage, setErrorMessage] = useState<string>("");
+  // Show loader component variable
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     document.title = t("pageTitles.newProject");
@@ -23,6 +26,9 @@ const NewProjectMenu = () => {
   });
 
   const createNewProject = (e: React.FormEvent<HTMLFormElement>) => {
+    // show loading screen
+    setLoading(true);
+
     e.preventDefault();
     const language = (document.querySelector("input[name='newproject']") as HTMLInputElement).value;
     axios
@@ -34,9 +40,13 @@ const NewProjectMenu = () => {
       .then((res) => {
         localStorage.setItem("project", res.data._id);
         localStorage.setItem("projectName", res.data.name);
-        navigate("/");
+        // Hide loading screen
+        setLoading(false);
+        navigate("/dashboard");
       })
       .catch((err) => {
+        // Hide loading screen
+        setLoading(false);
         switch (err.response.data) {
           case "Name too long":
             return setErrorMessage(t("errorMessages.errorNameTooLong"));
@@ -74,14 +84,18 @@ const NewProjectMenu = () => {
         </label>
         <input name="newproject" className={styles.input} onChange={handleChange} />
         {errorMessage === "" ? null : <ErrorMessage message={errorMessage} />}
-        <div className={buttons["wrapper-btns"]}>
-          <button type="submit" className={buttons["btn-open"]}>
-            {t("projects.createBtn")}
-          </button>
-          <button type="submit" className={buttons["btn-cancel"]} onClick={() => navigate("/")}>
-            {t("projects.cancelBtn")}
-          </button>
-        </div>
+        {!loading ? (
+          <div className={buttons["wrapper-btns"]}>
+            <button type="submit" className={buttons["btn-open"]}>
+              {t("projects.createBtn")}
+            </button>
+            <button type="submit" className={buttons["btn-cancel"]} onClick={() => navigate("/dashboard")}>
+              {t("projects.cancelBtn")}
+            </button>
+          </div>
+        ) : (
+          <Loader />
+        )}
       </form>
     </div>
   );

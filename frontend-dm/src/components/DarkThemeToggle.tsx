@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setIsDarkModeToggled } from "../features/settingsSlice";
 
 const DarkThemeToggle = () => {
+  /// Although this toggle component work pretty much the same way as the toggle one they are slight differences like 
+  // setAttribute; this probably could be used as one common toggle component later on.
   const isDarkThemeToggled = useAppSelector((state) => state.settings.isDarkModeToggled);
   const dispatch = useAppDispatch();
 

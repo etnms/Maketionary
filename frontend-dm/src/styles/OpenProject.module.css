@@ -18,7 +18,12 @@
   width: 40vw;
   gap: 1rem;
 }
-
+.wrapper-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
 .list-link {
   display: flex;
   flex-direction: column;

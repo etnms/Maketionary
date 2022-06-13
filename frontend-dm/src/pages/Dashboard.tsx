@@ -1,4 +1,4 @@
-import styles from "../styles/Home.module.css";
+import styles from "../styles/Dashboard.module.css";
 import TopNav from "../components/TopNav";
 import ListWords from "../components/ListWords";
 import CreateWordMenu from "../components/CreateWordMenu";

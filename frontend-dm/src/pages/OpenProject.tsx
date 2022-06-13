@@ -9,10 +9,12 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import ConfirmDelete from "../components/ConfirmDelete";
 import { setProjectID, setProjectName } from "../features/projectItemSlice";
 import { useTranslation } from "react-i18next";
+import { setSearchInput } from "../features/searchSlice";
+import Loader from "../components/Loader";
 
 const OpenProject = () => {
   const navigate = useNavigate();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const token = localStorage.getItem("token");
   const [languageList, setLanguageList] = useState<IProjectItem[]>([]);
@@ -46,6 +48,7 @@ const OpenProject = () => {
     localStorage.setItem("project", projectID);
     localStorage.setItem("projectName", projectName);
     goHomePage();
+    dispatch(setSearchInput(""));
   };
 
   const goHomePage = () => {
@@ -55,26 +58,29 @@ const OpenProject = () => {
     // Then navigate back to home page
     // Using timeout to put navigate in the stack
     // This avoid render problems with the change of state induced by redux
-    setTimeout(() => navigate("/"), 0);
+    setTimeout(() => navigate("/dashboard"), 0);
   };
 
   return (
     <main className={styles.main}>
       <div className={styles.menu}>
-        <h1>{t('projects.openProjectTitle')}</h1>
+        <h1>{t("projects.openProjectTitle")}</h1>
         {languageList.length === 0 ? (
-          <p>{t('projects.loading')}</p>
+          <div className={styles["wrapper-loader"]}>
+            <Loader/>
+            <p>{t("projects.loading")}</p>
+          </div>
         ) : (
           <ul className={styles["list-link"]}>{displayListProject()}</ul>
         )}
         <span className={buttons["wrapper-btns"]}>
           {languageList === [] ? null : (
             <button onClick={() => openProject(projectID, projectName)} className={buttons["btn-open"]}>
-              {t('projects.openBtn')}
+              {t("projects.openBtn")}
             </button>
           )}
           <button onClick={goHomePage} className={buttons["btn-cancel"]}>
-          {t('projects.cancelBtn')}
+            {t("projects.cancelBtn")}
           </button>
         </span>
       </div>

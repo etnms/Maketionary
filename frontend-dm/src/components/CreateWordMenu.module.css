@@ -35,7 +35,7 @@ select, textarea {
 }
 
 .example, .definition {
-  height: 3rem;
+  height: 9vh;
   resize: none;
 }
 
@@ -65,4 +65,11 @@ select, textarea {
 
 .btn-submit:hover {
   background-color: var(--primary-hover);
+}
+
+.wrapper-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 10vh;
 }
