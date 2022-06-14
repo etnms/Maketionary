@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "../app/hooks";
 import { addWord } from "../features/arrayWordsSlice";
-import { renderGlossOptions, renderPOSOptions } from "../helpers/renderSelect";
+import { renderGlossOptions } from "../helpers/renderSelect";
 import styles from "./CreateWordMenu.module.css";
 import ErrorMessage from "./ErrorMessage";
 import Loader from "./Loader";
@@ -86,7 +86,18 @@ const CreateWordMenu = () => {
         <label htmlFor="example">{t("newWord.example")}</label>
         <textarea name="example" className={styles.example} />
         <label htmlFor="pos">{t("newWord.pos")}</label>
-        <select name="pos">{renderPOSOptions("create")}</select>
+        <select name="pos">
+          <option>{t("selectPOS.noun")}</option>
+          <option>{t("selectPOS.verb")}</option>
+          <option>{t("selectPOS.pronoun")}</option>
+          <option>{t("selectPOS.adjective")}</option>
+          <option>{t("selectPOS.adverb")}</option>
+          <option>{t("selectPOS.interjection")}</option>
+          <option>{t("selectPOS.preposition")}</option>
+          <option>{t("selectPOS.conjunction")}</option>
+          <option>{t("selectPOS.determiner")}</option>
+          <option>{t("selectPOS.number")}</option>
+        </select>
         <label htmlFor="gloss">{t("newWord.gloss")}</label>
         <select name="gloss">{renderGlossOptions("create")}</select>
         {errorMessage === "" ? null : <ErrorMessage message={errorMessage} />}

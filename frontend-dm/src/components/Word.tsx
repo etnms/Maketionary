@@ -5,20 +5,17 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
-import { renderGlossOptions, renderPOSOptions } from "../helpers/renderSelect";
+import { renderGlossOptions } from "../helpers/renderSelect";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectWordEdit, setEditMode } from "../features/editModeSlice";
 import { updateWordList } from "../features/arrayWordsSlice";
 import { useTranslation } from "react-i18next";
-import Loader from "./Loader";
-
-// need function that cancel edit / restores tmp value to current value
 
 const Word = (props: React.PropsWithChildren<IWord>) => {
   const { _id, word, translation, definition, example, pos, gloss } = props;
 
   const token = localStorage.getItem("token");
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const listWord = useAppSelector((state) => state.arrayWords.value);
   // Using global state to determine the status of the edit mode
@@ -43,7 +40,9 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   const [posTmp, setPosTmp] = useState<string>(pos);
   const [glossTmp, setGlossTmp] = useState<string>(gloss);
 
-  const selectLine = (e: React.MouseEvent<HTMLLIElement, MouseEvent> | React.KeyboardEvent<HTMLLIElement>) => {
+  const selectLine = (
+    e: React.MouseEvent<HTMLLIElement, MouseEvent> | React.KeyboardEvent<HTMLLIElement>
+  ) => {
     dispatch(setEditMode(false));
     dispatch(selectWordEdit(_id));
     const el = e.currentTarget;
@@ -61,7 +60,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     previousEl?.children[0].children[0].classList.remove(`${styles["wrapper-btns-reveal"]}`);
   };
 
-  const deleteWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent> ) => {
+  const deleteWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     axios
       .delete(`${process.env.REACT_APP_BACKEND}/api/word`, {
         data: { _id },
@@ -108,7 +107,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   };
 
   // Hangle the change of each tmp value: allows to see changes directly
-  const handleChange = (e: React.ChangeEvent<HTMLElement> , elementName: string) => {
+  const handleChange = (e: React.ChangeEvent<HTMLElement>, elementName: string) => {
     switch (elementName) {
       case "word":
         setWordTmp((e.target as HTMLInputElement).value);
@@ -144,86 +143,106 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
 
   const handleKeypress = (e: React.KeyboardEvent<HTMLLIElement>) => {
     if (e.key === "Enter") selectLine(e);
-  }
+  };
   return (
-    <li className={styles.listitem} onDoubleClick={(e) => selectLine(e)} tabIndex={0} onKeyDown={(e) => handleKeypress(e)}>
+    <li
+      className={styles.listitem}
+      onDoubleClick={(e) => selectLine(e)}
+      tabIndex={0}
+      onKeyDown={(e) => handleKeypress(e)}>
       <div className={styles["wrapper-edit"]}>
-      
         <div className={styles["wrapper-btns"]}>
-          <button className={styles["btn"]} onClick={(e) => deleteWord(e)} aria-label={t("ariaLabels.delete")} >
-          <DeleteIcon />
-          </button> 
+          <button
+            className={styles["btn"]}
+            onClick={(e) => deleteWord(e)}
+            aria-label={t("ariaLabels.delete")}>
+            <DeleteIcon />
+          </button>
           {editMode ? (
-            <button className={styles["btn"]} onClick={updateWord} aria-label={t("ariaLabels.editConfirm")} >
-            <CheckCircleIcon /></button>
+            <button className={styles["btn"]} onClick={updateWord} aria-label={t("ariaLabels.editConfirm")}>
+              <CheckCircleIcon />
+            </button>
           ) : (
-            <button  className={styles["btn"]} onClick={() => dispatch(setEditMode(true))} aria-label={t("ariaLabels.edit")}  >
-            <EditIcon/></button>
+            <button
+              className={styles["btn"]}
+              onClick={() => dispatch(setEditMode(true))}
+              aria-label={t("ariaLabels.edit")}>
+              <EditIcon />
+            </button>
           )}
-        </div> 
+        </div>
       </div>
       {/* Check to see if edit mode is on but also if the selected word is the correct one.
       This allows for one edit at a time and not showing multiple on accident. 
       Repeat for every field.*/}
       {editMode && wordToEdit === _id ? (
         <div className={styles["wrapper-content"]}>
-        <span className={`${styles.word}`}>
-          <input
-            name="edit-word"
-            value={wordTmp}
-            className={`${styles.edit}`}
-            onChange={(e) => handleChange(e, "word")}
-          />
-        </span>
-        <span className={`${styles.translation}`}>
-          <input
-            name="edit-translation"
-            value={translationTmp}
-            className={`${styles.edit}`}
-            onChange={(e) => handleChange(e, "translation")}
-          />
-        </span>
-        <span className={`${styles.definition}`}>
-          <textarea
-            name="edit-definition"
-            value={definitionTmp}
-            className={`${styles.edit} ${styles["edit-example"]}`}
-            onChange={(e) => handleChange(e, "definition")}></textarea>
-        </span>
-        <span className={styles.example}>
-          <textarea
-            name="edit-example"
-            value={exampleTmp}
-            className={`${styles.edit} ${styles["edit-example"]}`}
-            onChange={(e) => handleChange(e, "example")}></textarea>
-        </span>
-        <span className={styles.pos}>
-          <select
-            name="edit-pos"
-            value={posTmp}
-            className={styles.pos}
-            onChange={(e) => handleChange(e, "pos")}>
-            {renderPOSOptions("edit")}
-          </select>
-        </span>
-        <span className={styles.gloss}>
-          <select
-            name="edit-gloss"
-            value={glossTmp}
-            className={styles.gloss}
-            onChange={(e) => handleChange(e, "gloss")}>
-            {renderGlossOptions("edit")}
-          </select>
-        </span>
+          <span className={`${styles.word}`}>
+            <input
+              name="edit-word"
+              value={wordTmp}
+              className={`${styles.edit}`}
+              onChange={(e) => handleChange(e, "word")}
+            />
+          </span>
+          <span className={`${styles.translation}`}>
+            <input
+              name="edit-translation"
+              value={translationTmp}
+              className={`${styles.edit}`}
+              onChange={(e) => handleChange(e, "translation")}
+            />
+          </span>
+          <span className={`${styles.definition}`}>
+            <textarea
+              name="edit-definition"
+              value={definitionTmp}
+              className={`${styles.edit} ${styles["edit-example"]}`}
+              onChange={(e) => handleChange(e, "definition")}></textarea>
+          </span>
+          <span className={styles.example}>
+            <textarea
+              name="edit-example"
+              value={exampleTmp}
+              className={`${styles.edit} ${styles["edit-example"]}`}
+              onChange={(e) => handleChange(e, "example")}></textarea>
+          </span>
+          <span className={styles.pos}>
+            <select
+              name="edit-pos"
+              value={posTmp}
+              className={styles.pos}
+              onChange={(e) => handleChange(e, "pos")}>
+              <option>{t("selectPOS.noun")}</option>
+              <option>{t("selectPOS.verb")}</option>
+              <option>{t("selectPOS.pronoun")}</option>
+              <option>{t("selectPOS.adjective")}</option>
+              <option>{t("selectPOS.adverb")}</option>
+              <option>{t("selectPOS.interjection")}</option>
+              <option>{t("selectPOS.preposition")}</option>
+              <option>{t("selectPOS.conjunction")}</option>
+              <option>{t("selectPOS.determiner")}</option>
+              <option>{t("selectPOS.number")}</option>
+            </select>
+          </span>
+          <span className={styles.gloss}>
+            <select
+              name="edit-gloss"
+              value={glossTmp}
+              className={styles.gloss}
+              onChange={(e) => handleChange(e, "gloss")}>
+              {renderGlossOptions("edit")}
+            </select>
+          </span>
         </div>
       ) : (
         <div className={styles["wrapper-content"]}>
-        <span className={styles.word}>{wordValue}</span>
-        <span className={styles.translation}>{translationValue}</span>
-        <span className={styles.definition}>{definitionValue}</span>
-        <span className={styles.example}>{exampleValue}</span>
-        <span className={styles.pos}>{posValue}</span>
-        <span className={styles.gloss}>{glossValue}</span>
+          <span className={styles.word}>{wordValue}</span>
+          <span className={styles.translation}>{translationValue}</span>
+          <span className={styles.definition}>{definitionValue}</span>
+          <span className={styles.example}>{exampleValue}</span>
+          <span className={styles.pos}>{posValue}</span>
+          <span className={styles.gloss}>{glossValue}</span>
         </div>
       )}
     </li>

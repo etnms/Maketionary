@@ -65,6 +65,18 @@
     "gloss": "Gloss",
     "noProjectOpen": "No project is currently open."
   },
+  "selectPOS" : {
+    "noun": "Noun",
+    "verb": "Verb",
+    "pronoun": "Pronoun",
+    "adjective": "Adjective",
+    "adverb" : "Adverb",
+    "interjection": "Interjection",
+    "preposition" : "Preposition",
+    "conjunction": "Conjuntion",
+    "determiner": "Determiner",
+    "number": "Number"
+  },
   "settings": {
     "title": "Settings",
     "theme": "Theme",
