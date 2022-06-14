@@ -1,6 +1,5 @@
 import express from "express";
 import mongoose from "mongoose";
-import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import { login, signup } from "./routes/authRoute.js";
@@ -12,7 +11,7 @@ import { downloadJSONRoute, downloadRTFRoute } from "./routes/downloadRoute.js";
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use(
   cors({

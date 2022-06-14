@@ -29,8 +29,8 @@
   display: flex;
   align-items: center;
   font-family: var(--font);
-
 }
+
 .btn-settings {
   border: none;
   background-color: transparent;
@@ -43,7 +43,6 @@
 .dropdown:hover, .btn-settings:hover {
   background-color: var(--bg-secondary-selected);
 }
-
 .dropdown-content {
   display: none;
   position: absolute;

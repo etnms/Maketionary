@@ -32,7 +32,10 @@ const Signup = () => {
       .post(`${process.env.REACT_APP_BACKEND}/api/signup`, { email, username, password, confirmPassword })
       .then((res) => {
         if (res.data.message === "User created") {
-          console.log(res);
+          // Remove project parameters for new connexion
+          localStorage.removeItem("project");
+          localStorage.removeItem("projectName");
+          // Save token
           localStorage.setItem("token", res.data.token);
           navigate("/dashboard");
         }
@@ -55,6 +58,8 @@ const Signup = () => {
             return setErrorMessage(t("errorMessages.errorPasswordCharacters"));
           case "Passwords need to match":
             return setErrorMessage(t("errorMessages.errorPasswordMatch"));
+          case "Invalid email":
+            return setErrorMessage(t("errorMessages.errorInvalidEmail"))
           default:
             return setErrorMessage(t("errorMessages.errorProblem"));
         }

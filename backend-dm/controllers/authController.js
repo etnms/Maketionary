@@ -2,6 +2,12 @@ import bcrypt from "bcryptjs";
 import User from "../models/user.js";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
+import axios from "axios";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const apiKey = process.env.ABSTRACT_APIKEY;
 
 const userLogin = (req, res) => {
   const username = req.body.username;
@@ -53,32 +59,48 @@ const userSignup = (req, res) => {
   if (password !== confirmPassword) return res.status(400).json("Passwords need to match");
   if (username == "") return res.status(400).json("Empty username");
 
-  bcrypt.hash(password, 10, (err, hashedPassword) => {
-    if (err) return res.status(400).json("There was a problem");
+  axios
+    .get(
+      `https://emailvalidation.abstractapi.com/v1/?api_key=${apiKey}&email=${email}`
+    )
+    .then((response) => {
+      // Checking deliverability status
+      if (response.data.deliverability === "UNDELIVERABLE" || response.data.deliverability === "RISKY")
+      // return error if invalid email
+        return res.status(400).json("Invalid email");
+      else {
+        bcrypt.hash(password, 10, (err, hashedPassword) => {
+          if (err) return res.status(400).json("There was a problem");
 
-    const user = new User({
-      username,
-      email,
-      password: hashedPassword,
-    });
-    // Create user
-    user.save((err) => {
-      if (err) {
-        // Check for unique user, if err return err, otherwise user added to db
-        if (err.code === 11000 && err.keyPattern.username === 1)
-          return res.status(400).json("Username already exists");
-        if (err.code === 11000 && err.keyPattern.email === 1)
-          return res.status(400).json("Email already exists");
-        else return res.status(400).json("There was an error");
-      } else {
-        // Log in user
-        jwt.sign({ user }, process.env.JWTKEY, { expiresIn: "7d" }, (err, token) => {
-          if (err) return res.sendStatus(403);
-          return res.status(200).json({ token: `Bearer ${token}`, message: "User created" });
+          const user = new User({
+            username,
+            email,
+            password: hashedPassword,
+          });
+          // Create user
+          user.save((err) => {
+            if (err) {
+              // Check for unique user, if err return err, otherwise user added to db
+              if (err.code === 11000 && err.keyPattern.username === 1)
+                return res.status(400).json("Username already exists");
+              if (err.code === 11000 && err.keyPattern.email === 1)
+                return res.status(400).json("Email already exists");
+              else return res.status(400).json("There was an error");
+            } else {
+              // Log in user
+              jwt.sign({ user }, process.env.JWTKEY, { expiresIn: "7d" }, (err, token) => {
+                if (err) return res.sendStatus(403);
+                return res.status(200).json({ token: `Bearer ${token}`, message: "User created" });
+              });
+            }
+          });
         });
       }
+    })
+    .catch((error) => {
+      console.log(error)
+      return res.status(400).json("There was a problem");
     });
-  });
 };
 
 export { userLogin, userSignup };

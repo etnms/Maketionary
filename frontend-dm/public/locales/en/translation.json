@@ -85,6 +85,7 @@
     "errorNameTooLong": "Error: the name of the project is too long.",
     "errorProjectNameEmpty" : "Error: the name is empty.",
     "errorWord": "Error: the word field cannot be empty.",
+    "errorInvalidEmail": "Error: this email is not valid.",
     "errorProblem": "Error: there was a problem."
   },
   "expired": {

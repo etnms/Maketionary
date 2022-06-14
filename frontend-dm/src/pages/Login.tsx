@@ -27,7 +27,10 @@ const Login = () => {
     axios
       .post(`${process.env.REACT_APP_BACKEND}/api/login`, { username, password })
       .then((res) => {
-        console.log(res);
+        // Remove project parameters for new connexion
+        localStorage.removeItem("project");
+        localStorage.removeItem("projectName");
+        // Save token
         localStorage.setItem("token", res.data.token);
         navigate("/dashboard");
       })
