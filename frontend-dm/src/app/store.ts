@@ -4,7 +4,7 @@ import editModeReducer from "../features/editModeSlice";
 import searchReducer from "../features/searchSlice";
 import projectItemReducer from "../features/projectItemSlice";
 import settingsReducer from "../features/settingsSlice";
-
+import authReducer from "../features/authSlice";
 export const store = configureStore({
   reducer: {
     arrayWords: arrayWordsReducer,
@@ -12,6 +12,7 @@ export const store = configureStore({
     search: searchReducer,
     projectItem: projectItemReducer,
     settings: settingsReducer,
+    auth: authReducer
   },
 });
 

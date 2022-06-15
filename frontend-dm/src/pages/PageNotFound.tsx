@@ -16,7 +16,7 @@ const PageNotFound = () => {
   return (
     <div className={styles.page}>
       <p className={styles.text}>{t("404.title")}</p>
-      <button className={styles.btn} onClick={() => navigate("/")}>
+      <button className={styles.btn} onClick={() => navigate("/dashboard")}>
         {t("404.btnHome")}
       </button>
     </div>

@@ -80,9 +80,7 @@
   "settings": {
     "title": "Paramètres",
     "theme": "Thème",
-    "language": "Langue",
-    "autoOpenProject": "Ouvrir le dernier projet automatiquement",
-    "userSignin": "Se connecter automatiquement"
+    "language": "Langue"
   },
   "errorMessages": {
     "emptyFields": "Erreur: l'un des champs est vide.",
@@ -122,5 +120,8 @@
     "openProject": "Maketionary - Ouvrir un projet",
     "expiredSession": "Session expirée",
     "pageNotFound": "404 - Page introuvable"
+  },
+  "loading": {
+    "title": "Chargement de Maketionary"
   }
 }

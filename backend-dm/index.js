@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import { login, signup } from "./routes/authRoute.js";
@@ -7,6 +8,7 @@ import { dashboard } from "./routes/dashboardRoute.js";
 import { deleteLanguageRoute, editLanguageRoute, getlanguageRoute, postLanguageRoute } from "./routes/languageRoute.js";
 import { deleteWordRoute, getWordRoute, postWordRoute, updateWordRoute } from "./routes/wordRoute.js";
 import { downloadJSONRoute, downloadRTFRoute } from "./routes/downloadRoute.js";
+import mongoSanitize from "express-mongo-sanitize"
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -17,6 +19,12 @@ app.use(
   cors({
     origin: "http://localhost:3000",
   })
+);
+
+app.use(
+  mongoSanitize({
+    allowDots: true,
+  }),
 );
 
 dotenv.config();

@@ -30,6 +30,11 @@ const downloadRTF = async (req, res) => {
   // Prepare the download directory
   const cwd = process.cwd();
   const path = `${cwd}\\downloads\\`;
+  // if folder does not exist then create it
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path);
+  }
+
   // Generate random filename
   const date = Date.now();
   const filename = `${language}${date}.rtf`;
@@ -72,7 +77,7 @@ const downloadRTF = async (req, res) => {
               res.status(400).json({ error: "Error downloading file" });
             }
             // If no error then delete file from server
-            else fs.unlinkSync(file);
+            // else fs.unlinkSync(file);
           });
         });
       }

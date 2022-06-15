@@ -80,9 +80,8 @@
   "settings": {
     "title": "Settings",
     "theme": "Theme",
-    "language": "Language",
-    "autoOpenProject": "Automatically load previous project",
-    "userSignin": "Sign in automatically"
+    "language": "Language"
+
   },
   "errorMessages": {
     "emptyFields": "Error: one of the fields is empty.",
@@ -122,5 +121,8 @@
     "openProject": "Maketionary - Open project",
     "expiredSession": "Session expired",
     "pageNotFound": "404 - Page not found"
+  },
+  "loading": {
+    "title": "Loading Maketionary"
   }
 }

@@ -40,7 +40,7 @@ const ListWords = () => {
 
   useEffect(() => {
     // Copy the sorted array to avoid reference issues & filter
-    const filtered = [...sortedArray.filter((word: any) => word.word.startsWith(searchInput))];
+    const filtered = [...sortedArray.filter((word: IWordDb) => word.word.startsWith(searchInput))];
 
     // Update filtered results to be displayed
     setFilteredResults(filtered);

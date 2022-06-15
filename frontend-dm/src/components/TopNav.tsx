@@ -4,15 +4,14 @@ import SearchBar from "./SearchBar";
 import { useTranslation } from "react-i18next";
 import React, { useEffect, useState } from "react";
 import { downloadJSON, downloadRTF } from "../helpers/downloadFiles";
+import { useAppSelector } from "../app/hooks";
 
-interface ITopNav {
-  username: string;
-}
 
-const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
-  const { username } = props;
+
+const TopNav = () => {
 
   const navigate = useNavigate();
+  
   const { t } = useTranslation();
 
   const token = localStorage.getItem("token");
@@ -154,7 +153,7 @@ const TopNav = (props: React.PropsWithChildren<ITopNav>) => {
         ) : null}
         <span>
           {t("nav.welcome")}
-          {username}
+          {useAppSelector(state => state.auth.username)}
         </span>
         <button className={styles["btn-logout"]} onClick={logout}>
           {t("nav.signout")}
