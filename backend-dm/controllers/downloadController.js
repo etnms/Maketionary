@@ -2,8 +2,9 @@ import jwt from "jsonwebtoken";
 import async from "async";
 import Word from "../models/word.js";
 import fs from "fs";
-import pkg from 'docx';
-const { Document, Packer, Paragraph, TextRun } = pkg;
+import pkg from "docx";
+const { AlignmentType, Document, HeadingLevel, Packer, Paragraph, TabStopPosition, TabStopType, TextRun } =
+  pkg;
 
 const downloadJSON = (req, res) => {
   const language = req.query.projectID;
@@ -64,7 +65,7 @@ const downloadRTF = async (req, res) => {
         // Loop through each word and write with stream
         sortedArray.forEach((el) => {
           stream.write(
-            `{\\pard{\\tab\\b ${el.word}} (${el.pos}) ${el.translation}. Definition: ${el.definition}. Example: \\i ${el.example} \\par}`
+            `{\\pard{\\b ${el.word}} (${el.pos}) ${el.translation} Definition: ${el.definition} Example: \\i ${el.example} \\par}`
           );
         });
         // End of document requires closing
@@ -79,14 +80,77 @@ const downloadRTF = async (req, res) => {
               res.status(400).json({ error: "Error downloading file" });
             }
             // If no error then delete file from server
-             else fs.unlinkSync(file);
+            else fs.unlinkSync(file);
           });
         });
       }
     );
   });
 };
+// Constructor for docx
+class DocumentCreator {
+  create([words]) {
+    const document = new Document({
+      sections: [
+        {
+          children: [
+            ...words
+              .map((word) => {
+                const arr = [];
+                arr.push(
+                  this.createEntry(
+                    word.word,
+                    word.translation,
+                    word.definition,
+                    word.example,
+                    word.pos,
+                    word.gloss
+                  )
+                );
+                return arr;
+              })
+              .reduce((prev, curr) => prev.concat(curr), []),
+          ],
+        },
+      ],
+    });
+    return document;
+  }
 
+  createEntry(word, translation, definition, example, pos, gloss) {
+    return new Paragraph({
+      children: [
+        new TextRun({
+          text: word,
+          bold: true,
+          size: 24,
+          font: "Arial",
+        }),
+        new TextRun({
+          text: ` (${pos}) `,
+          size: 24,
+          font: "Arial",
+        }),
+        new TextRun({
+          text: translation,
+          size: 24,
+          font: "Arial",
+        }),
+        new TextRun({
+          text: ` Definition: ${definition}`,
+          size: 24,
+          font: "Arial",
+        }),
+        new TextRun({
+          text: example,
+          italics: true,
+          size: 24,
+          font: "Arial",
+        }),
+      ],
+    });
+  }
+}
 // Download RTF file
 const downloadDocx = async (req, res) => {
   const language = req.query.projectID;
@@ -106,40 +170,34 @@ const downloadDocx = async (req, res) => {
 
   jwt.verify(req.token, process.env.JWTKEY, (err) => {
     if (err) return res.sendStatus(403);
-   
-    const doc = new Document({
-      sections: [{
-          properties: {},
-          children: [
-              new Paragraph({
-                  children: [
-                      new TextRun("Hello World"),
-                      new TextRun({
-                          text: "Foo Bar",
-                          bold: true,
-                      }),
-                      new TextRun({
-                          text: "\tGithub is the best",
-                          bold: true,
-                      }),
-                  ],
-              }),
-          ],
-      }],
-  });
-  
-  // Used to export the file into a .docx file
-  Packer.toBuffer(doc).then((buffer) => {
-      fs.writeFileSync(file, buffer);
-      return res.download(file, filename, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(400).json({ error: "Error downloading file" });
-        }
-        // If no error then delete file from server
-         else fs.unlinkSync(file);
-      });
-  });
+    async.parallel(
+      {
+        words: (callback) => {
+          // Callback to get each word, then remove non-required field for users with select
+          Word.find({ language }).select("-_id -language -__v").exec(callback);
+        },
+      },
+      (err, results) => {
+        if (err) return res.status(400);
+        // Sort the array by words
+        const sortedArray = results.words.sort((a, b) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
+        // Create the docx
+        const documentCreator = new DocumentCreator();
+        const doc = documentCreator.create([sortedArray]);
+        // Used to export the file into a .docx file
+        Packer.toBuffer(doc).then((buffer) => {
+          fs.writeFileSync(file, buffer);
+          return res.download(file, filename, (err) => {
+            if (err) {
+              console.log(err);
+              res.status(400).json({ error: "Error downloading file" });
+            }
+            // If no error then delete file from server
+            else fs.unlinkSync(file);
+          });
+        });
+      }
+    );
   });
 };
 

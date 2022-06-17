@@ -35,6 +35,7 @@ export const downloadRTF = (token: string, projectID: string, projectName: strin
       url: `${process.env.REACT_APP_BACKEND}/api/download/rtf`,
       headers: { Authorization: token! },
       params: { projectID },
+      responseType: 'blob',
     })
       .then((res) => {
         const fileName = projectName;
@@ -56,10 +57,10 @@ export const downloadRTF = (token: string, projectID: string, projectName: strin
       url: `${process.env.REACT_APP_BACKEND}/api/download/docx`,
       headers: { Authorization: token! },
       params: { projectID },
+      responseType: 'blob',
     })
       .then((res) => {
         const fileName = projectName;
-        console.log(res.data)
         const blob = new Blob([res.data]);
         const href = URL.createObjectURL(blob);
         const link = document.createElement("a");
