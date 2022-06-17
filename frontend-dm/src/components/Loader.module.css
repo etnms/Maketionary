@@ -2,8 +2,6 @@
   border: 3px solid var(--bg-secondary);
   border-top: 3px solid var(--primary);
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
   animation: spin 2s linear infinite;
 }
 

@@ -38,7 +38,7 @@ const Dashboard = () => {
           // If user has refreshed the page (the state) then set frstConnection back to false after response from server
           dispatch(setFirstConnection(false));
         })
-        .catch((err) => navigate("/"));
+        .catch(() => navigate("/"));
     }
   });
 

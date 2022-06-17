@@ -94,7 +94,7 @@ const NewProjectMenu = () => {
             </button>
           </div>
         ) : (
-          <Loader />
+          <Loader width={24} height={24}/>
         )}
       </form>
     </div>

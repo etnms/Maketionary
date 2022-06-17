@@ -57,6 +57,7 @@
     "addWordBtn": "Add word"
   },
   "main": {
+    "numberEntries": "Number of entries: ",
     "word": "Word",
     "translation": "Translation",
     "definition": "Definition",
@@ -79,9 +80,11 @@
   },
   "settings": {
     "title": "Settings",
-    "theme": "Theme",
-    "language": "Language"
-
+    "theme": "Theme:",
+    "language": "Language:",
+    "display": "Display",
+    "inLine": "Line",
+    "column": "Column"
   },
   "errorMessages": {
     "emptyFields": "Error: one of the fields is empty.",

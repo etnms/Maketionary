@@ -57,6 +57,7 @@
     "addWordBtn": "Ajouter"
   },
   "main": {
+    "numberEntries": "Nombre d'entrées: ",
     "word": "Mot",
     "translation": "Traduction",
     "definition": "Définition",
@@ -79,8 +80,11 @@
   },
   "settings": {
     "title": "Paramètres",
-    "theme": "Thème",
-    "language": "Langue"
+    "theme": "Thème:",
+    "language": "Langue:",
+    "display": "Affichage:",
+    "inLine": "Ligne",
+    "column": "Colonne"
   },
   "errorMessages": {
     "emptyFields": "Erreur: l'un des champs est vide.",

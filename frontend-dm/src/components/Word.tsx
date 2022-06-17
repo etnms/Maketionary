@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IWord from "../interfaces/interfaceWord";
 import styles from "./ListWords.module.css";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -15,7 +15,13 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   const { _id, word, translation, definition, example, pos, gloss } = props;
 
   const token = localStorage.getItem("token");
+
   const { t } = useTranslation();
+
+  // Setting
+  const columnDisplay = useAppSelector((state) => state.settings.inLineDisplay);
+  // Rerender when change in the settings
+  useEffect(() => {}, [columnDisplay]);
 
   const listWord = useAppSelector((state) => state.arrayWords.value);
   // Using global state to determine the status of the edit mode
@@ -144,6 +150,8 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   const handleKeypress = (e: React.KeyboardEvent<HTMLLIElement>) => {
     if (e.key === "Enter") selectLine(e);
   };
+
+  // Render list element
   return (
     <li
       className={styles.listitem}
@@ -176,43 +184,45 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
       This allows for one edit at a time and not showing multiple on accident. 
       Repeat for every field.*/}
       {editMode && wordToEdit === _id ? (
-        <div className={styles["wrapper-content"]}>
-          <span className={`${styles.word}`}>
+        <div className={!columnDisplay ? styles["wrapper-content"] : styles["wrapper-content-block"]}>
+          <span className={styles.word}>
             <input
               name="edit-word"
               value={wordTmp}
-              className={`${styles.edit}`}
+              className={!columnDisplay? `${styles.edit}` : `${styles["edit-block"]}`}
               onChange={(e) => handleChange(e, "word")}
             />
           </span>
-          <span className={`${styles.translation}`}>
+          <span className={styles.translation}>
             <input
               name="edit-translation"
               value={translationTmp}
-              className={`${styles.edit}`}
+              className={!columnDisplay? `${styles.edit}` : `${styles["edit-block"]}`}
               onChange={(e) => handleChange(e, "translation")}
             />
           </span>
-          <span className={`${styles.definition}`}>
+          <span className={styles.definition}>
             <textarea
               name="edit-definition"
               value={definitionTmp}
-              className={`${styles.edit} ${styles["edit-example"]}`}
+              className={!columnDisplay? `${styles.edit} ${styles["edit-example"]}` : `${styles["edit-block"]} ${styles["edit-block-example"]}`}
               onChange={(e) => handleChange(e, "definition")}></textarea>
           </span>
           <span className={styles.example}>
             <textarea
               name="edit-example"
               value={exampleTmp}
-              className={`${styles.edit} ${styles["edit-example"]}`}
+              className={!columnDisplay? `${styles.edit} ${styles["edit-example"]}` : `${styles["edit-block"]} ${styles["edit-block-example"]}`}
               onChange={(e) => handleChange(e, "example")}></textarea>
           </span>
           <span className={styles.pos}>
             <select
               name="edit-pos"
               value={posTmp}
-              className={styles.pos}
-              onChange={(e) => handleChange(e, "pos")}>
+              className={!columnDisplay? `${styles.edit}` : `${styles["edit-block"]}`}
+              onChange={(e) => handleChange(e, "pos")}
+             >
+              <option disabled hidden></option>
               <option>{t("selectPOS.noun")}</option>
               <option>{t("selectPOS.verb")}</option>
               <option>{t("selectPOS.pronoun")}</option>
@@ -229,12 +239,50 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             <select
               name="edit-gloss"
               value={glossTmp}
-              className={styles.gloss}
-              onChange={(e) => handleChange(e, "gloss")}>
+              className={!columnDisplay? `${styles.edit}` : `${styles["edit-block"]}`}
+              onChange={(e) => handleChange(e, "gloss")}
+              >
               {renderGlossOptions("edit")}
             </select>
           </span>
         </div>
+      ) : columnDisplay ? (
+        <span className={styles["wrapper-content-block"]}>
+          {<span><b>{t("main.word")}</b>: {wordValue}</span>}
+
+          {translationValue !== "" ? (
+            <span>
+              <br /> <b>{t("main.translation")}</b>: {translationValue}
+            </span>
+          ) : null}
+
+          {definitionValue !== "" ? (
+            <span>
+              <br />
+              <b>{t("main.definition")}</b>: {definitionValue}
+            </span>
+          ) : null}
+
+          {exampleValue !== "" ? (
+            <span>
+              <br />
+              <b>{t("main.example")}</b>: {exampleValue}
+            </span>
+          ) : null}
+
+          {posValue !== "" ? (
+            <span>
+              <br /> <b>{t("main.pos")}</b>: {posValue}
+            </span>
+          ) : null}
+
+          {glossValue !== "" ? (
+            <span>
+              <br />
+              <b>{t("main.gloss")}</b>: {glossValue}
+            </span>
+          ) : null}
+        </span>
       ) : (
         <div className={styles["wrapper-content"]}>
           <span className={styles.word}>{wordValue}</span>

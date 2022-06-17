@@ -1,25 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../app/store";
 
 interface ISettings {
-
+  inLineDisplay: boolean
 }
 
 const initialState: ISettings = {
- 
+  inLineDisplay: JSON.parse(localStorage.getItem("inline-display")!)
 };
 
 export const settingsSlice = createSlice({
   name: "settings",
   initialState,
   reducers: {
-
+    setInLineDisplay: (state, action: PayloadAction<boolean>) => {
+      state.inLineDisplay = (action.payload);
+    }
   },
 });
 
-//export const { setIsDarkModeToggled } = settingsSlice.actions;
-
-// Other code such as selectors can use the imported `RootState` type
-export const selectSettings = (state: RootState) => state.search.searchInput;
+export const { setInLineDisplay } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

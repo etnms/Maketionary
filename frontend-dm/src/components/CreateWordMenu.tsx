@@ -61,8 +61,8 @@ const CreateWordMenu = () => {
     (document.querySelector("input[name='translation']") as HTMLInputElement).value = "";
     (document.querySelector("textarea[name='definition']") as HTMLTextAreaElement).value = "";
     (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value = "";
-    (document.querySelector("select[name='pos']") as HTMLSelectElement).value = "Noun";
-    (document.querySelector("select[name='gloss']") as HTMLSelectElement).value = "ABE";
+    (document.querySelector("select[name='pos']") as HTMLSelectElement).value = "";
+    (document.querySelector("select[name='gloss']") as HTMLSelectElement).value = "";
   };
 
   // Handle the change to the word value to remove error message
@@ -86,7 +86,8 @@ const CreateWordMenu = () => {
         <label htmlFor="example">{t("newWord.example")}</label>
         <textarea name="example" className={styles.example} />
         <label htmlFor="pos">{t("newWord.pos")}</label>
-        <select name="pos">
+        <select name="pos" defaultValue={""} >
+          <option disabled hidden></option>
           <option>{t("selectPOS.noun")}</option>
           <option>{t("selectPOS.verb")}</option>
           <option>{t("selectPOS.pronoun")}</option>
@@ -99,12 +100,12 @@ const CreateWordMenu = () => {
           <option>{t("selectPOS.number")}</option>
         </select>
         <label htmlFor="gloss">{t("newWord.gloss")}</label>
-        <select name="gloss">{renderGlossOptions("create")}</select>
+        <select name="gloss" defaultValue={""} >{renderGlossOptions("create")}</select>
         {errorMessage === "" ? null : <ErrorMessage message={errorMessage} />}
         {!loading? // Loader after word submission
         <button type="submit" className={styles["btn-submit"]} onClick={(e) => createWord(e)}>
           {t("newWord.addWordBtn")}
-        </button> : <div className={styles["wrapper-loader"]}><Loader/></div>}
+        </button> : <div className={styles["wrapper-loader"]}><Loader width={24} height={24}/></div>}
       </form>
     </aside>
   );
