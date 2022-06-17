@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import { useTranslation } from "react-i18next";
 import React, { useEffect, useState } from "react";
-import { downloadJSON, downloadRTF } from "../helpers/downloadFiles";
+import { downloadDocx, downloadJSON, downloadRTF } from "../helpers/downloadFiles";
 import { useAppSelector } from "../app/hooks";
 
 
@@ -127,6 +127,11 @@ const TopNav = () => {
               className={styles["nav-btn"]}
               onClick={() => downloadJSON(token!, projectID!, projectName!)}>
               {t("nav.exportJson")}
+            </button>
+            <button
+              className={styles["nav-btn"]}
+              onClick={() => downloadDocx(token!, projectID!, projectName!)}>
+              download docx
             </button>
             <button
               className={styles["nav-btn"]}

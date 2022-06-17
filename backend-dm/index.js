@@ -1,13 +1,12 @@
 import express from "express";
 import mongoose from "mongoose";
-import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import { login, signup } from "./routes/authRoute.js";
 import { dashboard } from "./routes/dashboardRoute.js";
 import { deleteLanguageRoute, editLanguageRoute, getlanguageRoute, postLanguageRoute } from "./routes/languageRoute.js";
 import { deleteWordRoute, getWordRoute, postWordRoute, updateWordRoute } from "./routes/wordRoute.js";
-import { downloadJSONRoute, downloadRTFRoute } from "./routes/downloadRoute.js";
+import { downloadDocxRoute, downloadJSONRoute, downloadRTFRoute } from "./routes/downloadRoute.js";
 import mongoSanitize from "express-mongo-sanitize"
 
 const app = express();
@@ -52,6 +51,7 @@ app.use("/", postWordRoute);
 app.use("/", updateWordRoute);
 
 // Download
+app.use("/", downloadDocxRoute)
 app.use("/", downloadJSONRoute);
 app.use("/", downloadRTFRoute);
 

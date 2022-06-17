@@ -49,3 +49,25 @@ export const downloadRTF = (token: string, projectID: string, projectName: strin
       })
       .catch((err) => console.log(err));
   };
+
+  export const downloadDocx = (token: string, projectID: string, projectName: string) => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_BACKEND}/api/download/docx`,
+      headers: { Authorization: token! },
+      params: { projectID },
+    })
+      .then((res) => {
+        const fileName = projectName;
+        console.log(res.data)
+        const blob = new Blob([res.data]);
+        const href = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = href;
+        link.download = `${fileName}.docx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch((err) => console.log(err));
+  };

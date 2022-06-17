@@ -2,6 +2,8 @@ import jwt from "jsonwebtoken";
 import async from "async";
 import Word from "../models/word.js";
 import fs from "fs";
+import pkg from 'docx';
+const { Document, Packer, Paragraph, TextRun } = pkg;
 
 const downloadJSON = (req, res) => {
   const language = req.query.projectID;
@@ -77,7 +79,7 @@ const downloadRTF = async (req, res) => {
               res.status(400).json({ error: "Error downloading file" });
             }
             // If no error then delete file from server
-            // else fs.unlinkSync(file);
+             else fs.unlinkSync(file);
           });
         });
       }
@@ -85,4 +87,60 @@ const downloadRTF = async (req, res) => {
   });
 };
 
-export { downloadJSON, downloadRTF };
+// Download RTF file
+const downloadDocx = async (req, res) => {
+  const language = req.query.projectID;
+  // Prepare the download directory
+  const cwd = process.cwd();
+  const path = `${cwd}\\downloads\\`;
+  // if folder does not exist then create it
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path);
+  }
+
+  // Generate random filename
+  const date = Date.now();
+  const filename = `${language}${date}.docx`;
+  // Get the path
+  const file = `${path}\\${filename}`;
+
+  jwt.verify(req.token, process.env.JWTKEY, (err) => {
+    if (err) return res.sendStatus(403);
+   
+    const doc = new Document({
+      sections: [{
+          properties: {},
+          children: [
+              new Paragraph({
+                  children: [
+                      new TextRun("Hello World"),
+                      new TextRun({
+                          text: "Foo Bar",
+                          bold: true,
+                      }),
+                      new TextRun({
+                          text: "\tGithub is the best",
+                          bold: true,
+                      }),
+                  ],
+              }),
+          ],
+      }],
+  });
+  
+  // Used to export the file into a .docx file
+  Packer.toBuffer(doc).then((buffer) => {
+      fs.writeFileSync(file, buffer);
+      return res.download(file, filename, (err) => {
+        if (err) {
+          console.log(err);
+          res.status(400).json({ error: "Error downloading file" });
+        }
+        // If no error then delete file from server
+         else fs.unlinkSync(file);
+      });
+  });
+  });
+};
+
+export { downloadDocx, downloadJSON, downloadRTF };
