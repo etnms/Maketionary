@@ -3,10 +3,8 @@ import { Outlet, useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import { useTranslation } from "react-i18next";
 import React, { useEffect, useState } from "react";
-import { downloadDocx, downloadJSON, downloadRTF } from "../helpers/downloadFiles";
+import { downloadFile, downloadJSON, } from "../helpers/downloadFiles";
 import { useAppSelector } from "../app/hooks";
-
-
 
 const TopNav = () => {
 
@@ -130,12 +128,17 @@ const TopNav = () => {
             </button>
             <button
               className={styles["nav-btn"]}
-              onClick={() => downloadDocx(token!, projectID!, projectName!)}>
-              download docx
+              onClick={() => downloadFile(token!, projectID!, projectName!, "xml")}>
+              {t("nav.exportXml")}
             </button>
             <button
               className={styles["nav-btn"]}
-              onClick={() => downloadRTF(token!, projectID!, projectName!)}>
+              onClick={() => downloadFile(token!, projectID!, projectName!, "docx")}>
+              {t("nav.exportDocx")}
+            </button>
+            <button
+              className={styles["nav-btn"]}
+              onClick={() => downloadFile(token!, projectID!, projectName!, "rtf")}>
               {t("nav.exportRtf")}
             </button>
           </div>

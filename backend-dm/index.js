@@ -6,7 +6,7 @@ import { login, signup } from "./routes/authRoute.js";
 import { dashboard } from "./routes/dashboardRoute.js";
 import { deleteLanguageRoute, editLanguageRoute, getlanguageRoute, postLanguageRoute } from "./routes/languageRoute.js";
 import { deleteWordRoute, getWordRoute, postWordRoute, updateWordRoute } from "./routes/wordRoute.js";
-import { downloadDocxRoute, downloadJSONRoute, downloadRTFRoute } from "./routes/downloadRoute.js";
+import { downloadDocxRoute, downloadJSONRoute, downloadRTFRoute, downloadXMLRoute } from "./routes/downloadRoute.js";
 import mongoSanitize from "express-mongo-sanitize"
 
 const app = express();
@@ -54,6 +54,7 @@ app.use("/", updateWordRoute);
 app.use("/", downloadDocxRoute)
 app.use("/", downloadJSONRoute);
 app.use("/", downloadRTFRoute);
+app.use("/", downloadXMLRoute);
 
 const server = app.listen(PORT, () => {
   console.log(`app is listening on port ${PORT}`);

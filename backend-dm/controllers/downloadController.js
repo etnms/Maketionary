@@ -3,8 +3,7 @@ import async from "async";
 import Word from "../models/word.js";
 import fs from "fs";
 import pkg from "docx";
-const { AlignmentType, Document, HeadingLevel, Packer, Paragraph, TabStopPosition, TabStopType, TextRun } =
-  pkg;
+const { Document, Packer, Paragraph, TextRun } = pkg;
 
 const downloadJSON = (req, res) => {
   const language = req.query.projectID;
@@ -28,7 +27,7 @@ const downloadJSON = (req, res) => {
 };
 
 // Download RTF file
-const downloadRTF = async (req, res) => {
+const downloadRTF = (req, res) => {
   const language = req.query.projectID;
   // Prepare the download directory
   const cwd = process.cwd();
@@ -40,7 +39,7 @@ const downloadRTF = async (req, res) => {
 
   // Generate random filename
   const date = Date.now();
-  const filename = `${language}${date}.rtf`;
+  const filename = `${language}${date}.odt`;
   // Get the path
   const file = `${path}\\${filename}`;
 
@@ -152,7 +151,7 @@ class DocumentCreator {
   }
 }
 // Download RTF file
-const downloadDocx = async (req, res) => {
+const downloadDocx = (req, res) => {
   const language = req.query.projectID;
   // Prepare the download directory
   const cwd = process.cwd();
@@ -201,4 +200,64 @@ const downloadDocx = async (req, res) => {
   });
 };
 
-export { downloadDocx, downloadJSON, downloadRTF };
+const downloadXML = (req, res) => {
+  const language = req.query.projectID;
+  // Prepare the download directory
+  const cwd = process.cwd();
+  const path = `${cwd}\\downloads\\`;
+  // if folder does not exist then create it
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path);
+  }
+  // Generate random filename
+  const date = Date.now();
+  const filename = `${language}${date}.xml`;
+  // Get the path
+  const file = `${path}\\${filename}`;
+
+  jwt.verify(req.token, process.env.JWTKEY, (err) => {
+    if (err) return res.sendStatus(403);
+    async.parallel(
+      {
+        words: (callback) => {
+          // Callback to get each word, then remove non-required field for users with select
+          Word.find({ language }).select("-_id -language -__v").exec(callback);
+        },
+      },
+      (err, results) => {
+        if (err) return res.status(400);
+        // Sort the array by words
+        const sortedArray = results.words.sort((a, b) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
+        // Create stream to write all the data
+        const stream = fs.createWriteStream(file, { flags: "a" });
+
+        // FIrst write  the RTF basic
+        stream.write('<?xml version="1.0" encoding="utf-8"?>\n');
+        stream.write(`<Dictionary xmlns:Test="Test">`);
+        // Loop through each word and write with stream
+        sortedArray.forEach((el) => {
+          stream.write(
+            `\n<Entry><Word>${el.word}</Word><Translation>${el.translation}</Translation><Definition>${el.definition}</Definition><Example>${el.example}</Example><POS>${el.pos}</POS><Gloss>${el.gloss}</Gloss></Entry>`
+          );
+        });
+        // End of document requires closing
+        stream.write("</Dictionary>");
+        stream.end();
+
+        // Once the stream is over then download file
+        stream.on("finish", () => {
+          return res.download(file, filename, (err) => {
+            if (err) {
+              console.log(err);
+              res.status(400).json({ error: "Error downloading file" });
+            }
+            // If no error then delete file from server
+            else fs.unlinkSync(file);
+          });
+        });
+      }
+    );
+  });
+};
+
+export { downloadDocx, downloadJSON, downloadRTF, downloadXML };

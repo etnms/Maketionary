@@ -29,10 +29,10 @@ export const downloadJSON = (token: string, projectID: string, projectName: stri
       .catch((err) => console.log(err));
   };
 
-export const downloadRTF = (token: string, projectID: string, projectName: string) => {
+export const downloadFile = (token: string, projectID: string, projectName: string, format: string) => {
     axios({
       method: "get",
-      url: `${process.env.REACT_APP_BACKEND}/api/download/rtf`,
+      url: `${process.env.REACT_APP_BACKEND}/api/download/${format}`,
       headers: { Authorization: token! },
       params: { projectID },
       responseType: 'blob',
@@ -43,7 +43,7 @@ export const downloadRTF = (token: string, projectID: string, projectName: strin
         const href = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = href;
-        link.download = `${fileName}.rtf`;
+        link.download = `${fileName}.${format}`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -51,24 +51,4 @@ export const downloadRTF = (token: string, projectID: string, projectName: strin
       .catch((err) => console.log(err));
   };
 
-  export const downloadDocx = (token: string, projectID: string, projectName: string) => {
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_BACKEND}/api/download/docx`,
-      headers: { Authorization: token! },
-      params: { projectID },
-      responseType: 'blob',
-    })
-      .then((res) => {
-        const fileName = projectName;
-        const blob = new Blob([res.data]);
-        const href = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = href;
-        link.download = `${fileName}.docx`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      })
-      .catch((err) => console.log(err));
-  };
+  
