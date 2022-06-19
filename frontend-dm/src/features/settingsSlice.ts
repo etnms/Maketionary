@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ISettings {
-  inLineDisplay: boolean
+  inLineDisplay: boolean;
+
 }
 
 const initialState: ISettings = {
-  inLineDisplay: JSON.parse(localStorage.getItem("inline-display")!)
+  inLineDisplay: JSON.parse(localStorage.getItem("inline-display")!),
+
 };
 
 export const settingsSlice = createSlice({
@@ -14,7 +16,8 @@ export const settingsSlice = createSlice({
   reducers: {
     setInLineDisplay: (state, action: PayloadAction<boolean>) => {
       state.inLineDisplay = (action.payload);
-    }
+    },
+
   },
 });
 

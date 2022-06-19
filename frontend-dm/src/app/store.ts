@@ -5,6 +5,7 @@ import searchReducer from "../features/searchSlice";
 import projectItemReducer from "../features/projectItemSlice";
 import settingsReducer from "../features/settingsSlice";
 import authReducer from "../features/authSlice";
+import downloadFileReducer from "../features/downloadFileSlice";
 export const store = configureStore({
   reducer: {
     arrayWords: arrayWordsReducer,
@@ -12,7 +13,8 @@ export const store = configureStore({
     search: searchReducer,
     projectItem: projectItemReducer,
     settings: settingsReducer,
-    auth: authReducer
+    auth: authReducer,
+    download: downloadFileReducer
   },
 });
 

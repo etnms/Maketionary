@@ -129,7 +129,7 @@
   min-height: 30%;
 }
 
-.edit:focus {
+.edit:focus, .edit-block:focus {
   box-shadow: 0px 0px 6px -1px var(--primary);
   transition: 200ms;
 }
@@ -171,5 +171,4 @@
   align-items: center;
   justify-content: center;
   height:60vh;
-
 }

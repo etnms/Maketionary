@@ -56,15 +56,17 @@
 .display-dropdown {
   display: flex !important;
   flex-direction: column;
+  box-shadow: var(--shadow-primary);
 }
 
 .nav-btn {
   border: none;
   font-size: 1.2rem;
-  min-width: 150px;
+  min-width: 200px;
   background-color: var(--bg-secondary);
   padding: 0.3rem 0.2rem;
   text-align: left;
+
 }
 
 .wrapper-user {

@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import async from "async";
 import Word from "../models/word.js";
+import PDFDocument from "pdfkit";
 import fs from "fs";
 import pkg from "docx";
 const { Document, Packer, Paragraph, TextRun } = pkg;
@@ -26,7 +27,7 @@ const downloadJSON = (req, res) => {
   });
 };
 
-// Download RTF file
+
 const downloadRTF = (req, res) => {
   const language = req.query.projectID;
   // Prepare the download directory
@@ -150,7 +151,7 @@ class DocumentCreator {
     });
   }
 }
-// Download RTF file
+
 const downloadDocx = (req, res) => {
   const language = req.query.projectID;
   // Prepare the download directory
@@ -233,7 +234,7 @@ const downloadXML = (req, res) => {
 
         // FIrst write  the RTF basic
         stream.write('<?xml version="1.0" encoding="utf-8"?>\n');
-        stream.write(`<Dictionary xmlns:Test="Test">`);
+        stream.write(`<Dictionary xmlns:Dict="Dictionary">`);
         // Loop through each word and write with stream
         sortedArray.forEach((el) => {
           stream.write(
@@ -260,4 +261,55 @@ const downloadXML = (req, res) => {
   });
 };
 
-export { downloadDocx, downloadJSON, downloadRTF, downloadXML };
+// Download RTF file
+const downloadPDF = (req, res) => {
+  const language = req.query.projectID;
+  // Prepare the download directory
+  const cwd = process.cwd();
+  const path = `${cwd}\\downloads\\`;
+  // if folder does not exist then create it
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path);
+  }
+
+  // Generate random filename
+  const date = Date.now();
+  const filename = `${language}${date}.pdf`;
+  // Get the path
+  const file = `${path}\\${filename}`;
+
+  jwt.verify(req.token, process.env.JWTKEY, (err) => {
+    if (err) return res.sendStatus(403);
+    const doc = new PDFDocument;
+   
+    async.parallel(
+      {
+        words: (callback) => {
+          // Callback to get each word, then remove non-required field for users with select
+          Word.find({ language }).select("-_id -language -__v").exec(callback);
+        },
+      },
+      (err, results) => {
+        if (err) return res.status(400);
+        // Sort the array by words
+        const sortedArray = results.words.sort((a, b) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
+        // pipe res to directly send http answer no need to write file
+        doc.pipe(res)
+       
+        // Loop through each word and write with stream
+        sortedArray.forEach((el) => {
+          doc
+          .font('Helvetica-Bold')
+          .fontSize(12).text(`${el.word} `, {continued: true})
+          .font('Helvetica').text(`(${el.pos}) ${el.translation} \nDefinition: ${el.definition} \nExample: ${el.example}`)
+        });
+
+        doc.end();
+        
+
+      }
+    );
+  });
+};
+
+export { downloadDocx, downloadJSON, downloadPDF, downloadRTF, downloadXML };

@@ -31,6 +31,7 @@
     "exportRtf": "Export as rtf",
     "exportDocx": "Export as docx",
     "exportXml": "Export as xml",
+    "exportPdf": "Export as pdf",
     "settings": "Settings",
     "search": "Search",
     "current": "Current project: ",
@@ -102,6 +103,7 @@
     "errorProjectNameEmpty" : "Error: the name is empty.",
     "errorWord": "Error: the word field cannot be empty.",
     "errorInvalidEmail": "Error: this email is not valid.",
+    "errorEditWord": "Error: there was a problem, please try again.",
     "errorProblem": "Error: there was a problem."
   },
   "expired": {
@@ -129,5 +131,10 @@
   },
   "loading": {
     "title": "Loading Maketionary"
+  },
+  "download": {
+    "text": "Preparing your file. This may take a moment.",
+    "noDownload": "No file to download.",
+    "errorDownload": "Error while downloading file. Please try again."
   }
 }

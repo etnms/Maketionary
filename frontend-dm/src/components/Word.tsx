@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectWordEdit, setEditMode } from "../features/editModeSlice";
 import { updateWordList } from "../features/arrayWordsSlice";
 import { useTranslation } from "react-i18next";
+import ErrorMessage from "./ErrorMessage";
 
 const Word = (props: React.PropsWithChildren<IWord>) => {
   const { _id, word, translation, definition, example, pos, gloss } = props;
@@ -46,6 +47,8 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   const [posTmp, setPosTmp] = useState<string>(pos);
   const [glossTmp, setGlossTmp] = useState<string>(gloss);
 
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
   const selectLine = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent> | React.KeyboardEvent<HTMLLIElement>
   ) => {
@@ -66,7 +69,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     previousEl?.children[0].children[0].classList.remove(`${styles["wrapper-btns-reveal"]}`);
   };
 
-  const deleteWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const deleteWord = () => {
     axios
       .delete(`${process.env.REACT_APP_BACKEND}/api/word`, {
         data: { _id },
@@ -78,8 +81,15 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
         // Update the list for new render
         dispatch(updateWordList(updatedList));
       })
-      .catch((err) => console.log(err));
+      .catch(() => {
+        setErrorMessage(t("errorMessages.errorEditWord"));
+      });
   };
+
+  const activateEditMode = () => {
+    setErrorMessage("");
+    dispatch(setEditMode(true))
+  } 
 
   const updateWord = () => {
     // Updating a word function
@@ -109,7 +119,9 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
         setPosValue(posTmp);
         dispatch(setEditMode(false));
       })
-      .catch((err) => console.log(err));
+      .catch(() =>{
+        setErrorMessage(t("errorMessages.errorEditWord"));
+      } );
   };
 
   // Hangle the change of each tmp value: allows to see changes directly
@@ -162,7 +174,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
         <div className={styles["wrapper-btns"]}>
           <button
             className={styles["btn"]}
-            onClick={(e) => deleteWord(e)}
+            onClick={deleteWord}
             aria-label={t("ariaLabels.delete")}>
             <DeleteIcon />
           </button>
@@ -173,7 +185,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
           ) : (
             <button
               className={styles["btn"]}
-              onClick={() => dispatch(setEditMode(true))}
+              onClick={activateEditMode}
               aria-label={t("ariaLabels.edit")}>
               <EditIcon />
             </button>
@@ -184,71 +196,84 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
       This allows for one edit at a time and not showing multiple on accident. 
       Repeat for every field.*/}
       {editMode && wordToEdit === _id ? (
-        <div className={!columnDisplay ? styles["wrapper-content"] : styles["wrapper-content-block"]}>
-          <span className={styles.word}>
-            <input
-              name="edit-word"
-              value={wordTmp}
-              className={!columnDisplay? `${styles.edit}` : `${styles["edit-block"]}`}
-              onChange={(e) => handleChange(e, "word")}
-            />
-          </span>
-          <span className={styles.translation}>
-            <input
-              name="edit-translation"
-              value={translationTmp}
-              className={!columnDisplay? `${styles.edit}` : `${styles["edit-block"]}`}
-              onChange={(e) => handleChange(e, "translation")}
-            />
-          </span>
-          <span className={styles.definition}>
-            <textarea
-              name="edit-definition"
-              value={definitionTmp}
-              className={!columnDisplay? `${styles.edit} ${styles["edit-example"]}` : `${styles["edit-block"]} ${styles["edit-block-example"]}`}
-              onChange={(e) => handleChange(e, "definition")}></textarea>
-          </span>
-          <span className={styles.example}>
-            <textarea
-              name="edit-example"
-              value={exampleTmp}
-              className={!columnDisplay? `${styles.edit} ${styles["edit-example"]}` : `${styles["edit-block"]} ${styles["edit-block-example"]}`}
-              onChange={(e) => handleChange(e, "example")}></textarea>
-          </span>
-          <span className={styles.pos}>
-            <select
-              name="edit-pos"
-              value={posTmp}
-              className={!columnDisplay? `${styles.edit}` : `${styles["edit-block"]}`}
-              onChange={(e) => handleChange(e, "pos")}
-             >
-              <option disabled hidden></option>
-              <option>{t("selectPOS.noun")}</option>
-              <option>{t("selectPOS.verb")}</option>
-              <option>{t("selectPOS.pronoun")}</option>
-              <option>{t("selectPOS.adjective")}</option>
-              <option>{t("selectPOS.adverb")}</option>
-              <option>{t("selectPOS.interjection")}</option>
-              <option>{t("selectPOS.preposition")}</option>
-              <option>{t("selectPOS.conjunction")}</option>
-              <option>{t("selectPOS.determiner")}</option>
-              <option>{t("selectPOS.number")}</option>
-            </select>
-          </span>
-          <span className={styles.gloss}>
-            <select
-              name="edit-gloss"
-              value={glossTmp}
-              className={!columnDisplay? `${styles.edit}` : `${styles["edit-block"]}`}
-              onChange={(e) => handleChange(e, "gloss")}
-              >
-              {renderGlossOptions("edit")}
-            </select>
-          </span>
+        <div>
+          <div className={!columnDisplay ? styles["wrapper-content"] : styles["wrapper-content-block"]}>
+            <span className={styles.word}>
+              <input
+                name="edit-word"
+                value={wordTmp}
+                className={!columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`}
+                onChange={(e) => handleChange(e, "word")}
+              />
+            </span>
+            <span className={styles.translation}>
+              <input
+                name="edit-translation"
+                value={translationTmp}
+                className={!columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`}
+                onChange={(e) => handleChange(e, "translation")}
+              />
+            </span>
+            <span className={styles.definition}>
+              <textarea
+                name="edit-definition"
+                value={definitionTmp}
+                className={
+                  !columnDisplay
+                    ? `${styles.edit} ${styles["edit-example"]}`
+                    : `${styles["edit-block"]} ${styles["edit-block-example"]}`
+                }
+                onChange={(e) => handleChange(e, "definition")}></textarea>
+            </span>
+            <span className={styles.example}>
+              <textarea
+                name="edit-example"
+                value={exampleTmp}
+                className={
+                  !columnDisplay
+                    ? `${styles.edit} ${styles["edit-example"]}`
+                    : `${styles["edit-block"]} ${styles["edit-block-example"]}`
+                }
+                onChange={(e) => handleChange(e, "example")}></textarea>
+            </span>
+            <span className={styles.pos}>
+              <select
+                name="edit-pos"
+                value={posTmp}
+                className={!columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`}
+                onChange={(e) => handleChange(e, "pos")}>
+                <option disabled hidden></option>
+                <option>{t("selectPOS.noun")}</option>
+                <option>{t("selectPOS.verb")}</option>
+                <option>{t("selectPOS.pronoun")}</option>
+                <option>{t("selectPOS.adjective")}</option>
+                <option>{t("selectPOS.adverb")}</option>
+                <option>{t("selectPOS.interjection")}</option>
+                <option>{t("selectPOS.preposition")}</option>
+                <option>{t("selectPOS.conjunction")}</option>
+                <option>{t("selectPOS.determiner")}</option>
+                <option>{t("selectPOS.number")}</option>
+              </select>
+            </span>
+            <span className={styles.gloss}>
+              <select
+                name="edit-gloss"
+                value={glossTmp}
+                className={!columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`}
+                onChange={(e) => handleChange(e, "gloss")}>
+                {renderGlossOptions("edit")}
+              </select>
+            </span>
+          </div>
+          {errorMessage === "" ? null : <ErrorMessage message={errorMessage} />}
         </div>
       ) : columnDisplay ? (
         <span className={styles["wrapper-content-block"]}>
-          {<span><b>{t("main.word")}</b>: {wordValue}</span>}
+          {
+            <span>
+              <b>{t("main.word")}</b>: {wordValue}
+            </span>
+          }
 
           {translationValue !== "" ? (
             <span>

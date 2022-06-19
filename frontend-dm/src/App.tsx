@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import { Suspense } from "react";
 import HomeLoader from "./components/HomeLoader";
 import Settings from "./components/Settings";
+import DownloadWindow from "./components/DownloadWindow";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="settings" element={<Settings/>}/>
+            <Route path="download" element={<DownloadWindow/>}/>
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
