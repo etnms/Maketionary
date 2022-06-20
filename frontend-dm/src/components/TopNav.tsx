@@ -10,8 +10,8 @@ const TopNav = () => {
 
   const { t } = useTranslation();
 
-  const projectID = localStorage.getItem("project");
-  const projectName = localStorage.getItem("projectName");
+  const projectID: string | null = localStorage.getItem("project");
+  const projectName: string | null = localStorage.getItem("projectName");
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -21,9 +21,7 @@ const TopNav = () => {
   return (
     <nav className={styles.nav}>
       <TopNavMenu />
-      {
-        // Display outlet for the settings after the button to follow a more natural order, especially accessibility and focus
-      }
+      {/* Display outlet for the settings after the button to follow a more natural order, especially accessibility and focus */}
       <Outlet />
       <SearchBar />
 

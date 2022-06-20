@@ -9,7 +9,7 @@ import ErrorMessage from "./ErrorMessage";
 import Loader from "./Loader";
 
 const CreateWordMenu = () => {
-  const token = localStorage.getItem("token");
+  const token: string | null = localStorage.getItem("token");
 
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -22,22 +22,22 @@ const CreateWordMenu = () => {
     e.preventDefault();
     // Get all parameters
     // Remove any upper case letters for word/translation
-    const word = (document.querySelector("input[name='word']") as HTMLInputElement).value.toLowerCase();
-    const translation = (
+    const word : string = (document.querySelector("input[name='word']") as HTMLInputElement).value.toLowerCase();
+    const translation: string = (
       document.querySelector("input[name='translation']") as HTMLInputElement
     ).value.toLowerCase();
     // Uppercase the first letter for definition and examples
-    let definition = (document.querySelector("textarea[name='definition']") as HTMLTextAreaElement).value;
+    let definition: string = (document.querySelector("textarea[name='definition']") as HTMLTextAreaElement).value;
     // Making sure the field is not empty, if not uppercase it
     if (definition !== "") definition = definition[0].toUpperCase() + definition.slice(1);
-    let example = (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value;
+    let example: string = (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value;
     // Making sure the field is not empty, if not uppercase it
     if (example !== "") example = example[0].toUpperCase() + example.slice(1);
     //pos and gloss don't require changes since they are select values
-    const pos = (document.querySelector("select[name='pos']") as HTMLSelectElement).value;
-    const gloss = (document.querySelector("select[name='gloss']") as HTMLSelectElement).value;
+    const pos: string = (document.querySelector("select[name='pos']") as HTMLSelectElement).value;
+    const gloss: string = (document.querySelector("select[name='gloss']") as HTMLSelectElement).value;
     //Get the ID
-    const languageID = localStorage.getItem("project");
+    const languageID: string | null = localStorage.getItem("project");
     // Create loader to wait for answer from the server
     setLoading(true);
     axios
@@ -67,7 +67,7 @@ const CreateWordMenu = () => {
 
   // Handle the change to the word value to remove error message
   const handleWordChange = () => {
-    const word = (document.querySelector("input[name='word']") as HTMLInputElement).value;
+    const word: string = (document.querySelector("input[name='word']") as HTMLInputElement).value;
     if (errorMessage === t("errorMessages.errorWord")) {
       if (word !== "") setErrorMessage("");
     }

@@ -1,0 +1,27 @@
+.list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.letter {
+  border: none;
+  background-color: transparent;
+  font-size: 1.2rem;
+  position: relative;
+  width: 25px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.letter:hover {
+    background-color: var(--primary);
+    color: var(--color-text);
+}
+
+.active {
+    background-color: var(--secondary);
+    color: var(--color-text);
+}

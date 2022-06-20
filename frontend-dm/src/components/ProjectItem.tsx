@@ -13,18 +13,18 @@ import { useTranslation } from "react-i18next";
 const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
   const { _id, name } = props;
 
-  const token = localStorage.getItem("token");
+  const token: string | null = localStorage.getItem("token");
 
   const [projectValue, setProjectValue] = useState<string>(name);
   const [edit, setEdit] = useState<boolean>(false);
 
-  const stateID = useAppSelector((state) => state.projectItem.projectID);
+  const stateID: string = useAppSelector((state) => state.projectItem.projectID);
 
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
 
   const updateProjectName = () => {
-    const newName = (document.querySelector("input[name='edit-project']") as HTMLInputElement).value;
+    const newName: string = (document.querySelector("input[name='edit-project']") as HTMLInputElement).value;
     axios
       .put(
         `${process.env.REACT_APP_BACKEND}/api/language`,
@@ -43,7 +43,7 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
 
   const openConfirmDelete = () => {
     // Display the confirmation menu to delete a project
-    const confirmWindow = document.querySelector("[data-confirm-delete='window']");
+    const confirmWindow: Element | null = document.querySelector("[data-confirm-delete='window']");
     confirmWindow?.classList.add(`${confirmDeleteStyle.show}`);
   };
 
@@ -52,9 +52,9 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
     _id: string,
     name: string
   ) => {
-    const el = e.currentTarget;
+    const el: EventTarget & HTMLLIElement = e.currentTarget;
     // Select previous selected element to remove style
-    const previousEl = document.querySelector(`.${styles["selected-project"]}`);
+    const previousEl: Element | null = document.querySelector(`.${styles["selected-project"]}`);
     previousEl?.classList.remove(`${styles["selected-project"]}`);
     // Add selected style to item
     el.classList.add(`${styles["selected-project"]}`);

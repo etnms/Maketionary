@@ -14,10 +14,10 @@ const ConfirmDelete = (props: React.PropsWithChildren<IConfirmDelete>) => {
   const { languageList, setLanguageList } = props;
 
   const {t} = useTranslation();
-  const token = localStorage.getItem("token");
+  const token: string | null = localStorage.getItem("token");
 
-  const projectID = useAppSelector((state) => state.projectItem.projectID);
-  const projectName = useAppSelector((state) => state.projectItem.projectName);
+  const projectID: string = useAppSelector((state) => state.projectItem.projectID);
+  const projectName: string = useAppSelector((state) => state.projectItem.projectName);
 
   const deleteProject = () => {
     axios
@@ -38,7 +38,7 @@ const ConfirmDelete = (props: React.PropsWithChildren<IConfirmDelete>) => {
   };
 
   const closeWindow = () => {
-    const confirmWindow = document.querySelector("[data-confirm-delete='window']");
+    const confirmWindow: Element | null = document.querySelector("[data-confirm-delete='window']");
     confirmWindow?.classList.remove(`${styles.show}`);
   };
 

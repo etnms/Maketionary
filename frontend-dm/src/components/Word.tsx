@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import IWord from "../interfaces/interfaceWord";
+import IWord, { IWordDb } from "../interfaces/interfaceWord";
 import styles from "./ListWords.module.css";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -15,21 +15,21 @@ import ErrorMessage from "./ErrorMessage";
 const Word = (props: React.PropsWithChildren<IWord>) => {
   const { _id, word, translation, definition, example, pos, gloss } = props;
 
-  const token = localStorage.getItem("token");
+  const token: string | null = localStorage.getItem("token");
 
   const { t } = useTranslation();
 
   // Setting
-  const columnDisplay = useAppSelector((state) => state.settings.inLineDisplay);
+  const columnDisplay: boolean = useAppSelector((state) => state.settings.inLineDisplay);
   // Rerender when change in the settings
   useEffect(() => {}, [columnDisplay]);
 
-  const listWord = useAppSelector((state) => state.arrayWords.value);
+  const listWord: IWordDb[] = useAppSelector((state) => state.arrayWords.value);
   // Using global state to determine the status of the edit mode
   // But also checking which word is currently select to show only one edit at a time (for current word)
   const dispatch = useAppDispatch();
-  const editMode = useAppSelector((state) => state.editMode.value);
-  const wordToEdit = useAppSelector((state) => state.editMode.wordToEdit);
+  const editMode: boolean = useAppSelector((state) => state.editMode.value);
+  const wordToEdit: string = useAppSelector((state) => state.editMode.wordToEdit);
 
   // Define all the values in state for an entry to use them for edit and display
   const [wordValue, setWordValue] = useState<string>(word);
@@ -57,7 +57,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     const el = e.currentTarget;
 
     // Select previous selected element
-    const previousEl = document.querySelector(`.${styles.selected}`);
+    const previousEl: Element | null = document.querySelector(`.${styles.selected}`);
     // If same element then reset the edit values
     if (el === previousEl) cancelChange();
     // Add selected style to item
@@ -77,7 +77,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
       })
       .then(() => {
         // Filter list to remove deleted item
-        const updatedList = listWord.filter((word: IWord) => word._id !== _id);
+        const updatedList: IWordDb[] = listWord.filter((word: IWord) => word._id !== _id);
         // Update the list for new render
         dispatch(updateWordList(updatedList));
       })
@@ -95,13 +95,13 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     // Updating a word function
     // This function does not uppercase/lowercase entries as opposed to the create word one
     // This is for the simple purpose of letting users change entries as they wish for scenarios where casing can be an issue
-    const word = (document.querySelector("input[name='edit-word']") as HTMLInputElement).value;
-    const translation = (document.querySelector("input[name='edit-translation']") as HTMLInputElement).value;
-    const definition = (document.querySelector("textarea[name='edit-definition']") as HTMLTextAreaElement)
+    const word: string = (document.querySelector("input[name='edit-word']") as HTMLInputElement).value;
+    const translation: string = (document.querySelector("input[name='edit-translation']") as HTMLInputElement).value;
+    const definition: string = (document.querySelector("textarea[name='edit-definition']") as HTMLTextAreaElement)
       .value;
-    const example = (document.querySelector("textarea[name='edit-example']") as HTMLTextAreaElement).value;
-    const pos = (document.querySelector("select[name='edit-pos']") as HTMLSelectElement).value;
-    const gloss = (document.querySelector("select[name='edit-gloss']") as HTMLSelectElement).value;
+    const example: string = (document.querySelector("textarea[name='edit-example']") as HTMLTextAreaElement).value;
+    const pos: string = (document.querySelector("select[name='edit-pos']") as HTMLSelectElement).value;
+    const gloss: string = (document.querySelector("select[name='edit-gloss']") as HTMLSelectElement).value;
 
     axios
       .put(

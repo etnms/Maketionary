@@ -14,8 +14,8 @@ const DownloadWindow = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
-  const isFileDownloading = useAppSelector((state) => state.download.isFileDownloading);
-  const errorDownload = useAppSelector((state) => state.download.errorDownload);
+  const isFileDownloading: boolean = useAppSelector((state) => state.download.isFileDownloading);
+  const errorDownload: boolean = useAppSelector((state) => state.download.errorDownload);
 
   const closeWindow = () => {
     navigate("/dashboard");

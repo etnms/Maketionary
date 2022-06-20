@@ -4,13 +4,15 @@ import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateWordList } from "../features/arrayWordsSlice";
 import { IWordDb } from "../interfaces/interfaceWord";
+import FilterLetter from "./FilterLetter";
 import styles from "./ListWords.module.css";
+import filterStyle from "./FilterLetter.module.css";
 import Loader from "./Loader";
 import Word from "./Word";
 
 const ListWords = () => {
-  const token = localStorage.getItem("token");
-  const projectID = localStorage.getItem("project");
+  const token: string | null = localStorage.getItem("token");
+  const projectID: string | null = localStorage.getItem("project");
 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -18,20 +20,21 @@ const ListWords = () => {
 
   const [filteredResults, setFilteredResults] = useState<IWordDb[]>();
 
-  const listWord = useAppSelector((state) => state.arrayWords.value);
-  const searchInput = useAppSelector((state) => state.search.searchInput);
+  const listWord: IWordDb[] = useAppSelector((state) => state.arrayWords.value);
+  const searchInput: string = useAppSelector((state) => state.search.searchInput);
+  const searchFilter: string = useAppSelector((state) => state.search.searchFilter);
 
   // sort array function to use in memo
-  const createSortedArray = (array: Array<IWordDb>) => {
+  const createSortedArray = (array: IWordDb[]) => {
     return array.sort((a: IWordDb, b: IWordDb) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
   };
   // Get the actual sorted array
-  const sortedArray = useMemo(() => createSortedArray([...listWord]), [listWord]);
+  const sortedArray: IWordDb[] = useMemo(() => createSortedArray([...listWord]), [listWord]);
 
-    // Setting
-    const columnDisplay = useAppSelector((state) => state.settings.inLineDisplay);
-    // Rerender when change in the settings
-    useEffect(() => {}, [columnDisplay]);
+  // Setting
+  const columnDisplay: boolean = useAppSelector((state) => state.settings.inLineDisplay);
+  // Rerender when change in the settings
+  useEffect(() => {}, [columnDisplay]);
 
   useEffect(() => {
     axios({
@@ -47,20 +50,24 @@ const ListWords = () => {
   }, [projectID, token, dispatch]);
 
   useEffect(() => {
-    // If else statement solely for UI purposes depending on its size 
+    const tmp = "word"; //Temporary search value
+    if (searchFilter !== searchInput) {
+      const prevActive: Element | null = document.querySelector(`.${filterStyle.active}`);
+      prevActive?.classList.remove(filterStyle.active);
+    }
+    // If else statement solely for UI purposes depending on its size
     if (sortedArray.length < 100) {
-    // Copy the sorted array to avoid reference issues & filter
-    const filtered = [...sortedArray.filter((word: IWordDb) => word.word.startsWith(searchInput))];
-    // Update filtered results to be displayed
-    setFilteredResults(filtered);
-  }
-  else {
-    startTransition(() => {
-      const filtered = [...sortedArray.filter((word: IWordDb) => word.word.startsWith(searchInput))];
+      // Copy the sorted array to avoid reference issues & filter
+      const filtered: IWordDb[] = [...sortedArray.filter((word: IWordDb) => word[tmp].startsWith(searchInput))];
+      // Update filtered results to be displayed
       setFilteredResults(filtered);
-    });
-  }
-  }, [sortedArray, searchInput]);
+    } else {
+      startTransition(() => {
+        const filtered: IWordDb[] = [...sortedArray.filter((word: IWordDb) => word.word.startsWith(searchInput))];
+        setFilteredResults(filtered);
+      });
+    }
+  }, [sortedArray, searchInput, searchFilter]);
 
   const filterResults = () => {
     if (filteredResults === undefined) return;
@@ -80,21 +87,26 @@ const ListWords = () => {
 
   return (
     <main className={styles.main}>
-      <span>{t("main.numberEntries")}{listWord.length}</span>
+      <span>
+        {t("main.numberEntries")}
+        {listWord.length}
+      </span>
+      <FilterLetter />
       <ul className={styles.list}>
-        {!columnDisplay?
-        <li className={`${styles.listitem} ${styles.titles}`} key={"titles"}>
-          <span className={styles["wrapper-edit"]}></span>{" "}
-          {/* Empty element to create space in the view but no need to edit titles*/}
-          <div className={styles["wrapper-content"]}>
-            <span className={styles.word}>{t("main.word")}</span>
-            <span className={styles.translation}>{t("main.translation")}</span>
-            <span className={styles.definition}>{t("main.definition")}</span>
-            <span className={styles.example}>{t("main.example")}</span>
-            <span className={styles.pos}>{t("main.pos")}</span>
-            <span className={styles.gloss}>{t("main.gloss")}</span>
-          </div>
-        </li> :null}
+        {!columnDisplay ? (
+          <li className={`${styles.listitem} ${styles.titles}`} key={"titles"}>
+            <span className={styles["wrapper-edit"]}></span>{" "}
+            {/* Empty element to create space in the view but no need to edit titles*/}
+            <div className={styles["wrapper-content"]}>
+              <span className={styles.word}>{t("main.word")}</span>
+              <span className={styles.translation}>{t("main.translation")}</span>
+              <span className={styles.definition}>{t("main.definition")}</span>
+              <span className={styles.example}>{t("main.example")}</span>
+              <span className={styles.pos}>{t("main.pos")}</span>
+              <span className={styles.gloss}>{t("main.gloss")}</span>
+            </div>
+          </li>
+        ) : null}
         {pending ? (
           <div className={styles["wrapper-loader-main"]}>
             <Loader width={50} height={50} />

@@ -12,7 +12,7 @@ const Settings = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const languageValue = localStorage.getItem("i18nextLng") || "en";
+    const languageValue: string | null = localStorage.getItem("i18nextLng") || "en";
     (document.querySelector("select[name='language-select']") as HTMLSelectElement).value = languageValue;
   });
 

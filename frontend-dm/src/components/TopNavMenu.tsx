@@ -8,17 +8,17 @@ import { IWordDb } from "../interfaces/interfaceWord";
 import styles from "./TopNav.module.css";
 
 const TopNavMenu = () => {
-  const token = localStorage.getItem("token");
-  const projectID = localStorage.getItem("project");
-  const projectName = localStorage.getItem("projectName");
+  const token: string | null = localStorage.getItem("token");
+  const projectID: string | null = localStorage.getItem("project");
+  const projectName: string | null = localStorage.getItem("projectName");
 
   const navigate = useNavigate();
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   // Value to know if user clicked on element of the menu
   const [isMenuItemSelected, setIsMenuItemSelected] = useState<boolean>(false);
- 
+
   const displayDropdown = (
     e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.KeyboardEvent<HTMLSpanElement>
   ) => {
@@ -26,9 +26,9 @@ const TopNavMenu = () => {
     setIsMenuItemSelected(!isMenuItemSelected);
 
     // Get all elements that previously had the display dropdown class
-    const displayDropdownEls = document.querySelector(`.${styles["display-dropdown"]}`);
+    const displayDropdownEls: Element | null = document.querySelector(`.${styles["display-dropdown"]}`);
     displayDropdownEls?.classList.remove(`${styles["display-dropdown"]}`);
-    const children = e.currentTarget.children;
+    const children: HTMLCollection = e.currentTarget.children;
     children[1]!.classList.toggle(`${styles["display-dropdown"]}`);
 
     // Remove previous classes. Needs to be put after the toggle as the elements were previously selected
@@ -40,18 +40,18 @@ const TopNavMenu = () => {
 
   // useEffect for navigation UI
   useEffect(() => {
-    const dropdowns = document.querySelectorAll(`.${styles.dropdown}`);
+    const dropdowns: NodeListOf<Element> = document.querySelectorAll(`.${styles.dropdown}`);
 
     const displayMenuHover = (node: Element) => {
       // Get all dropdown elements
-      const displayDropdownEls = document.querySelectorAll(`.${styles["display-dropdown"]}`);
+      const displayDropdownEls: NodeListOf<Element> = document.querySelectorAll(`.${styles["display-dropdown"]}`);
       // If list is empty then return
       // This avoids hover effect to appear when menu is supposed to be closed
       if (displayDropdownEls.length === 0) return;
       // Remove all the dropdowns that are visible
       displayDropdownEls.forEach((el) => el?.classList.remove(`${styles["display-dropdown"]}`));
       // Get the elements (children) of the current dropdown
-      const children = node.children;
+      const children: HTMLCollection = node.children;
       // Show the elements
       children[1]!.classList.add(`${styles["display-dropdown"]}`);
     };
@@ -59,7 +59,7 @@ const TopNavMenu = () => {
     const hide = () => {
       // Get the elements and hide each one of them one by one
       // Getting the element is a duplicate but necessary to have individual hide/show of each dropdown
-      const displayDropdownEls = document.querySelectorAll(`.${styles["display-dropdown"]}`);
+      const displayDropdownEls: NodeListOf<Element> = document.querySelectorAll(`.${styles["display-dropdown"]}`);
       displayDropdownEls.forEach((el) => el?.classList.remove(`${styles["display-dropdown"]}`));
     };
 
@@ -101,7 +101,7 @@ const TopNavMenu = () => {
     // Display window while file is being prepared
     dispatch(setIsFileDownloading(true));
     navigate("download");
-    
+
     axios({
       method: "get",
       url: `${process.env.REACT_APP_BACKEND}/api/download/${format}`,
@@ -110,31 +110,31 @@ const TopNavMenu = () => {
       responseType, //blob
     })
       .then((res) => {
-        const fileName = projectName;
+        const fileName: string = projectName;
         let blob;
         if (format === "json") {
           // Sort data
-          const sortedData = res.data.results.words.sort((a: IWordDb, b: IWordDb) =>
+          const sortedData: any = res.data.results.words.sort((a: IWordDb, b: IWordDb) =>
             a.word > b.word ? 1 : a.word === b.word ? 0 : -1
           );
           // Stringify
-          const json = JSON.stringify(sortedData);
+          const json: string = JSON.stringify(sortedData);
           blob = new Blob([json], { type }); //text/plain
         } else blob = new Blob([res.data], { type }); //text/plain
 
-        const href = URL.createObjectURL(blob);
-        const link = document.createElement("a");
+        const href: string = URL.createObjectURL(blob);
+        const link: HTMLAnchorElement = document.createElement("a");
         link.href = href;
         link.download = `${fileName}.${format}`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         dispatch(setIsFileDownloading(false));
-        // Close window after download 
+        // Close window after download
         navigate("/dashboard");
       })
       .catch((err) => {
-        dispatch(setErrorDownload(true))
+        dispatch(setErrorDownload(true));
         console.log(err);
       });
   };
