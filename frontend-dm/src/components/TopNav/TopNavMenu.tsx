@@ -6,7 +6,7 @@ import { Dispatch } from "redux";
 import { useAppDispatch } from "../../app/hooks";
 import { setErrorDownload, setIsFileDownloading } from "../../features/downloadFileSlice";
 import { IWordDb } from "../../interfaces/interfaceWord";
-import styles from "./TopNav.module.css";
+import styles from "./TopNavMenu.module.css";
 
 const TopNavMenu = () => {
   const token: string | null = localStorage.getItem("token");
@@ -24,7 +24,7 @@ const TopNavMenu = () => {
     e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.KeyboardEvent<HTMLSpanElement>
   ) => {
     // Click decides if user clicked to have the menu elements or if the menu has to hide them
-    setIsMenuItemSelected(!isMenuItemSelected);
+    setIsMenuItemSelected(prev => !prev);
 
     // Get all elements that previously had the display dropdown class
     const displayDropdownEls: Element | null = document.querySelector(`.${styles["display-dropdown"]}`);
@@ -41,7 +41,7 @@ const TopNavMenu = () => {
 
   // useEffect for navigation UI
   useEffect(() => {
-    const dropdowns: NodeListOf<Element> = document.querySelectorAll(`.${styles.dropdown}`);
+    const dropdowns= document.querySelectorAll(`.${styles.dropdown}`);
 
     const displayMenuHover = (node: Element) => {
       // Get all dropdown elements
@@ -49,6 +49,7 @@ const TopNavMenu = () => {
       // If list is empty then return
       // This avoids hover effect to appear when menu is supposed to be closed
       if (displayDropdownEls.length === 0) return;
+ 
       // Remove all the dropdowns that are visible
       displayDropdownEls.forEach((el) => el?.classList.remove(`${styles["display-dropdown"]}`));
       // Get the elements (children) of the current dropdown

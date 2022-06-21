@@ -25,7 +25,6 @@ export const authSlice = createSlice({
     setFirstConnection: (state, action: PayloadAction<boolean>) => {
       state.firstConnection = action.payload;
     },
-
   },
 });
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { updateWordList } from "../features/arrayWordsSlice";
@@ -10,6 +10,7 @@ import filterStyle from "./FilterLetter.module.css";
 import Loader from "./Loader";
 import Word from "./Word";
 import { Dispatch } from "redux";
+import DisplayOptions from "./DisplayOptions";
 
 const ListWords = () => {
   const token: string | null = localStorage.getItem("token");
@@ -23,15 +24,33 @@ const ListWords = () => {
 
   const listWord: IWordDb[] = useAppSelector((state) => state.arrayWords.value);
   const searchInput: string = useAppSelector((state) => state.search.searchInput);
+  // Search bar input and filtering
   const searchFilter: string = useAppSelector((state) => state.search.searchFilter);
-  const typeFilter: string = useAppSelector((state) => state.search.typeFilter);
-  
+  const searchTypeFilter: string = useAppSelector((state) => state.search.searchTypeFilter);
+  // View without search filtering
+  const displayTypeFilter: string = useAppSelector((state) => state.search.displayTypeFilter);
+  const isDescendingFilter: boolean = useAppSelector((state) => state.search.isDescendingFilter);
+
   // sort array function to use in memo
-  const createSortedArray = (array: IWordDb[]) => {
-    return array.sort((a: IWordDb, b: IWordDb) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
-  };
+  const createSortedArray = useCallback(
+    (array: IWordDb[], typeFilter: string) => {
+      if (isDescendingFilter)
+        return array.sort((a: any, b: any) =>
+          b[typeFilter] > a[typeFilter] ? 1 : b[typeFilter] === a[typeFilter] ? 0 : -1
+        );
+      else
+        return array.sort((a: any, b: any) =>
+          a[typeFilter] > b[typeFilter] ? 1 : a[typeFilter] === b[typeFilter] ? 0 : -1
+        );
+    },
+    [isDescendingFilter]
+  );
+
   // Get the actual sorted array
-  const sortedArray: IWordDb[] = useMemo(() => createSortedArray([...listWord]), [listWord]);
+  const sortedArray: IWordDb[] = useMemo(
+    () => createSortedArray([...listWord], displayTypeFilter),
+    [listWord, displayTypeFilter, createSortedArray]
+  );
 
   // Setting
   const columnDisplay: boolean = useAppSelector((state) => state.settings.inLineDisplay);
@@ -52,24 +71,28 @@ const ListWords = () => {
   }, [projectID, token, dispatch]);
 
   useEffect(() => {
-
     if (searchFilter !== searchInput) {
       const prevActive: Element | null = document.querySelector(`.${filterStyle.active}`);
       prevActive?.classList.remove(filterStyle.active);
     }
     // If else statement solely for UI purposes depending on its size
     if (sortedArray.length < 100) {
+      console.log(sortedArray)
       // Copy the sorted array to avoid reference issues & filter
-      const filtered: IWordDb[] = [...sortedArray.filter((word: IWordDb) => word.word.startsWith(searchInput))];
+      const filtered: IWordDb[] = [
+        ...sortedArray.filter((word: any) => word[searchTypeFilter].startsWith(searchInput)),
+      ];
       // Update filtered results to be displayed
       setFilteredResults(filtered);
     } else {
       startTransition(() => {
-        const filtered: IWordDb[] = [...sortedArray.filter((word: IWordDb) => word.word.startsWith(searchInput))];
+        const filtered: IWordDb[] = [
+          ...sortedArray.filter((word: any) => word[searchTypeFilter].startsWith(searchInput)),
+        ];
         setFilteredResults(filtered);
       });
     }
-  }, [sortedArray, searchInput, searchFilter]);
+  }, [sortedArray, searchInput, searchFilter, searchTypeFilter]);
 
   const filterResults = () => {
     if (filteredResults === undefined) return;
@@ -89,15 +112,18 @@ const ListWords = () => {
 
   return (
     <main className={styles.main}>
-      <span>
-        {t("main.numberEntries")}
-        {listWord.length}
-      </span>
+      <div className={styles["info-menu"]}>
+        <span>
+          {t("main.numberEntries")}
+          {listWord.length}
+        </span>
+        <DisplayOptions/>
+      </div>
       <FilterLetter />
       <ul className={styles.list}>
         {!columnDisplay ? (
           <li className={`${styles.listitem} ${styles.titles}`} key={"titles"}>
-            <span className={styles["wrapper-edit"]}></span>{" "}
+            <span className={styles["wrapper-edit"]}></span>
             {/* Empty element to create space in the view but no need to edit titles*/}
             <div className={styles["wrapper-content"]}>
               <span className={styles.word}>{t("main.word")}</span>

@@ -1,16 +1,14 @@
 import { useAppDispatch } from "../../app/hooks";
-import { setSearchInput, setTypeFilter } from "../../features/searchSlice";
+import { setSearchInput, setSearchTypeFilter } from "../../features/searchSlice";
 import styles from "./SearchBar.module.css";
-import navBarStyles from "./TopNav.module.css";
 import SearchIcon from "@mui/icons-material/Search";
-import { RefObject, useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Dispatch } from "redux";
 
 const SearchBar = () => {
   const dispatch: Dispatch<any> = useAppDispatch();
   const { t } = useTranslation();
-  const [isMenuItemSelected, setIsMenuItemSelected] = useState<boolean>(false);
 
   const searchItems = (searchValue: string) => {
     dispatch(setSearchInput(searchValue));
@@ -37,8 +35,6 @@ const SearchBar = () => {
   const displayDropdown = (
     e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.KeyboardEvent<HTMLSpanElement>
   ) => {
-    // Click decides if user clicked to have the menu elements or if the menu has to hide them
-    setIsMenuItemSelected(!isMenuItemSelected);
 
     // Get all elements that previously had the display dropdown class
     const displayDropdownEls: Element | null = document.querySelector(`.${styles["display-dropdown"]}`);
@@ -53,11 +49,9 @@ const SearchBar = () => {
     }
   };
 
-  const chooseFilter = (value: string) => {
-    dispatch(setTypeFilter(value))
-    console.log(value)
+  const chooseFilterOption = (value: string) => {
+    dispatch(setSearchTypeFilter(value))
   }
-
 
   return (
     <div className={styles["wrapper-search"]}>
@@ -72,14 +66,14 @@ const SearchBar = () => {
       {/*<SearchIcon className={styles["search-icon"]} />*/}
       <span tabIndex={0} className={styles.dropdown} onClick={(e) => displayDropdown(e)}>
         <SearchIcon className={styles["search-icon"]} />
-        <div className={navBarStyles["dropdown-content"]}>
+        <div className={styles["dropdown-content"]}>
           <span className={styles["title-filter"]}>{t("nav.filterBy")}</span>
-          <button className={navBarStyles["nav-btn"]} onClick={() => chooseFilter("word")}>{t("main.word")}</button>
-          <button className={navBarStyles["nav-btn"]} onClick={() => chooseFilter("translation")}>{t("main.translation")}</button>
-          <button className={navBarStyles["nav-btn"]} onClick={() => chooseFilter("definition")}>{t("main.definition")}</button>
-          <button className={navBarStyles["nav-btn"]} onClick={() => chooseFilter("example")}>{t("main.example")}</button>
-          <button className={navBarStyles["nav-btn"]} onClick={() => chooseFilter("pos")}>{t("main.pos")}</button>
-          <button className={navBarStyles["nav-btn"]} onClick={() => chooseFilter("gloss")}>{t("main.gloss")}</button>
+          <button className={styles["nav-btn"]} onClick={() => chooseFilterOption("word")}>{t("main.word")}</button>
+          <button className={styles["nav-btn"]} onClick={() => chooseFilterOption("translation")}>{t("main.translation")}</button>
+          <button className={styles["nav-btn"]} onClick={() => chooseFilterOption("definition")}>{t("main.definition")}</button>
+          <button className={styles["nav-btn"]} onClick={() => chooseFilterOption("example")}>{t("main.example")}</button>
+          <button className={styles["nav-btn"]} onClick={() => chooseFilterOption("pos")}>{t("main.pos")}</button>
+          <button className={styles["nav-btn"]} onClick={() => chooseFilterOption("gloss")}>{t("main.gloss")}</button>
         </div>
       </span>
     </div>

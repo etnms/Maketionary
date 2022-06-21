@@ -24,7 +24,6 @@ export const editModeSlice = createSlice({
     setProjectName: (state, action: PayloadAction<string>) => {
       state.projectName = action.payload;
     },
-
   },
 });
 
