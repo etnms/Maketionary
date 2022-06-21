@@ -52,18 +52,14 @@
   cursor: pointer;
 }
 
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: var(--bg-secondary);
-  min-width: 100px;
-  z-index: 1;
-  top: 100%;
-  left: 0;
-}
-
 .display-dropdown {
   display: flex !important;
   flex-direction: column;
   box-shadow: var(--shadow-primary);
+}
+
+.title-filter {
+  cursor: default;
+  padding: 0.2rem;
+  font-size: 1.4rem;
 }

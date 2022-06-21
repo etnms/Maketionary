@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../app/hooks";
-import { setErrorDownload, setIsFileDownloading } from "../features/downloadFileSlice";
-import { IWordDb } from "../interfaces/interfaceWord";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import { Dispatch } from "redux";
+import { useAppDispatch } from "../../app/hooks";
+import { setErrorDownload, setIsFileDownloading } from "../../features/downloadFileSlice";
+import { IWordDb } from "../../interfaces/interfaceWord";
 import styles from "./TopNav.module.css";
 
 const TopNavMenu = () => {
@@ -12,8 +13,8 @@ const TopNavMenu = () => {
   const projectID: string | null = localStorage.getItem("project");
   const projectName: string | null = localStorage.getItem("projectName");
 
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate();
+  const dispatch: Dispatch<any> = useAppDispatch();
   const { t } = useTranslation();
 
   // Value to know if user clicked on element of the menu

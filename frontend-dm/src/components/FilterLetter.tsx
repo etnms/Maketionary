@@ -2,9 +2,10 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setSearchFilter, setSearchInput } from "../features/searchSlice";
 import letters from "../data/letters.json";
 import styles from "../components/FilterLetter.module.css";
+import { Dispatch } from "redux";
 
 const FilterLetter = () => {
-  const dispatch = useAppDispatch();
+  const dispatch: Dispatch<any> = useAppDispatch();
   const searchInput: string = useAppSelector((state) => state.search.searchInput);
 
   const filterByLetter = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, searchValue: string) => {

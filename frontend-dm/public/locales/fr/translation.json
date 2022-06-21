@@ -34,6 +34,7 @@
     "exportPdf": "Exporter en pdf",
     "settings": "Paramètres",
     "search": "Chercher",
+    "filterBy": "Filtrer par:",
     "current": "Projet : ",
     "welcome": "Bienvenue, ",
     "signout": "Se déconnecter"

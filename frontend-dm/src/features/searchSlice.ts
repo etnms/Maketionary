@@ -5,12 +5,14 @@ import type { RootState } from '../app/store'
 interface ISearch {
   searchInput: string;
   searchFilter: string;
+  typeFilter: string;
 }
 
 // Define the initial state using that type
 const initialState:  ISearch = {
     searchInput: "",
     searchFilter: "",
+    typeFilter: "word",
 }
 
 export const editModeSlice = createSlice({
@@ -24,11 +26,14 @@ export const editModeSlice = createSlice({
     setSearchFilter: (state, action: PayloadAction<string>) => {
       state.searchFilter = (action.payload);
     },
+    setTypeFilter: (state, action: PayloadAction<string>) => {
+      state.typeFilter = (action.payload);
+    },
 
   }
 })
 
-export const { setSearchInput, setSearchFilter } = editModeSlice.actions
+export const { setSearchInput, setSearchFilter, setTypeFilter } = editModeSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectSearch = (state: RootState) => state.search.searchInput;

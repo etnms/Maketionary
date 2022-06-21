@@ -1,12 +1,12 @@
 import styles from "./TopNav.module.css";
-import { Outlet, useNavigate } from "react-router-dom";
+import { NavigateFunction, Outlet, useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import { useTranslation } from "react-i18next";
-import { useAppSelector } from "../app/hooks";
+import { useAppSelector } from "../../app/hooks";
 import TopNavMenu from "./TopNavMenu";
 
 const TopNav = () => {
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
 
   const { t } = useTranslation();
 

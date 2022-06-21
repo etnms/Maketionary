@@ -1,12 +1,14 @@
-import { useAppDispatch } from "../app/hooks";
-import { setSearchInput } from "../features/searchSlice";
+import { useAppDispatch } from "../../app/hooks";
+import { setSearchInput, setTypeFilter } from "../../features/searchSlice";
 import styles from "./SearchBar.module.css";
+import navBarStyles from "./TopNav.module.css";
 import SearchIcon from "@mui/icons-material/Search";
 import { RefObject, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Dispatch } from "redux";
 
 const SearchBar = () => {
-  const dispatch = useAppDispatch();
+  const dispatch: Dispatch<any> = useAppDispatch();
   const { t } = useTranslation();
   const [isMenuItemSelected, setIsMenuItemSelected] = useState<boolean>(false);
 
@@ -50,6 +52,13 @@ const SearchBar = () => {
       displayDropdownEls?.classList.remove(`${styles["display-dropdown"]}`);
     }
   };
+
+  const chooseFilter = (value: string) => {
+    dispatch(setTypeFilter(value))
+    console.log(value)
+  }
+
+
   return (
     <div className={styles["wrapper-search"]}>
       <input
@@ -63,9 +72,14 @@ const SearchBar = () => {
       {/*<SearchIcon className={styles["search-icon"]} />*/}
       <span tabIndex={0} className={styles.dropdown} onClick={(e) => displayDropdown(e)}>
         <SearchIcon className={styles["search-icon"]} />
-        <div className={styles["dropdown-content"]}>
-          <button className={styles["nav-btn"]}>{t("nav.newProject")}</button>
-          <button className={styles["nav-btn"]}>{t("nav.openProject")}</button>
+        <div className={navBarStyles["dropdown-content"]}>
+          <span className={styles["title-filter"]}>{t("nav.filterBy")}</span>
+          <button className={navBarStyles["nav-btn"]} onClick={() => chooseFilter("word")}>{t("main.word")}</button>
+          <button className={navBarStyles["nav-btn"]} onClick={() => chooseFilter("translation")}>{t("main.translation")}</button>
+          <button className={navBarStyles["nav-btn"]} onClick={() => chooseFilter("definition")}>{t("main.definition")}</button>
+          <button className={navBarStyles["nav-btn"]} onClick={() => chooseFilter("example")}>{t("main.example")}</button>
+          <button className={navBarStyles["nav-btn"]} onClick={() => chooseFilter("pos")}>{t("main.pos")}</button>
+          <button className={navBarStyles["nav-btn"]} onClick={() => chooseFilter("gloss")}>{t("main.gloss")}</button>
         </div>
       </span>
     </div>

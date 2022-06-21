@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Dispatch } from "redux";
 import { useAppDispatch } from "../app/hooks";
 import { addWord } from "../features/arrayWordsSlice";
 import { renderGlossOptions } from "../helpers/renderSelect";
@@ -11,7 +12,7 @@ import Loader from "./Loader";
 const CreateWordMenu = () => {
   const token: string | null = localStorage.getItem("token");
 
-  const dispatch = useAppDispatch();
+  const dispatch: Dispatch<any> = useAppDispatch();
   const { t } = useTranslation();
 
   const [errorMessage, setErrorMessage] = useState<string>("");

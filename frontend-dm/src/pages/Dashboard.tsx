@@ -1,5 +1,5 @@
 import styles from "../styles/Dashboard.module.css";
-import TopNav from "../components/TopNav";
+import TopNav from "../components/TopNav/TopNav";
 import ListWords from "../components/ListWords";
 import CreateWordMenu from "../components/CreateWordMenu";
 import { useEffect } from "react";

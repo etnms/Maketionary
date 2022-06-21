@@ -3,15 +3,16 @@ import settingsStyle from "./Settings.module.css";
 import styles from "./DownloadWindow.module.css";
 import Loader from "./Loader";
 import CloseIcon from "@mui/icons-material/Close";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import ErrorMessage from "./ErrorMessage";
 import { setErrorDownload } from "../features/downloadFileSlice";
+import { Dispatch } from "redux";
 
 const DownloadWindow = () => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate();
+  const dispatch: Dispatch<any> = useAppDispatch();
   const { t } = useTranslation();
 
   const isFileDownloading: boolean = useAppSelector((state) => state.download.isFileDownloading);

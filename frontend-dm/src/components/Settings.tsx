@@ -4,12 +4,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
 import React, { useEffect } from "react";
 import Toggle from "./settings/Toggle";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { setInLineDisplay } from "../features/settingsSlice";
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
 
   useEffect(() => {
     const languageValue: string | null = localStorage.getItem("i18nextLng") || "en";

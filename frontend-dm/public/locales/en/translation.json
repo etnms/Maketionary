@@ -34,6 +34,7 @@
     "exportPdf": "Export as pdf",
     "settings": "Settings",
     "search": "Search",
+    "filterBy": "Filter by:",
     "current": "Current project: ",
     "welcome": "Welcome, ",
     "signout": "Sign out"

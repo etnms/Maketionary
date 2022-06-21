@@ -9,13 +9,14 @@ import styles from "./ListWords.module.css";
 import filterStyle from "./FilterLetter.module.css";
 import Loader from "./Loader";
 import Word from "./Word";
+import { Dispatch } from "redux";
 
 const ListWords = () => {
   const token: string | null = localStorage.getItem("token");
   const projectID: string | null = localStorage.getItem("project");
 
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
+  const dispatch: Dispatch<any> = useAppDispatch();
   const [pending, startTransition] = useTransition();
 
   const [filteredResults, setFilteredResults] = useState<IWordDb[]>();
@@ -23,7 +24,8 @@ const ListWords = () => {
   const listWord: IWordDb[] = useAppSelector((state) => state.arrayWords.value);
   const searchInput: string = useAppSelector((state) => state.search.searchInput);
   const searchFilter: string = useAppSelector((state) => state.search.searchFilter);
-
+  const typeFilter: string = useAppSelector((state) => state.search.typeFilter);
+  
   // sort array function to use in memo
   const createSortedArray = (array: IWordDb[]) => {
     return array.sort((a: IWordDb, b: IWordDb) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
@@ -50,7 +52,7 @@ const ListWords = () => {
   }, [projectID, token, dispatch]);
 
   useEffect(() => {
-    const tmp = "word"; //Temporary search value
+
     if (searchFilter !== searchInput) {
       const prevActive: Element | null = document.querySelector(`.${filterStyle.active}`);
       prevActive?.classList.remove(filterStyle.active);
@@ -58,7 +60,7 @@ const ListWords = () => {
     // If else statement solely for UI purposes depending on its size
     if (sortedArray.length < 100) {
       // Copy the sorted array to avoid reference issues & filter
-      const filtered: IWordDb[] = [...sortedArray.filter((word: IWordDb) => word[tmp].startsWith(searchInput))];
+      const filtered: IWordDb[] = [...sortedArray.filter((word: IWordDb) => word.word.startsWith(searchInput))];
       // Update filtered results to be displayed
       setFilteredResults(filtered);
     } else {

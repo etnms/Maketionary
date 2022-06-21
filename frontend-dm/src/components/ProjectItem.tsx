@@ -2,7 +2,7 @@ import axios from "axios";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import React, { useState } from "react";
+import React, { Dispatch, useState } from "react";
 import styles from "../styles/OpenProject.module.css";
 import { IProjectItem } from "../interfaces/interfaceProjectItem";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
@@ -20,7 +20,7 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
 
   const stateID: string = useAppSelector((state) => state.projectItem.projectID);
 
-  const dispatch = useAppDispatch();
+  const dispatch: Dispatch<any> = useAppDispatch();
   const {t} = useTranslation();
 
   const updateProjectName = () => {
