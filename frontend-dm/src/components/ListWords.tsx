@@ -77,17 +77,16 @@ const ListWords = () => {
     }
     // If else statement solely for UI purposes depending on its size
     if (sortedArray.length < 100) {
-      console.log(sortedArray)
       // Copy the sorted array to avoid reference issues & filter
       const filtered: IWordDb[] = [
-        ...sortedArray.filter((word: any) => word[searchTypeFilter].startsWith(searchInput)),
+        ...sortedArray.filter((word: any) => word[searchTypeFilter].toLowerCase().startsWith(searchInput)),
       ];
       // Update filtered results to be displayed
       setFilteredResults(filtered);
     } else {
       startTransition(() => {
         const filtered: IWordDb[] = [
-          ...sortedArray.filter((word: any) => word[searchTypeFilter].startsWith(searchInput)),
+          ...sortedArray.filter((word: any) => word[searchTypeFilter].toLowerCase().startsWith(searchInput)),
         ];
         setFilteredResults(filtered);
       });

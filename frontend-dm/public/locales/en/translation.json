@@ -68,7 +68,8 @@
     "example": "Example",
     "pos": "POS",
     "gloss": "Gloss",
-    "noProjectOpen": "No project is currently open."
+    "noProjectOpen": "No project is currently open.",
+    "sortText": "Sort by:"
   },
   "selectPOS" : {
     "noun": "Noun",
@@ -120,7 +121,8 @@
     "edit": "edit",
     "editConfirm" : "edit confirm",
     "delete" : "delete",
-    "searchBar" : "search bar"
+    "searchBar" : "search bar",
+    "searchIcon": "search filtering"
   },
   "pageTitles": {
     "login": "Maketionary - Login",

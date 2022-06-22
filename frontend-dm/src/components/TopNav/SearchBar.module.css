@@ -28,11 +28,11 @@
 
 .search-icon {
   background-color: var(--bg-secondary);
-  transition: transform 300ms;
+  transition: transform 200ms;
 }
 .search-icon:hover {
   transform: scale(1.1);
-  transition: transform 300ms;
+  transition: transform 400ms;
 }
 
 .focus {
@@ -40,57 +40,8 @@
   transition: all 100ms linear;
 }
 
-.dropdown {
-  background-color: transparent;
-  border: none;
-  font-size: 1.3rem;
-  position: relative;
-  padding: 0.1rem;
-  height: 4vh;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.display-dropdown {
-  display: flex !important;
-  flex-direction: column;
-  box-shadow: var(--shadow-primary);
-}
-
 .title-filter {
   cursor: default;
   padding: 0.2rem;
   font-size: 1.4rem;
-}
-
-.dropdown:hover{
-  background-color: var(--bg-secondary-selected);
-}
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: var(--bg-secondary);
-  min-width: 100px;
-  z-index: 1;
-  top: 100%;
-  left: 0;
-}
-
-.display-dropdown {
-  display: flex !important;
-  flex-direction: column;
-  box-shadow: var(--shadow-primary);
-}
-
-.nav-btn {
-  border: none;
-  font-size: 1.2rem;
-  min-width: 200px;
-  background-color: var(--bg-secondary);
-  padding: 0.3rem 0.2rem;
-  text-align: left;
-}
-.nav-btn:hover {
-  background-color: var(--bg-secondary-selected);
 }

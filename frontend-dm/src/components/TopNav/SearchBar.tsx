@@ -5,13 +5,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import { RefObject, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Dispatch } from "redux";
+import Dropdown from "../Dropdown";
 
 const SearchBar = () => {
   const dispatch: Dispatch<any> = useAppDispatch();
   const { t } = useTranslation();
 
   const searchItems = (searchValue: string) => {
-    dispatch(setSearchInput(searchValue));
+    // update search value to lower case for easier filtering in ListWords.tsx
+    dispatch(setSearchInput(searchValue.toLowerCase()));
   };
 
   // Get ref of the input element
@@ -32,26 +34,6 @@ const SearchBar = () => {
     return () => document.removeEventListener("mousedown", checkIfClickedOutside);
   });
 
-  const displayDropdown = (
-    e: React.MouseEvent<HTMLSpanElement, MouseEvent> | React.KeyboardEvent<HTMLSpanElement>
-  ) => {
-
-    // Get all elements that previously had the display dropdown class
-    const displayDropdownEls: Element | null = document.querySelector(`.${styles["display-dropdown"]}`);
-    displayDropdownEls?.classList.remove(`${styles["display-dropdown"]}`);
-    const children: HTMLCollection = e.currentTarget.children;
-    children[1]!.classList.toggle(`${styles["display-dropdown"]}`);
-
-    // Remove previous classes. Needs to be put after the toggle as the elements were previously selected
-    // This allows for the click different menu/click same menu to close previous menus
-    if (displayDropdownEls) {
-      displayDropdownEls?.classList.remove(`${styles["display-dropdown"]}`);
-    }
-  };
-
-  const chooseFilterOption = (value: string) => {
-    dispatch(setSearchTypeFilter(value))
-  }
 
   return (
     <div className={styles["wrapper-search"]}>
@@ -63,19 +45,14 @@ const SearchBar = () => {
         aria-label={t("ariaLabels.searchBar")}
         ref={ref}
       />
-      {/*<SearchIcon className={styles["search-icon"]} />*/}
-      <span tabIndex={0} className={styles.dropdown} onClick={(e) => displayDropdown(e)}>
-        <SearchIcon className={styles["search-icon"]} />
-        <div className={styles["dropdown-content"]}>
-          <span className={styles["title-filter"]}>{t("nav.filterBy")}</span>
-          <button className={styles["nav-btn"]} onClick={() => chooseFilterOption("word")}>{t("main.word")}</button>
-          <button className={styles["nav-btn"]} onClick={() => chooseFilterOption("translation")}>{t("main.translation")}</button>
-          <button className={styles["nav-btn"]} onClick={() => chooseFilterOption("definition")}>{t("main.definition")}</button>
-          <button className={styles["nav-btn"]} onClick={() => chooseFilterOption("example")}>{t("main.example")}</button>
-          <button className={styles["nav-btn"]} onClick={() => chooseFilterOption("pos")}>{t("main.pos")}</button>
-          <button className={styles["nav-btn"]} onClick={() => chooseFilterOption("gloss")}>{t("main.gloss")}</button>
-        </div>
-      </span>
+      <Dropdown
+      buttonClass={null}
+        searchFilter="search"
+        dataDropdown="dropdown-search"
+        filteringFunction={setSearchTypeFilter}
+        buttonText={<SearchIcon className={styles["search-icon"]} aria-label={t("ariaLabels.searchIcon")}/>} // string or svg
+        titleFilter={<span className={styles["title-filter"]}>{t("nav.filterBy")}</span>}
+      />
     </div>
   );
 };

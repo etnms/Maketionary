@@ -68,7 +68,8 @@
     "example": "Exemple",
     "pos": "PDD",
     "gloss": "Glose",
-    "noProjectOpen": "Aucun projet n'est ouvert pour le moment."
+    "noProjectOpen": "Aucun projet n'est ouvert pour le moment.",
+    "sortText": "Trier par:"
   },
   "selectPOS" : {
     "noun": "Nom",
@@ -120,7 +121,8 @@
     "edit": "éditer",
     "editConfirm" : "confirmer les changements",
     "delete" : "supprimer",
-    "searchBar" : "barre de recherche"
+    "searchBar" : "barre de recherche",
+    "searchIcon": "Filtrer une recherche"
   },
   "pageTitles": {
     "login": "Maketionary - Se connecter",
