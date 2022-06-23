@@ -89,16 +89,16 @@ const CreateWordMenu = () => {
         <label htmlFor="pos">{t("newWord.pos")}</label>
         <select name="pos" defaultValue={""} >
           <option disabled hidden></option>
-          <option>{t("selectPOS.noun")}</option>
-          <option>{t("selectPOS.verb")}</option>
-          <option>{t("selectPOS.pronoun")}</option>
-          <option>{t("selectPOS.adjective")}</option>
-          <option>{t("selectPOS.adverb")}</option>
-          <option>{t("selectPOS.interjection")}</option>
-          <option>{t("selectPOS.preposition")}</option>
-          <option>{t("selectPOS.conjunction")}</option>
-          <option>{t("selectPOS.determiner")}</option>
-          <option>{t("selectPOS.number")}</option>
+          <option value="noun">{t("selectPOS.noun")}</option>
+          <option value="verb">{t("selectPOS.verb")}</option>
+          <option value="pronoun">{t("selectPOS.pronoun")}</option>
+          <option value="adjective">{t("selectPOS.adjective")}</option>
+          <option value="adverb">{t("selectPOS.adverb")}</option>
+          <option value="interjection">{t("selectPOS.interjection")}</option>
+          <option value="preposition">{t("selectPOS.preposition")}</option>
+          <option value="conjunction">{t("selectPOS.conjunction")}</option>
+          <option value="determiner">{t("selectPOS.determiner")}</option>
+          <option value="number">{t("selectPOS.number")}</option>
         </select>
         <label htmlFor="gloss">{t("newWord.gloss")}</label>
         <select name="gloss" defaultValue={""} >{renderGlossOptions("create")}</select>

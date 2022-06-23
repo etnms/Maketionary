@@ -103,13 +103,13 @@ const TopNavMenu = () => {
     // Display window while file is being prepared
     dispatch(setIsFileDownloading(true));
     navigate("download");
-
+    const lang: string = localStorage.getItem("i18nextLng") || "en"
     axios({
       method: "get",
       url: `${process.env.REACT_APP_BACKEND}/api/download/${format}`,
       headers: { Authorization: token! },
-      params: { projectID },
-      responseType, //blob
+      params: { projectID, lang },
+      responseType, //blob or json
     })
       .then((res) => {
         const fileName: string = projectName;

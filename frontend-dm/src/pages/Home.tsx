@@ -32,8 +32,8 @@ const Home = () => {
         dispatch(setFirstConnection(false));
         navigate("/dashboard");
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        return;
       });
   }, [token, navigate, dispatch]);
 

@@ -21,6 +21,7 @@
 .title {
   padding: 0;
   margin: 8px;
+  text-align: center;
 }
 
 .form-word > input,
@@ -73,3 +74,4 @@ select, textarea {
   justify-content: center;
   height: 10vh;
 }
+

@@ -1,35 +1,38 @@
 import jwt from "jsonwebtoken";
+import translatePos from "../helpers/translatePos.js";
 import async from "async";
 import Word from "../models/word.js";
 import PDFDocument from "pdfkit";
 import fs from "fs";
 import pkg from "docx";
+import { translateTextDocument } from "../helpers/translateTextDocument.js";
 const { Document, Packer, Paragraph, TextRun } = pkg;
 
 const downloadJSON = (req, res) => {
-  const language = req.query.projectID;
-
+  const projectID = req.query.projectID;
+  const lang = req.query.lang;
   jwt.verify(req.token, process.env.JWTKEY, (err) => {
     if (err) return res.sendStatus(403);
     async.parallel(
       {
         words: (callback) => {
           // Callback to get each word, then remove non-required field for users with select
-          Word.find({ language }).select("-_id -language -__v").exec(callback);
+          Word.find({ language: projectID }).select("-_id -language -__v").exec(callback);
         },
       },
       (err, results) => {
         if (err) return res.status(400);
-
+        // Translate the pos 
+        results.words.forEach(el => el.pos = translatePos(el.pos, lang))
         return res.status(200).json({ results });
       }
     );
   });
 };
 
-
 const downloadRTF = (req, res) => {
-  const language = req.query.projectID;
+  const projectID = req.query.projectID;
+  const lang = req.query.lang;
   // Prepare the download directory
   const cwd = process.cwd();
   const path = `${cwd}\\downloads\\`;
@@ -40,7 +43,7 @@ const downloadRTF = (req, res) => {
 
   // Generate random filename
   const date = Date.now();
-  const filename = `${language}${date}.odt`;
+  const filename = `${projectID}${date}.odt`;
   // Get the path
   const file = `${path}\\${filename}`;
 
@@ -50,7 +53,7 @@ const downloadRTF = (req, res) => {
       {
         words: (callback) => {
           // Callback to get each word, then remove non-required field for users with select
-          Word.find({ language }).select("-_id -language -__v").exec(callback);
+          Word.find({ language: projectID }).select("-_id -language -__v").exec(callback);
         },
       },
       (err, results) => {
@@ -65,7 +68,12 @@ const downloadRTF = (req, res) => {
         // Loop through each word and write with stream
         sortedArray.forEach((el) => {
           stream.write(
-            `{\\pard{\\b ${el.word}} (${el.pos}) ${el.translation} Definition: ${el.definition} Example: \\i ${el.example} \\par}`
+            `{\\pard{\\b ${el.word}} (${translatePos(el.pos, lang)}) ${
+              el.translation
+            } ${translateTextDocument("definition", lang)}: ${el.definition} {${translateTextDocument(
+              "example",
+              lang
+            )}}: \\i ${el.example} \\par}`
           );
         });
         // End of document requires closing
@@ -89,7 +97,7 @@ const downloadRTF = (req, res) => {
 };
 // Constructor for docx
 class DocumentCreator {
-  create([words]) {
+  create([words], lang) {
     const document = new Document({
       sections: [
         {
@@ -98,14 +106,7 @@ class DocumentCreator {
               .map((word) => {
                 const arr = [];
                 arr.push(
-                  this.createEntry(
-                    word.word,
-                    word.translation,
-                    word.definition,
-                    word.example,
-                    word.pos,
-                    word.gloss
-                  )
+                  this.createEntry(word.word, word.translation, word.definition, word.example, word.pos, lang)
                 );
                 return arr;
               })
@@ -117,7 +118,7 @@ class DocumentCreator {
     return document;
   }
 
-  createEntry(word, translation, definition, example, pos, gloss) {
+  createEntry(word, translation, definition, example, pos, lang) {
     return new Paragraph({
       children: [
         new TextRun({
@@ -127,7 +128,7 @@ class DocumentCreator {
           font: "Arial",
         }),
         new TextRun({
-          text: ` (${pos}) `,
+          text: ` (${translatePos(pos, lang)}) `,
           size: 24,
           font: "Arial",
         }),
@@ -137,12 +138,12 @@ class DocumentCreator {
           font: "Arial",
         }),
         new TextRun({
-          text: ` Definition: ${definition}`,
+          text: ` ${translateTextDocument("definition", lang)}: ${definition}`,
           size: 24,
           font: "Arial",
         }),
         new TextRun({
-          text: example,
+          text: ` ${translateTextDocument("example", lang)}: ${example}`,
           italics: true,
           size: 24,
           font: "Arial",
@@ -153,7 +154,8 @@ class DocumentCreator {
 }
 
 const downloadDocx = (req, res) => {
-  const language = req.query.projectID;
+  const projectID = req.query.projectID;
+  const lang = req.query.lang;
   // Prepare the download directory
   const cwd = process.cwd();
   const path = `${cwd}\\downloads\\`;
@@ -164,7 +166,7 @@ const downloadDocx = (req, res) => {
 
   // Generate random filename
   const date = Date.now();
-  const filename = `${language}${date}.docx`;
+  const filename = `${projectID}${date}.docx`;
   // Get the path
   const file = `${path}\\${filename}`;
 
@@ -174,7 +176,7 @@ const downloadDocx = (req, res) => {
       {
         words: (callback) => {
           // Callback to get each word, then remove non-required field for users with select
-          Word.find({ language }).select("-_id -language -__v").exec(callback);
+          Word.find({ language: projectID }).select("-_id -language -__v").exec(callback);
         },
       },
       (err, results) => {
@@ -183,13 +185,12 @@ const downloadDocx = (req, res) => {
         const sortedArray = results.words.sort((a, b) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
         // Create the docx
         const documentCreator = new DocumentCreator();
-        const doc = documentCreator.create([sortedArray]);
+        const doc = documentCreator.create([sortedArray], lang);
         // Used to export the file into a .docx file
         Packer.toBuffer(doc).then((buffer) => {
           fs.writeFileSync(file, buffer);
           return res.download(file, filename, (err) => {
             if (err) {
-              console.log(err);
               res.status(400).json({ error: "Error downloading file" });
             }
             // If no error then delete file from server
@@ -202,7 +203,8 @@ const downloadDocx = (req, res) => {
 };
 
 const downloadXML = (req, res) => {
-  const language = req.query.projectID;
+  const projectID = req.query.projectID;
+  const lang = req.query.lang;
   // Prepare the download directory
   const cwd = process.cwd();
   const path = `${cwd}\\downloads\\`;
@@ -212,7 +214,7 @@ const downloadXML = (req, res) => {
   }
   // Generate random filename
   const date = Date.now();
-  const filename = `${language}${date}.xml`;
+  const filename = `${projectID}${date}.xml`;
   // Get the path
   const file = `${path}\\${filename}`;
 
@@ -222,7 +224,7 @@ const downloadXML = (req, res) => {
       {
         words: (callback) => {
           // Callback to get each word, then remove non-required field for users with select
-          Word.find({ language }).select("-_id -language -__v").exec(callback);
+          Word.find({ language: projectID }).select("-_id -language -__v").exec(callback);
         },
       },
       (err, results) => {
@@ -238,7 +240,11 @@ const downloadXML = (req, res) => {
         // Loop through each word and write with stream
         sortedArray.forEach((el) => {
           stream.write(
-            `\n<Entry><Word>${el.word}</Word><Translation>${el.translation}</Translation><Definition>${el.definition}</Definition><Example>${el.example}</Example><POS>${el.pos}</POS><Gloss>${el.gloss}</Gloss></Entry>`
+            `\n<Entry><Word>${el.word}</Word><Translation>${el.translation}</Translation><Definition>${
+              el.definition
+            }</Definition><Example>${el.example}</Example><POS>${translatePos(el.pos, lang)}</POS><Gloss>${
+              el.gloss
+            }</Gloss></Entry>`
           );
         });
         // End of document requires closing
@@ -263,30 +269,18 @@ const downloadXML = (req, res) => {
 
 // Download RTF file
 const downloadPDF = (req, res) => {
-  const language = req.query.projectID;
-  // Prepare the download directory
-  const cwd = process.cwd();
-  const path = `${cwd}\\downloads\\`;
-  // if folder does not exist then create it
-  if (!fs.existsSync(path)) {
-    fs.mkdirSync(path);
-  }
-
-  // Generate random filename
-  const date = Date.now();
-  const filename = `${language}${date}.pdf`;
-  // Get the path
-  const file = `${path}\\${filename}`;
+  const projectID = req.query.projectID;
+  const lang = req.query.lang;
 
   jwt.verify(req.token, process.env.JWTKEY, (err) => {
     if (err) return res.sendStatus(403);
-    const doc = new PDFDocument;
-   
+    const doc = new PDFDocument();
+
     async.parallel(
       {
         words: (callback) => {
           // Callback to get each word, then remove non-required field for users with select
-          Word.find({ language }).select("-_id -language -__v").exec(callback);
+          Word.find({ language: projectID }).select("-_id -language -__v").exec(callback);
         },
       },
       (err, results) => {
@@ -294,19 +288,23 @@ const downloadPDF = (req, res) => {
         // Sort the array by words
         const sortedArray = results.words.sort((a, b) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
         // pipe res to directly send http answer no need to write file
-        doc.pipe(res)
-       
+        doc.pipe(res);
+
         // Loop through each word and write with stream
         sortedArray.forEach((el) => {
           doc
-          .font('Helvetica-Bold')
-          .fontSize(12).text(`${el.word} `, {continued: true})
-          .font('Helvetica').text(`(${el.pos}) ${el.translation} \nDefinition: ${el.definition} \nExample: ${el.example}`)
+            .font("Helvetica-Bold")
+            .fontSize(12)
+            .text(`${el.word} `, { continued: true })
+            .font("Helvetica")
+            .text(
+              `(${translatePos(el.pos, lang)}) ${el.translation} \n${translateTextDocument(
+                "definition",
+                lang
+              )}: ${el.definition} \n${translateTextDocument("example", lang)}: ${el.example}`
+            );
         });
-
         doc.end();
-        
-
       }
     );
   });

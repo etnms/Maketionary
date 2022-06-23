@@ -11,6 +11,7 @@ import { selectWordEdit, setEditMode } from "../features/editModeSlice";
 import { updateWordList } from "../features/arrayWordsSlice";
 import { useTranslation } from "react-i18next";
 import ErrorMessage from "./ErrorMessage";
+import useTranslateSelect from "../helpers/useTranslateSelect";
 
 const Word = (props: React.PropsWithChildren<IWord>) => {
   const { _id, word, translation, definition, example, pos, gloss } = props;
@@ -163,6 +164,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     if (e.key === "Enter") selectLine(e);
   };
 
+  const translate = useTranslateSelect(posValue)
   // Render list element
   return (
     <li
@@ -243,16 +245,16 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
                 className={!columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`}
                 onChange={(e) => handleChange(e, "pos")}>
                 <option disabled hidden></option>
-                <option>{t("selectPOS.noun")}</option>
-                <option>{t("selectPOS.verb")}</option>
-                <option>{t("selectPOS.pronoun")}</option>
-                <option>{t("selectPOS.adjective")}</option>
-                <option>{t("selectPOS.adverb")}</option>
-                <option>{t("selectPOS.interjection")}</option>
-                <option>{t("selectPOS.preposition")}</option>
-                <option>{t("selectPOS.conjunction")}</option>
-                <option>{t("selectPOS.determiner")}</option>
-                <option>{t("selectPOS.number")}</option>
+                <option value="noun">{t("selectPOS.noun")}</option>
+                <option value="verb">{t("selectPOS.verb")}</option>
+                <option value="pronoun">{t("selectPOS.pronoun")}</option>
+                <option value="adjective">{t("selectPOS.adjective")}</option>
+                <option value="adverb">{t("selectPOS.adverb")}</option>
+                <option value="interjection">{t("selectPOS.interjection")}</option>
+                <option value="preposition">{t("selectPOS.preposition")}</option>
+                <option value="conjunction">{t("selectPOS.conjunction")}</option>
+                <option value="determiner">{t("selectPOS.determiner")}</option>
+                <option value="number">{t("selectPOS.number")}</option>
               </select>
             </span>
             <span className={styles.gloss}>
@@ -295,9 +297,9 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             </span>
           ) : null}
 
-          {posValue !== "" ? (
+          {translate !== "" ? (
             <span>
-              <br /> <b>{t("main.pos")}</b>: {posValue}
+              <br /> <b>{t("main.pos")}</b>: {translate}
             </span>
           ) : null}
 
@@ -314,7 +316,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
           <span className={styles.translation}>{translationValue}</span>
           <span className={styles.definition}>{definitionValue}</span>
           <span className={styles.example}>{exampleValue}</span>
-          <span className={styles.pos}>{posValue}</span>
+          <span className={styles.pos}>{translate}</span>
           <span className={styles.gloss}>{glossValue}</span>
         </div>
       )}
