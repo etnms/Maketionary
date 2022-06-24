@@ -9,7 +9,6 @@ const ExpiredSession = () => {
   const [count, setCount] = useState<number>(5);
 
   useEffect(() => {
-    console.log("hey")
     document.title = t("pageTitles.expiredSession");
     if (localStorage.getItem("darktheme") === "darktheme")
       document.documentElement.setAttribute("data-color-scheme", "dark");

@@ -41,3 +41,31 @@
   background-color: var(--bg-secondary-selected);
 }
 
+@media (max-width: 1100px) {
+  .nav {
+    height: 12vh;
+  }
+  .current-project {
+    margin: 0.2rem;
+  }
+}
+@media (max-width: 950px) {
+  .nav {
+    height: 20vh;
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .nav {
+    min-height: 40vh;
+    flex-direction: column-reverse;
+  }
+  .wrapper-user {
+    flex-direction: column;
+  }
+  .current-project {
+    max-width: 80%;
+  }
+}

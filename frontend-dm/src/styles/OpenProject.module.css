@@ -18,12 +18,18 @@
   width: 40vw;
   gap: 1rem;
 }
+
 .wrapper-loader {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
+
+.title {
+  text-align: center;
+}
+
 .list-link {
   display: flex;
   flex-direction: column;
@@ -95,3 +101,14 @@
   transition: 300ms;
 }
 
+@media (max-width: 800px) {
+  .menu {
+    width: 80vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .language-li {
+    min-width: 30vw;
+  }
+}

@@ -180,3 +180,25 @@
   justify-content: center;
   height: 60vh;
 }
+
+
+@media (max-width: 950px) {
+  .main {
+    width: 100vw;
+  }
+}
+
+@media (max-width: 850px) {
+  .wrapper-content {
+    display: inline-block;
+  }
+  .titles {
+    display: none;
+  }
+}
+
+@media (max-width: 575px) {
+  .info-menu {
+    flex-direction: column;
+  }
+}

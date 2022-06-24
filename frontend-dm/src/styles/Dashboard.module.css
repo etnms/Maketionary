@@ -23,3 +23,17 @@
   padding: 5rem;
   font-size: 1.5rem;
 }
+
+@media (max-width: 800px) {
+  .box {
+    width: 60vw;
+  }
+}
+
+@media (max-width: 550px) {
+  .box {
+    width: 50vw;
+    padding: 2rem;
+  }
+  
+}

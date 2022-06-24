@@ -33,7 +33,6 @@
   align-items: center;
   text-align: left;
   gap: 0.2rem;
-
 }
 
 .wrapper-password-text {
@@ -98,3 +97,43 @@
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
+
+@media (max-width: 800px) {
+  .bg {
+    overflow-x: hidden;
+  }
+  .auth {
+    width: 80vw;
+  }
+}
+
+@media (max-width: 500px) {
+  .title {
+   text-align: center;
+  }
+}
+
+@media (max-width: 450px) {
+  .auth {
+    width: 90vw;
+  }
+  .input-text {
+    width: 80%;
+  }
+  .input-label, .wrapper-password-text {
+    width: 80%;
+  }
+}
+
+@media (max-width: 350px) {
+  .input-text {
+    width: 80%;
+  }
+  .input-label, .wrapper-password-text {
+    width: 80%;
+  }
+  .auth {
+    width: 95vw;
+  }
+}
+

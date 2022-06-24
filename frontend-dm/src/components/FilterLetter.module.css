@@ -25,3 +25,9 @@
     background-color: var(--secondary);
     color: var(--color-text);
 }
+
+@media (max-width:400px) {
+  .letter {
+    font-size: 0.8rem;
+  }
+}

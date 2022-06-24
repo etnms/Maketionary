@@ -47,3 +47,9 @@
 .btn-cancel:hover {
   background-color: var(--bg-secondary-selected);
 }
+
+@media (max-width: 500px) {
+  .wrapper-btns {
+    flex-direction: column;
+  }
+}

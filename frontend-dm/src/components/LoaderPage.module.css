@@ -45,6 +45,7 @@
     bottom: 30%;
     left: 50%;
     animation: change-opacity 4s infinite linear;
+    text-align: center;
 }
 
 @keyframes spin {

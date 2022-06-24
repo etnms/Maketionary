@@ -64,7 +64,7 @@ const OpenProject = () => {
   return (
     <main className={styles.main}>
       <div className={styles.menu}>
-        <h1>{t("projects.openProjectTitle")}</h1>
+        <h1 className={styles.title}>{t("projects.openProjectTitle")}</h1>
         {languageList.length === 0 ? (
           <div className={styles["wrapper-loader"]}>
             <Loader width={24} height={24}/>

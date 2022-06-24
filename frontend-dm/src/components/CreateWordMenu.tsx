@@ -8,6 +8,7 @@ import { renderGlossOptions } from "../helpers/renderSelect";
 import styles from "./CreateWordMenu.module.css";
 import ErrorMessage from "./ErrorMessage";
 import Loader from "./Loader";
+import useWindowResize from "../helpers/useWindowResize";
 
 const CreateWordMenu = () => {
   const token: string | null = localStorage.getItem("token");
@@ -23,12 +24,15 @@ const CreateWordMenu = () => {
     e.preventDefault();
     // Get all parameters
     // Remove any upper case letters for word/translation
-    const word : string = (document.querySelector("input[name='word']") as HTMLInputElement).value.toLowerCase();
+    const word: string = (
+      document.querySelector("input[name='word']") as HTMLInputElement
+    ).value.toLowerCase();
     const translation: string = (
       document.querySelector("input[name='translation']") as HTMLInputElement
     ).value.toLowerCase();
     // Uppercase the first letter for definition and examples
-    let definition: string = (document.querySelector("textarea[name='definition']") as HTMLTextAreaElement).value;
+    let definition: string = (document.querySelector("textarea[name='definition']") as HTMLTextAreaElement)
+      .value;
     // Making sure the field is not empty, if not uppercase it
     if (definition !== "") definition = definition[0].toUpperCase() + definition.slice(1);
     let example: string = (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value;
@@ -73,10 +77,30 @@ const CreateWordMenu = () => {
       if (word !== "") setErrorMessage("");
     }
   };
+  
+  //Get current size of window with hook and state of the menu for phone view
 
+  const widthWindow = useWindowResize();
+  const [isMenuPhoneOpen, setIsMenuOpen] = useState<boolean>(false);
+  // Display the menu fully or close it 
+  const displayMobileView = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    const width = window.innerWidth;
+    if (width <= 950) {
+      const el = document.querySelector(`.${styles["create-word"]}`);
+      el?.classList.toggle(`${styles["phone-view"]}`);
+      setIsMenuOpen(prev => !prev)
+    }
+  };
+  
   return (
     <aside className={styles["create-word"]}>
       <form className={styles["form-word"]}>
+        {widthWindow <= 950 ? (
+          <button className={styles["button-show"]} onClick={(e) => displayMobileView(e)}>
+            {isMenuPhoneOpen? "-" : "+"} 
+          </button>
+        ) : null}
         <h2 className={styles.title}>{t("newWord.title")}</h2>
         <label htmlFor="word">{t("newWord.word")}</label>
         <input name="word" onChange={handleWordChange} />
@@ -87,7 +111,7 @@ const CreateWordMenu = () => {
         <label htmlFor="example">{t("newWord.example")}</label>
         <textarea name="example" className={styles.example} />
         <label htmlFor="pos">{t("newWord.pos")}</label>
-        <select name="pos" defaultValue={""} >
+        <select name="pos" defaultValue={""}>
           <option disabled hidden></option>
           <option value="noun">{t("selectPOS.noun")}</option>
           <option value="verb">{t("selectPOS.verb")}</option>
@@ -101,12 +125,19 @@ const CreateWordMenu = () => {
           <option value="number">{t("selectPOS.number")}</option>
         </select>
         <label htmlFor="gloss">{t("newWord.gloss")}</label>
-        <select name="gloss" defaultValue={""} >{renderGlossOptions("create")}</select>
+        <select name="gloss" defaultValue={""}>
+          {renderGlossOptions("create")}
+        </select>
         {errorMessage === "" ? null : <ErrorMessage message={errorMessage} />}
-        {!loading? // Loader after word submission
-        <button type="submit" className={styles["btn-submit"]} onClick={(e) => createWord(e)}>
-          {t("newWord.addWordBtn")}
-        </button> : <div className={styles["wrapper-loader"]}><Loader width={24} height={24}/></div>}
+        {!loading ? ( // Loader after word submission
+          <button type="submit" className={styles["btn-submit"]} onClick={(e) => createWord(e)}>
+            {t("newWord.addWordBtn")}
+          </button>
+        ) : (
+          <div className={styles["wrapper-loader"]}>
+            <Loader width={24} height={24} />
+          </div>
+        )}
       </form>
     </aside>
   );

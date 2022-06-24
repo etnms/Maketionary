@@ -45,3 +45,9 @@
   padding: 0.2rem;
   font-size: 1.4rem;
 }
+
+@media (max-width:350px) {
+  .wrapper-search {
+    margin-top: 0.4rem;
+  }
+}

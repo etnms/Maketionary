@@ -30,3 +30,9 @@
 .text {
   text-align: center;
 }
+
+@media (max-width:700px) {
+  .download-box {
+    width: 80vw;
+  }
+}

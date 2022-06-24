@@ -1,6 +1,6 @@
 .settings {
   position: fixed;
-  z-index: 1;
+  z-index: 999;
   top: 50%;
   right: 50%;
   transform: translate(50%, -50%);
@@ -19,7 +19,7 @@
   box-shadow: var(--shadow);
   border-radius: 8px;
   width: 60vw;
-  height: 80vh;
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,4 +70,17 @@
 
 .btn-close:hover {
   background-color: var(--red-hover);
+}
+
+@media (max-width: 700px) {
+  .settings-box {
+    width: 80vw;
+    min-height: 60vh;
+  }
+}
+
+@media (max-width:300px) {
+  .title {
+    font-size: 1.5rem;
+  }
 }
