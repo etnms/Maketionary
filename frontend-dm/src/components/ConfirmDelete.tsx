@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../app/hooks";
 import { IProjectItem } from "../interfaces/interfaceProjectItem";
 import styles from "./ConfirmDelete.module.css";
@@ -13,7 +14,9 @@ interface IConfirmDelete {
 const ConfirmDelete = (props: React.PropsWithChildren<IConfirmDelete>) => {
   const { languageList, setLanguageList } = props;
 
+  const navigate = useNavigate();
   const {t} = useTranslation();
+
   const token: string | null = localStorage.getItem("token");
 
   const projectID: string = useAppSelector((state) => state.projectItem.projectID);
@@ -34,7 +37,7 @@ const ConfirmDelete = (props: React.PropsWithChildren<IConfirmDelete>) => {
           localStorage.removeItem("projectName");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) =>{if (err.response.status === 403) return navigate("/expired")});
   };
 
   const closeWindow = () => {

@@ -8,18 +8,19 @@ import { useTranslation } from "react-i18next";
 import { setFirstConnection, setUsername } from "../features/authSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import LoaderPage from "../components/LoaderPage";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import { Dispatch } from "redux";
 
 const Dashboard = () => {
-  const token = localStorage.getItem("token");
-  const projectID = localStorage.getItem("project");
+  const token: string | null = localStorage.getItem("token");
+  const projectID: string | null = localStorage.getItem("project");
 
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const dispatch: Dispatch<any> = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate();
 
-  const username = useAppSelector((state) => state.auth.username);
-  const firstConnection = useAppSelector((state) => state.auth.firstConnection);
+  const username: string = useAppSelector((state) => state.auth.username);
+  const firstConnection: boolean = useAppSelector((state) => state.auth.firstConnection);
 
   useEffect(() => {
     document.title = "Maketionary";
@@ -38,7 +39,10 @@ const Dashboard = () => {
           // If user has refreshed the page (the state) then set frstConnection back to false after response from server
           dispatch(setFirstConnection(false));
         })
-        .catch(() => navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 403) return navigate("/expired")
+          else navigate("/");
+        });
     }
   });
 

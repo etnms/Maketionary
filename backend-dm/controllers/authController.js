@@ -26,7 +26,7 @@ const userLogin = (req, res) => {
         if (result) {
           // Log in user
           jwt.sign({ user }, process.env.JWTKEY, { expiresIn: "7d" }, (err, token) => {
-            if (err) return res.status(400).json("Incorrect username or password");
+            if (err) return res.sendStatus(403);
             return res.status(200).json({ token: `Bearer ${token}` });
           });
         }

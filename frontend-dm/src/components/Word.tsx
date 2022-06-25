@@ -12,12 +12,14 @@ import { updateWordList } from "../features/arrayWordsSlice";
 import { useTranslation } from "react-i18next";
 import ErrorMessage from "./ErrorMessage";
 import useTranslateSelect from "../helpers/useTranslateSelect";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 const Word = (props: React.PropsWithChildren<IWord>) => {
   const { _id, word, translation, definition, example, pos, gloss } = props;
 
   const token: string | null = localStorage.getItem("token");
 
+  const navigate: NavigateFunction = useNavigate();
   const { t } = useTranslation();
 
   // Setting
@@ -82,25 +84,29 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
         // Update the list for new render
         dispatch(updateWordList(updatedList));
       })
-      .catch(() => {
+      .catch((err) => {
+        if (err.response.status === 403) return navigate("/expired");
         setErrorMessage(t("errorMessages.errorEditWord"));
       });
   };
 
   const activateEditMode = () => {
     setErrorMessage("");
-    dispatch(setEditMode(true))
-  } 
+    dispatch(setEditMode(true));
+  };
 
   const updateWord = () => {
     // Updating a word function
     // This function does not uppercase/lowercase entries as opposed to the create word one
     // This is for the simple purpose of letting users change entries as they wish for scenarios where casing can be an issue
     const word: string = (document.querySelector("input[name='edit-word']") as HTMLInputElement).value;
-    const translation: string = (document.querySelector("input[name='edit-translation']") as HTMLInputElement).value;
-    const definition: string = (document.querySelector("textarea[name='edit-definition']") as HTMLTextAreaElement)
+    const translation: string = (document.querySelector("input[name='edit-translation']") as HTMLInputElement)
       .value;
-    const example: string = (document.querySelector("textarea[name='edit-example']") as HTMLTextAreaElement).value;
+    const definition: string = (
+      document.querySelector("textarea[name='edit-definition']") as HTMLTextAreaElement
+    ).value;
+    const example: string = (document.querySelector("textarea[name='edit-example']") as HTMLTextAreaElement)
+      .value;
     const pos: string = (document.querySelector("select[name='edit-pos']") as HTMLSelectElement).value;
     const gloss: string = (document.querySelector("select[name='edit-gloss']") as HTMLSelectElement).value;
 
@@ -120,9 +126,10 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
         setPosValue(posTmp);
         dispatch(setEditMode(false));
       })
-      .catch(() =>{
+      .catch((err) => {
+        if (err.response.status === 403) return navigate("/expired");
         setErrorMessage(t("errorMessages.errorEditWord"));
-      } );
+      });
   };
 
   // Hangle the change of each tmp value: allows to see changes directly
@@ -164,7 +171,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     if (e.key === "Enter") selectLine(e);
   };
 
-  const translate = useTranslateSelect(posValue)
+  const translate = useTranslateSelect(posValue);
   // Render list element
   return (
     <li
@@ -174,10 +181,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
       onKeyDown={(e) => handleKeypress(e)}>
       <div className={styles["wrapper-edit"]}>
         <div className={styles["wrapper-btns"]}>
-          <button
-            className={styles["btn"]}
-            onClick={deleteWord}
-            aria-label={t("ariaLabels.delete")}>
+          <button className={styles["btn"]} onClick={deleteWord} aria-label={t("ariaLabels.delete")}>
             <DeleteIcon />
           </button>
           {editMode ? (
@@ -185,10 +189,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
               <CheckCircleIcon />
             </button>
           ) : (
-            <button
-              className={styles["btn"]}
-              onClick={activateEditMode}
-              aria-label={t("ariaLabels.edit")}>
+            <button className={styles["btn"]} onClick={activateEditMode} aria-label={t("ariaLabels.edit")}>
               <EditIcon />
             </button>
           )}

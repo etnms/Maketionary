@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import confirmDeleteStyle from "./ConfirmDelete.module.css";
 import { setProjectID, setProjectName } from "../features/projectItemSlice";
 import { useTranslation } from "react-i18next";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
   const { _id, name } = props;
@@ -21,6 +22,7 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
   const stateID: string = useAppSelector((state) => state.projectItem.projectID);
 
   const dispatch: Dispatch<any> = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate();
   const {t} = useTranslation();
 
   const updateProjectName = () => {
@@ -37,7 +39,7 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
       })
       .catch((err) => {
         setEdit(false);
-        console.log(err);
+        if (err.response.status === 403) return navigate("/expired")
       });
   };
 

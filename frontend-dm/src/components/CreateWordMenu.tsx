@@ -9,11 +9,13 @@ import styles from "./CreateWordMenu.module.css";
 import ErrorMessage from "./ErrorMessage";
 import Loader from "./Loader";
 import useWindowResize from "../helpers/useWindowResize";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 const CreateWordMenu = () => {
   const token: string | null = localStorage.getItem("token");
 
   const dispatch: Dispatch<any> = useAppDispatch();
+  const navigate: NavigateFunction = useNavigate()
   const { t } = useTranslation();
 
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -57,6 +59,7 @@ const CreateWordMenu = () => {
       })
       .catch((err) => {
         setLoading(false);
+        if (err.response.status === 403) return navigate("/expired")
         if (err.response.data === "Error empty field") setErrorMessage(t("errorMessages.errorWord"));
         else setErrorMessage(t("errorMessages.errorProblem"));
       });

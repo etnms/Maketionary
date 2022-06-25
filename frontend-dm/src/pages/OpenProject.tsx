@@ -34,8 +34,8 @@ const OpenProject = () => {
     axios
       .get(`${process.env.REACT_APP_BACKEND}/api/language`, { headers: { Authorization: token! } })
       .then((res) => setLanguageList(res.data.results.languages))
-      .catch((err) => console.log(err));
-  }, [token, t]);
+      .catch((err) => {if (err.response.status === 403) return navigate("/expired")});
+  }, [token, t, navigate]);
 
   const displayListProject = () => {
     return languageList.map((language) => (
