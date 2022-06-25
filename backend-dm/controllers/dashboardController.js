@@ -5,7 +5,9 @@ import User from "../models/user.js";
 const checkUserLogin = (req, res) => {
   jwt.verify(req.token, process.env.JWTKEY, (err, authData) => {
     if (err) return res.sendStatus(403);
-    else return res.json(authData.user.username);
+    else{
+     return res.json(authData.username);
+    }
   });
 };
 

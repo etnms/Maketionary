@@ -8,6 +8,7 @@ import { deleteLanguageRoute, editLanguageRoute, getlanguageRoute, postLanguageR
 import { deleteWordRoute, getWordRoute, postWordRoute, updateWordRoute } from "./routes/wordRoute.js";
 import { downloadDocxRoute, downloadJSONRoute, downloadPDFRoute, downloadRTFRoute, downloadXMLRoute } from "./routes/downloadRoute.js";
 import mongoSanitize from "express-mongo-sanitize"
+import { tokenRoute } from "./routes/tokenRoute.js";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -37,6 +38,7 @@ db.on("error", console.error.bind(console, "mongo connection error"));
 app.use("/", signup);
 app.use("/", login);
 app.use("/", dashboard);
+app.use("/", tokenRoute);
 
 // Language
 app.use("/", getlanguageRoute);

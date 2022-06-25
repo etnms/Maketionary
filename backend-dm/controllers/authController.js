@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import User from "../models/user.js";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
+import generateAccessToken from "../generateToken.js";
 
 const userLogin = (req, res) => {
   const username = req.body.username;
@@ -25,9 +26,10 @@ const userLogin = (req, res) => {
         if (!result) return res.status(400).json("Incorrect username or password");
         if (result) {
           // Log in user
-          jwt.sign({ user }, process.env.JWTKEY, { expiresIn: "7d" }, (err, token) => {
+          jwt.sign({ user }, process.env.REFRESH_TOKEN, { expiresIn: "7d" }, (err, token) => {
             if (err) return res.sendStatus(403);
-            return res.status(200).json({ token: `Bearer ${token}` });
+            const accessToken = generateAccessToken({user});
+            return res.status(200).json({ refreshToken: `Bearer ${token}`, accessToken: `Bearer ${accessToken}` });
           });
         }
       });
@@ -74,7 +76,7 @@ const userSignup = (req, res) => {
         // Log in user
         jwt.sign({ user }, process.env.JWTKEY, { expiresIn: "7d" }, (err, token) => {
           if (err) return res.sendStatus(403);
-          return res.status(200).json({ token: `Bearer ${token}`, message: "User created" });
+          return res.status(200).json({ token: `Bearer ${token}` });
         });
       }
     });

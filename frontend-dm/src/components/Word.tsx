@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import ErrorMessage from "./ErrorMessage";
 import useTranslateSelect from "../helpers/useTranslateSelect";
 import { NavigateFunction, useNavigate } from "react-router-dom";
+import Loader from "./Loader";
 
 const Word = (props: React.PropsWithChildren<IWord>) => {
   const { _id, word, translation, definition, example, pos, gloss } = props;
@@ -51,6 +52,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   const [glossTmp, setGlossTmp] = useState<string>(gloss);
 
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const selectLine = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent> | React.KeyboardEvent<HTMLLIElement>
@@ -73,6 +75,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   };
 
   const deleteWord = () => {
+    setIsLoading(true);
     axios
       .delete(`${process.env.REACT_APP_BACKEND}/api/word`, {
         data: { _id },
@@ -83,8 +86,10 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
         const updatedList: IWordDb[] = listWord.filter((word: IWord) => word._id !== _id);
         // Update the list for new render
         dispatch(updateWordList(updatedList));
+        setIsLoading(false);
       })
       .catch((err) => {
+        setIsLoading(false);
         if (err.response.status === 403) return navigate("/expired");
         setErrorMessage(t("errorMessages.errorEditWord"));
       });
@@ -96,6 +101,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   };
 
   const updateWord = () => {
+    setIsLoading(true);
     // Updating a word function
     // This function does not uppercase/lowercase entries as opposed to the create word one
     // This is for the simple purpose of letting users change entries as they wish for scenarios where casing can be an issue
@@ -125,8 +131,10 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
         setGlossValue(glossTmp);
         setPosValue(posTmp);
         dispatch(setEditMode(false));
+        setIsLoading(false);
       })
       .catch((err) => {
+        setIsLoading(false);
         if (err.response.status === 403) return navigate("/expired");
         setErrorMessage(t("errorMessages.errorEditWord"));
       });
@@ -181,17 +189,29 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
       onKeyDown={(e) => handleKeypress(e)}>
       <div className={styles["wrapper-edit"]}>
         <div className={styles["wrapper-btns"]}>
-          <button className={styles["btn"]} onClick={deleteWord} aria-label={t("ariaLabels.delete")}>
-            <DeleteIcon />
-          </button>
-          {editMode ? (
-            <button className={styles["btn"]} onClick={updateWord} aria-label={t("ariaLabels.editConfirm")}>
-              <CheckCircleIcon />
-            </button>
+          {isLoading ? (
+            <Loader width={24} height={24} />
           ) : (
-            <button className={styles["btn"]} onClick={activateEditMode} aria-label={t("ariaLabels.edit")}>
-              <EditIcon />
-            </button>
+            <>
+              <button className={styles["btn"]} onClick={deleteWord} aria-label={t("ariaLabels.delete")}>
+                <DeleteIcon />
+              </button>
+              {editMode ? (
+                <button
+                  className={styles["btn"]}
+                  onClick={updateWord}
+                  aria-label={t("ariaLabels.editConfirm")}>
+                  <CheckCircleIcon />
+                </button>
+              ) : (
+                <button
+                  className={styles["btn"]}
+                  onClick={activateEditMode}
+                  aria-label={t("ariaLabels.edit")}>
+                  <EditIcon />
+                </button>
+              )}
+            </>
           )}
         </div>
       </div>

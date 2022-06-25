@@ -5,6 +5,7 @@ import authStyle from "../styles/Login.module.css";
 import buttons from "../styles/Buttons.module.css";
 import { useTranslation } from "react-i18next";
 import ErrorMessage from "../components/ErrorMessage";
+import refreshAccessToken from "../helpers/refreshAccessToken";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,11 +28,13 @@ const Login = () => {
     axios
       .post(`${process.env.REACT_APP_BACKEND}/api/login`, { username, password })
       .then((res) => {
+        console.log(res.data)
         // Remove project parameters for new connexion
         localStorage.removeItem("project");
         localStorage.removeItem("projectName");
         // Save token
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("refreshToken", res.data.refreshToken);
+        sessionStorage.setItem("accessToken", res.data.accessToken);
         navigate("/dashboard");
       })
       .catch((err) => {
