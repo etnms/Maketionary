@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/Home.module.css";
@@ -6,9 +5,10 @@ import buttons from "../styles/Buttons.module.css";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "../app/hooks";
 import { setFirstConnection, setUsername } from "../features/authSlice";
+import adapter from "../helpers/axiosAdapter";
 
 const Home = () => {
-  const token = localStorage.getItem("token");
+  const refreshToken = localStorage.getItem("refreshToken");
 
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -21,21 +21,21 @@ const Home = () => {
     else document.documentElement.setAttribute("data-color-scheme", "light");
 
     // if there is no token then return, no need for API call as users need to connect
-    if (token === null) return;
+    if (refreshToken === null) return;
     // If token is valid leads straight to the dashboard
-    axios
-      .get(`${process.env.REACT_APP_BACKEND}/api/dashboard`, { headers: { authorization: token! } })
-      .then((res) => {
-        // If token is valid then set username and firstConnection to false
-        // firstConnection makes sure that the api is not called twice (in dashboard)
-        dispatch(setUsername(res.data));
-        dispatch(setFirstConnection(false));
-        navigate("/dashboard");
-      })
-      .catch(() => {
-        return;
-      });
-  }, [token, navigate, dispatch]);
+    adapter
+    .get("/dashboard")
+    .then((res) => {
+      // If token is valid then set username and firstConnection to false
+      // firstConnection makes sure that the api is not called twice (in dashboard)
+      dispatch(setUsername(res.data));
+      dispatch(setFirstConnection(false));
+      navigate("/dashboard");
+    })
+    .catch(() => {
+      return;
+    });
+  }, [refreshToken, navigate, dispatch]);
 
   return (
     <div className={styles.page}>

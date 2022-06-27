@@ -1,8 +1,8 @@
-import axios from "axios";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../app/hooks";
+import adapter from "../helpers/axiosAdapter";
 import { IProjectItem } from "../interfaces/interfaceProjectItem";
 import styles from "./ConfirmDelete.module.css";
 
@@ -17,16 +17,13 @@ const ConfirmDelete = (props: React.PropsWithChildren<IConfirmDelete>) => {
   const navigate = useNavigate();
   const {t} = useTranslation();
 
-  const token: string | null = localStorage.getItem("token");
-
   const projectID: string = useAppSelector((state) => state.projectItem.projectID);
   const projectName: string = useAppSelector((state) => state.projectItem.projectName);
 
   const deleteProject = () => {
-    axios
-      .delete(`${process.env.REACT_APP_BACKEND}/api/language`, {
+    adapter
+      .delete("/language", {
         data: { _id: projectID },
-        headers: { Authorization: token! },
       })
       .then(() => {
         closeWindow();

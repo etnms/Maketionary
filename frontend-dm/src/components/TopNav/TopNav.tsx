@@ -4,17 +4,27 @@ import SearchBar from "./SearchBar";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../../app/hooks";
 import TopNavMenu from "./TopNavMenu";
+import { Dispatch } from "redux";
+import { useDispatch } from "react-redux";
+import { setFirstConnection } from "../../features/authSlice";
+import axios from "axios";
 
 const TopNav = () => {
   const navigate: NavigateFunction = useNavigate();
-
+  const dispatch: Dispatch<any> = useDispatch();
   const { t } = useTranslation();
 
   const projectID: string | null = localStorage.getItem("project");
   const projectName: string | null = localStorage.getItem("projectName");
 
   const logout = () => {
-    localStorage.removeItem("token");
+    const refreshToken: string | null = localStorage.getItem("refreshToken");
+    axios
+      .delete(`${process.env.REACT_APP_BACKEND}/api/token`, { data: { refreshToken } })
+      .then((res) => console.log(res)).catch(err => console.log(err));
+    localStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("accessToken");
+    dispatch(setFirstConnection(true));
     navigate("/");
   };
 

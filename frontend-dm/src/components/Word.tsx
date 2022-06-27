@@ -4,7 +4,6 @@ import styles from "./ListWords.module.css";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import axios from "axios";
 import { renderGlossOptions } from "../helpers/renderSelect";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectWordEdit, setEditMode } from "../features/editModeSlice";
@@ -14,11 +13,10 @@ import ErrorMessage from "./ErrorMessage";
 import useTranslateSelect from "../helpers/useTranslateSelect";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import Loader from "./Loader";
+import adapter from "../helpers/axiosAdapter";
 
 const Word = (props: React.PropsWithChildren<IWord>) => {
   const { _id, word, translation, definition, example, pos, gloss } = props;
-
-  const token: string | null = localStorage.getItem("token");
 
   const navigate: NavigateFunction = useNavigate();
   const { t } = useTranslation();
@@ -76,10 +74,9 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
 
   const deleteWord = () => {
     setIsLoading(true);
-    axios
-      .delete(`${process.env.REACT_APP_BACKEND}/api/word`, {
+    adapter
+      .delete("/word", {
         data: { _id },
-        headers: { Authorization: token! },
       })
       .then(() => {
         // Filter list to remove deleted item
@@ -116,12 +113,8 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     const pos: string = (document.querySelector("select[name='edit-pos']") as HTMLSelectElement).value;
     const gloss: string = (document.querySelector("select[name='edit-gloss']") as HTMLSelectElement).value;
 
-    axios
-      .put(
-        `${process.env.REACT_APP_BACKEND}/api/word`,
-        { word, translation, definition, example, pos, gloss, _id },
-        { headers: { Authorization: token! } }
-      )
+    adapter
+      .put("/word", { word, translation, definition, example, pos, gloss, _id })
       .then(() => {
         // Tmp values are applied to the actual value once validated
         setWordValue(wordTmp);

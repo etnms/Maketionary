@@ -36,7 +36,8 @@ const Signup = () => {
           localStorage.removeItem("project");
           localStorage.removeItem("projectName");
           // Save token
-          localStorage.setItem("token", res.data.token);
+          localStorage.setItem("refreshToken", res.data.refreshToken);
+          sessionStorage.setItem("accessToken", res.data.accessToken);
           navigate("/dashboard");
         }
       })
@@ -59,7 +60,7 @@ const Signup = () => {
           case "Passwords need to match":
             return setErrorMessage(t("errorMessages.errorPasswordMatch"));
           case "Invalid email":
-            return setErrorMessage(t("errorMessages.errorInvalidEmail"))
+            return setErrorMessage(t("errorMessages.errorInvalidEmail"));
           default:
             return setErrorMessage(t("errorMessages.errorProblem"));
         }

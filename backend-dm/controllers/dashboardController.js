@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
 const checkUserLogin = (req, res) => {
-  jwt.verify(req.token, process.env.JWTKEY, (err, authData) => {
+  jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(403);
     else{
      return res.json(authData.username);
@@ -32,10 +32,10 @@ const changePassword = (req, res) => {
   // Verify same passwords 
   if (newPassword !== confirmPassword) return res.status(400).json("Passwords don't match");
 
-  jwt.verify(req.token, process.env.JWTKEY, (err, authData) => {
+  jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(403);
     // Find corresponding user with _id from authdata
-    User.findById({ _id: authData.user._id }).exec((err, result) => {
+    User.findById({ _id: authData._id }).exec((err, result) => {
       if (err) return res.status(400).json("There was a problem");
       if (!result) return res.status(400).json("Incorrect username or password");
       else {
@@ -49,7 +49,7 @@ const changePassword = (req, res) => {
             bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
               if (err) return res.status(400).json("There was a problem" );
               // Update the password
-            User.findByIdAndUpdate({ _id: authData.user._id }, { password: hashedPassword },
+            User.findByIdAndUpdate({ _id: authData._id }, { password: hashedPassword },
               (err) => {
                 if (err) return res.status(400).json("There was a problem");
                 return res.status(200).json("Password updated");

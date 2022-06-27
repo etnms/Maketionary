@@ -4,12 +4,10 @@ const refreshAccessToken = async () => {
   return axios
     .post(`${process.env.REACT_APP_BACKEND}/api/token`, { refreshToken })
     .then((res) => {
-        console.log("ptdr t ki ", res.data.accessToken)
       sessionStorage.setItem("accessToken", `Bearer ${res.data.accessToken}`);
       return res.data.accessToken;
     })
     .catch((err) => {
-      console.log(err);
       return null;
     });
 };

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/OpenProject.module.css";
@@ -11,12 +10,13 @@ import { setProjectID, setProjectName } from "../features/projectItemSlice";
 import { useTranslation } from "react-i18next";
 import { setSearchInput } from "../features/searchSlice";
 import Loader from "../components/Loader";
+import adapter from "../helpers/axiosAdapter";
 
 const OpenProject = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const token = localStorage.getItem("token");
+  //const access = localStorage.getItem("token");
   const [languageList, setLanguageList] = useState<IProjectItem[]>([]);
 
   const projectID = useAppSelector((state) => state.projectItem.projectID);
@@ -31,11 +31,12 @@ const OpenProject = () => {
       document.documentElement.setAttribute("data-color-scheme", "dark");
     else document.documentElement.setAttribute("data-color-scheme", "light");
 
-    axios
-      .get(`${process.env.REACT_APP_BACKEND}/api/language`, { headers: { Authorization: token! } })
-      .then((res) => setLanguageList(res.data.results.languages))
-      .catch((err) => {if (err.response.status === 403) return navigate("/expired")});
-  }, [token, t, navigate]);
+    adapter
+    .get("/language")
+    .then((res) => {setLanguageList(res.data.results.languages)})
+    .catch(() =>  navigate("/expired"));
+   
+  }, [t, navigate]);
 
   const displayListProject = () => {
     return languageList.map((language) => (
@@ -67,7 +68,7 @@ const OpenProject = () => {
         <h1 className={styles.title}>{t("projects.openProjectTitle")}</h1>
         {languageList.length === 0 ? (
           <div className={styles["wrapper-loader"]}>
-            <Loader width={24} height={24}/>
+            <Loader width={24} height={24} />
             <p>{t("projects.loading")}</p>
           </div>
         ) : (

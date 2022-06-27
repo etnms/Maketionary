@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Dispatch } from "redux";
@@ -10,12 +9,12 @@ import ErrorMessage from "./ErrorMessage";
 import Loader from "./Loader";
 import useWindowResize from "../helpers/useWindowResize";
 import { NavigateFunction, useNavigate } from "react-router-dom";
+import adapter from "../helpers/axiosAdapter";
 
 const CreateWordMenu = () => {
-  const token: string | null = localStorage.getItem("token");
 
   const dispatch: Dispatch<any> = useAppDispatch();
-  const navigate: NavigateFunction = useNavigate()
+  const navigate: NavigateFunction = useNavigate();
   const { t } = useTranslation();
 
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -47,20 +46,15 @@ const CreateWordMenu = () => {
     const languageID: string | null = localStorage.getItem("project");
     // Create loader to wait for answer from the server
     setLoading(true);
-    axios
-      .post(
-        `${process.env.REACT_APP_BACKEND}/api/word`,
-        { word, translation, definition, example, pos, gloss, languageID },
-        { headers: { Authorization: token! } }
-      )
+    adapter
+      .post("/word", { word, translation, definition, example, pos, gloss, languageID })
       .then((res) => {
         dispatch(addWord(res.data.results));
         setLoading(false);
       })
       .catch((err) => {
-        setLoading(false);
-        if (err.response.status === 403) return navigate("/expired")
-        if (err.response.data === "Error empty field") setErrorMessage(t("errorMessages.errorWord"));
+        if (err.response.status === 403) return navigate("/expired");
+        if (err.response.data === "Error empty field") return setErrorMessage(t("errorMessages.errorWord"));
         else setErrorMessage(t("errorMessages.errorProblem"));
       });
 
@@ -71,6 +65,7 @@ const CreateWordMenu = () => {
     (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value = "";
     (document.querySelector("select[name='pos']") as HTMLSelectElement).value = "";
     (document.querySelector("select[name='gloss']") as HTMLSelectElement).value = "";
+    console.log("called");
   };
 
   // Handle the change to the word value to remove error message
@@ -80,28 +75,28 @@ const CreateWordMenu = () => {
       if (word !== "") setErrorMessage("");
     }
   };
-  
+
   //Get current size of window with hook and state of the menu for phone view
 
   const widthWindow = useWindowResize();
   const [isMenuPhoneOpen, setIsMenuOpen] = useState<boolean>(false);
-  // Display the menu fully or close it 
+  // Display the menu fully or close it
   const displayMobileView = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault()
+    e.preventDefault();
     const width = window.innerWidth;
     if (width <= 950) {
       const el = document.querySelector(`.${styles["create-word"]}`);
       el?.classList.toggle(`${styles["phone-view"]}`);
-      setIsMenuOpen(prev => !prev)
+      setIsMenuOpen((prev) => !prev);
     }
   };
-  
+
   return (
     <aside className={styles["create-word"]}>
       <form className={styles["form-word"]}>
         {widthWindow <= 950 ? (
           <button className={styles["button-show"]} onClick={(e) => displayMobileView(e)}>
-            {isMenuPhoneOpen? "-" : "+"} 
+            {isMenuPhoneOpen ? "-" : "+"}
           </button>
         ) : null}
         <h2 className={styles.title}>{t("newWord.title")}</h2>

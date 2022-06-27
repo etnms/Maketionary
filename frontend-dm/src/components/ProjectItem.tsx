@@ -1,4 +1,3 @@
-import axios from "axios";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -10,6 +9,7 @@ import confirmDeleteStyle from "./ConfirmDelete.module.css";
 import { setProjectID, setProjectName } from "../features/projectItemSlice";
 import { useTranslation } from "react-i18next";
 import { NavigateFunction, useNavigate } from "react-router-dom";
+import adapter from "../helpers/axiosAdapter";
 
 const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
   const { _id, name } = props;
@@ -27,9 +27,9 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
 
   const updateProjectName = () => {
     const newName: string = (document.querySelector("input[name='edit-project']") as HTMLInputElement).value;
-    axios
+    adapter
       .put(
-        `${process.env.REACT_APP_BACKEND}/api/language`,
+        "/language",
         { newName, _id },
         { headers: { Authorization: token! } }
       )

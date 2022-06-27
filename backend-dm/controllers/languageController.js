@@ -5,10 +5,11 @@ import Word from "../models/word.js";
 import Language from "../models/language.js";
 
 const getLanguage = (req, res) => {
-  jwt.verify(req.token, process.env.JWTKEY, (err, authData) => {
-    if (err) return res.status(400);
-    User.findById(authData.user._id).exec((err, result) => {
+  jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
+    if (err) return res.sendStatus(403);
+    User.findById(authData._id).exec((err, result) => {
       if (err) return res.status(400).json({ error: "Error login" });
+     
       else
         async.parallel(
           {
@@ -33,10 +34,10 @@ const postLanguage = (req, res) => {
   // Prevent long name
   if (language.length > 30) return res.status(400).json("Name too long");
 
-  jwt.verify(req.token, process.env.JWTKEY, (err, authData) => {
+  jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(403);
     else {
-      User.findOne({ username: authData.user.username }).exec((err, result) => {
+      User.findOne({ username: authData.username }).exec((err, result) => {
         if (err) return res.status(400).json("Error creation collection");
 
         if (result) {
@@ -59,7 +60,7 @@ const postLanguage = (req, res) => {
 const deletelanguage = (req, res) => {
   const _id = req.body._id;
 
-  jwt.verify(req.token, process.env.JWTKEY, (err) => {
+  jwt.verify(req.token, process.env.ACCESS_TOKEN, (err) => {
     if (err) {
       return res.sendStatus(403);
     } else {
@@ -88,7 +89,7 @@ const editLanguage = (req, res) => {
   // Prevent long name
   if (name.length > 30) return res.status(400).json({ error: "Name too long" });
 
-  jwt.verify(req.token, process.env.JWTKEY, (err) => {
+  jwt.verify(req.token, process.env.ACCESS_TOKEN, (err) => {
     if (err) {
       return res.sendStatus(403);
     }

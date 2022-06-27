@@ -1,10 +1,10 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { Dispatch } from "redux";
 import { useAppDispatch } from "../../app/hooks";
 import { setErrorDownload, setIsFileDownloading } from "../../features/downloadFileSlice";
+import adapter from "../../helpers/axiosAdapter";
 import { IWordDb } from "../../interfaces/interfaceWord";
 import styles from "./TopNavMenu.module.css";
 
@@ -104,10 +104,9 @@ const TopNavMenu = () => {
     dispatch(setIsFileDownloading(true));
     navigate("download");
     const lang: string = localStorage.getItem("i18nextLng") || "en"
-    axios({
+    adapter({
       method: "get",
-      url: `${process.env.REACT_APP_BACKEND}/api/download/${format}`,
-      headers: { Authorization: token! },
+      url: `/download/${format}`,
       params: { projectID, lang },
       responseType, //blob or json
     })

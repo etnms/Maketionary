@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
@@ -11,9 +10,9 @@ import Loader from "./Loader";
 import Word from "./Word";
 import { Dispatch } from "redux";
 import DisplayOptions from "./DisplayOptions";
+import adapter from "../helpers/axiosAdapter";
 
 const ListWords = () => {
-  const token: string | null = localStorage.getItem("token");
   const projectID: string | null = localStorage.getItem("project");
 
   const { t } = useTranslation();
@@ -58,17 +57,16 @@ const ListWords = () => {
   useEffect(() => {}, [columnDisplay]);
 
   useEffect(() => {
-    axios({
+    adapter({
       method: "get",
-      url: `${process.env.REACT_APP_BACKEND}/api/word`,
-      headers: { Authorization: token! },
+      url: "/word",
       params: { projectID },
     })
       .then((res) => {
         dispatch(updateWordList(res.data.results.words));
       })
       .catch((err) => console.log(err));
-  }, [projectID, token, dispatch]);
+  }, [projectID, dispatch]);
 
   useEffect(() => {
     if (searchFilter !== searchInput) {

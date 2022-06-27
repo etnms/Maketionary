@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/ProjectMenu.module.css";
 import buttons from "../styles/Buttons.module.css";
@@ -6,10 +5,9 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ErrorMessage from "../components/ErrorMessage";
 import Loader from "../components/Loader";
+import adapter from "../helpers/axiosAdapter";
 
 const NewProjectMenu = () => {
-  const token = localStorage.getItem("token");
-
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -31,11 +29,10 @@ const NewProjectMenu = () => {
 
     e.preventDefault();
     const language = (document.querySelector("input[name='newproject']") as HTMLInputElement).value;
-    axios
+    adapter
       .post(
-        `${process.env.REACT_APP_BACKEND}/api/language`,
+        "/language",
         { language },
-        { headers: { Authorization: token! } }
       )
       .then((res) => {
         localStorage.setItem("project", res.data._id);
