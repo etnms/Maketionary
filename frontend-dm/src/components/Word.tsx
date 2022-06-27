@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import IWord, { IWordDb } from "../interfaces/interfaceWord";
 import styles from "./ListWords.module.css";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -33,21 +33,17 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   const editMode: boolean = useAppSelector((state) => state.editMode.value);
   const wordToEdit: string = useAppSelector((state) => state.editMode.wordToEdit);
 
-  // Define all the values in state for an entry to use them for edit and display
-  const [wordValue, setWordValue] = useState<string>(word);
-  const [translationValue, setTranslationValue] = useState<string>(translation);
-  const [definitionValue, setDefinitionValue] = useState<string>(definition);
-  const [exampleValue, setExampleValue] = useState<string>(example);
-  const [posValue, setPosValue] = useState<string>(pos);
-  const [glossValue, setGlossValue] = useState<string>(gloss);
+  const [wordObject, setWordObject] = useState<IWord>({
+    word,
+    translation,
+    definition,
+    example,
+    pos,
+    gloss,
+    _id,
+  });
 
-  // Temp values for editing purposes
-  const [wordTmp, setWordTmp] = useState<string>(word);
-  const [translationTmp, setTranslationTmp] = useState<string>(translation);
-  const [definitionTmp, setDefinitionTmp] = useState<string>(definition);
-  const [exampleTmp, setExampleTmp] = useState<string>(example);
-  const [posTmp, setPosTmp] = useState<string>(pos);
-  const [glossTmp, setGlossTmp] = useState<string>(gloss);
+  const resetValue = useRef(wordObject);
 
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -116,13 +112,12 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     adapter
       .put("/word", { word, translation, definition, example, pos, gloss, _id })
       .then(() => {
-        // Tmp values are applied to the actual value once validated
-        setWordValue(wordTmp);
-        setDefinitionValue(definitionTmp);
-        setTranslationValue(translationTmp);
-        setExampleValue(exampleTmp);
-        setGlossValue(glossTmp);
-        setPosValue(posTmp);
+        resetValue.current.word = word;
+        resetValue.current.definition = translation;
+        resetValue.current.translation = definition;
+        resetValue.current.example = example;
+        resetValue.current.gloss = gloss;
+        resetValue.current.pos = pos;
         dispatch(setEditMode(false));
         setIsLoading(false);
       })
@@ -137,22 +132,22 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   const handleChange = (e: React.ChangeEvent<HTMLElement>, elementName: string) => {
     switch (elementName) {
       case "word":
-        setWordTmp((e.target as HTMLInputElement).value);
+        setWordObject((prev: IWord) => ({ ...prev, word: (e.target as HTMLInputElement).value }));
         break;
       case "translation":
-        setTranslationTmp((e.target as HTMLInputElement).value);
+        setWordObject((prev: IWord) => ({ ...prev, translation: (e.target as HTMLInputElement).value }));
         break;
       case "definition":
-        setDefinitionTmp((e.target as HTMLTextAreaElement).value);
+        setWordObject((prev: IWord) => ({ ...prev, definition: (e.target as HTMLTextAreaElement).value }));
         break;
       case "example":
-        setExampleTmp((e.target as HTMLTextAreaElement).value);
+        setWordObject((prev: IWord) => ({ ...prev, example: (e.target as HTMLTextAreaElement).value }));
         break;
       case "pos":
-        setPosTmp((e.target as HTMLSelectElement).value);
+        setWordObject((prev: IWord) => ({ ...prev, pos: (e.target as HTMLSelectElement).value }));
         break;
       case "gloss":
-        setGlossTmp((e.target as HTMLSelectElement).value);
+        setWordObject((prev: IWord) => ({ ...prev, gloss: (e.target as HTMLSelectElement).value }));
         break;
       default:
         return;
@@ -160,19 +155,24 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   };
 
   const cancelChange = () => {
-    setWordTmp(wordValue);
-    setDefinitionTmp(definitionValue);
-    setTranslationTmp(translationValue);
-    setExampleTmp(exampleValue);
-    setGlossTmp(glossValue);
-    setPosTmp(posValue);
+    setWordObject(resetValue.current);
   };
 
   const handleKeypress = (e: React.KeyboardEvent<HTMLLIElement>) => {
     if (e.key === "Enter") selectLine(e);
   };
 
-  const translate = useTranslateSelect(posValue);
+  const renderBlockDisplay = (value: string, text: string) => {
+    if (value !== "")
+      return (
+        <span>
+          <br /> <b>{t(`main.${text}`)}</b>: {value}
+        </span>
+      );
+    else return null;
+  };
+
+  const translate = useTranslateSelect(wordObject.pos);
   // Render list element
   return (
     <li
@@ -217,7 +217,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             <span className={styles.word}>
               <input
                 name="edit-word"
-                value={wordTmp}
+                value={wordObject.word}
                 className={!columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`}
                 onChange={(e) => handleChange(e, "word")}
               />
@@ -225,7 +225,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             <span className={styles.translation}>
               <input
                 name="edit-translation"
-                value={translationTmp}
+                value={wordObject.translation}
                 className={!columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`}
                 onChange={(e) => handleChange(e, "translation")}
               />
@@ -233,7 +233,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             <span className={styles.definition}>
               <textarea
                 name="edit-definition"
-                value={definitionTmp}
+                value={wordObject.definition}
                 className={
                   !columnDisplay
                     ? `${styles.edit} ${styles["edit-example"]}`
@@ -244,7 +244,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             <span className={styles.example}>
               <textarea
                 name="edit-example"
-                value={exampleTmp}
+                value={wordObject.example}
                 className={
                   !columnDisplay
                     ? `${styles.edit} ${styles["edit-example"]}`
@@ -255,7 +255,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             <span className={styles.pos}>
               <select
                 name="edit-pos"
-                value={posTmp}
+                value={wordObject.pos}
                 className={!columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`}
                 onChange={(e) => handleChange(e, "pos")}>
                 <option disabled hidden></option>
@@ -274,7 +274,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             <span className={styles.gloss}>
               <select
                 name="edit-gloss"
-                value={glossTmp}
+                value={wordObject.gloss}
                 className={!columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`}
                 onChange={(e) => handleChange(e, "gloss")}>
                 {renderGlossOptions("edit")}
@@ -287,51 +287,23 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
         <span className={styles["wrapper-content-block"]}>
           {
             <span>
-              <b>{t("main.word")}</b>: {wordValue}
+              <b>{t("main.word")}</b>: {wordObject.word}
             </span>
           }
-
-          {translationValue !== "" ? (
-            <span>
-              <br /> <b>{t("main.translation")}</b>: {translationValue}
-            </span>
-          ) : null}
-
-          {definitionValue !== "" ? (
-            <span>
-              <br />
-              <b>{t("main.definition")}</b>: {definitionValue}
-            </span>
-          ) : null}
-
-          {exampleValue !== "" ? (
-            <span>
-              <br />
-              <b>{t("main.example")}</b>: {exampleValue}
-            </span>
-          ) : null}
-
-          {translate !== "" ? (
-            <span>
-              <br /> <b>{t("main.pos")}</b>: {translate}
-            </span>
-          ) : null}
-
-          {glossValue !== "" ? (
-            <span>
-              <br />
-              <b>{t("main.gloss")}</b>: {glossValue}
-            </span>
-          ) : null}
+          {renderBlockDisplay(wordObject.translation, "translation")}
+          {renderBlockDisplay(wordObject.definition, "definition")}
+          {renderBlockDisplay(wordObject.example, "example")}
+          {renderBlockDisplay(wordObject.pos, "pos")}
+          {renderBlockDisplay(wordObject.gloss, "gloss")}
         </span>
       ) : (
         <div className={styles["wrapper-content"]}>
-          <span className={styles.word}>{wordValue}</span>
-          <span className={styles.translation}>{translationValue}</span>
-          <span className={styles.definition}>{definitionValue}</span>
-          <span className={styles.example}>{exampleValue}</span>
+          <span className={styles.word}>{wordObject.word}</span>
+          <span className={styles.translation}>{wordObject.translation}</span>
+          <span className={styles.definition}>{wordObject.definition}</span>
+          <span className={styles.example}>{wordObject.example}</span>
           <span className={styles.pos}>{translate}</span>
-          <span className={styles.gloss}>{glossValue}</span>
+          <span className={styles.gloss}>{wordObject.gloss}</span>
         </div>
       )}
     </li>

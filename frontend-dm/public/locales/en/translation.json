@@ -106,7 +106,7 @@
     "errorWord": "Error: the word field cannot be empty.",
     "errorInvalidEmail": "Error: this email is not valid.",
     "errorEditWord": "Error: there was a problem, please try again.",
-    "errorProblem": "Error: there was a problem."
+    "errorProblem": "Unexpected error: please try again."
   },
   "expired": {
     "title": "Your session has expired.",

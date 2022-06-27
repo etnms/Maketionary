@@ -106,7 +106,7 @@
     "errorWord": "Erreur: le champt mot ne peut pas être vide.",
     "errorInvalidEmail": "Erreur: cette adresse email n'est pas valide.",
     "errorEditWord": "Erreur: il y a eu un problème, veuillez réessayer.",
-    "errorProblem": "Erreur: il y a eu un problème."
+    "errorProblem": "Erreur inattendue: veuillez réessayer."
   },
   "expired": {
     "title": "Votre session a expiré.",
