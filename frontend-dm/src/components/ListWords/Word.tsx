@@ -1,35 +1,36 @@
 import React, { useEffect, useRef, useState } from "react";
-import IWord, { IWordDb } from "../interfaces/interfaceWord";
+import IWord, { IWordDb } from "../../interfaces/interfaceWord";
 import styles from "./ListWords.module.css";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { renderGlossOptions } from "../helpers/renderSelect";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { selectWordEdit, setEditMode } from "../features/editModeSlice";
-import { updateWordList } from "../features/arrayWordsSlice";
+import { renderGlossOptions } from "../../helpers/renderSelect";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { selectWordEdit, setEditMode } from "../../features/editModeSlice";
+import { updateWordList } from "../../features/arrayWordsSlice";
 import { useTranslation } from "react-i18next";
-import ErrorMessage from "./ErrorMessage";
-import useTranslateSelect from "../helpers/useTranslateSelect";
+import ErrorMessage from "../ErrorMessage";
+import useTranslateSelect from "../../helpers/useTranslateSelect";
 import { NavigateFunction, useNavigate } from "react-router-dom";
-import Loader from "./Loader";
-import adapter from "../helpers/axiosAdapter";
+import Loader from "../Loaders/Loader";
+import adapter from "../../helpers/axiosAdapter";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const Word = (props: React.PropsWithChildren<IWord>) => {
   const { _id, word, translation, definition, example, pos, gloss } = props;
 
   const navigate: NavigateFunction = useNavigate();
   const { t } = useTranslation();
-
+  const dispatch = useAppDispatch();
   // Setting
   const columnDisplay: boolean = useAppSelector((state) => state.settings.inLineDisplay);
   // Rerender when change in the settings
-  useEffect(() => {}, [columnDisplay]);
+  useEffect(() => {
+  }, [columnDisplay]);
 
   const listWord: IWordDb[] = useAppSelector((state) => state.arrayWords.value);
   // Using global state to determine the status of the edit mode
   // But also checking which word is currently select to show only one edit at a time (for current word)
-  const dispatch = useAppDispatch();
   const editMode: boolean = useAppSelector((state) => state.editMode.value);
   const wordToEdit: string = useAppSelector((state) => state.editMode.wordToEdit);
 
@@ -49,7 +50,10 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const selectLine = (
-    e: React.MouseEvent<HTMLLIElement, MouseEvent> | React.KeyboardEvent<HTMLLIElement>
+    e:
+      | React.MouseEvent<HTMLLIElement, MouseEvent>
+      | React.KeyboardEvent<HTMLLIElement>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     dispatch(setEditMode(false));
     dispatch(selectWordEdit(_id));
@@ -186,7 +190,10 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
             <Loader width={24} height={24} />
           ) : (
             <>
-              <button className={styles["btn"]} onClick={deleteWord} aria-label={t("ariaLabels.delete")}>
+              <button
+                className={`${styles["btn"]} ${styles["btn-delete"]}`}
+                onClick={deleteWord}
+                aria-label={t("ariaLabels.delete")}>
                 <DeleteIcon />
               </button>
               {editMode ? (
@@ -204,6 +211,12 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
                   <EditIcon />
                 </button>
               )}
+              <button
+                className={styles["btn"]}
+                onClick={(e) => selectLine(e)}
+                aria-label={t("ariaLabels.edit")}>
+                <CancelIcon />
+              </button>
             </>
           )}
         </div>

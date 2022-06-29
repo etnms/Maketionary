@@ -1,0 +1,35 @@
+
+.select-number-words {
+    width: 5vw;
+    height: 2rem;
+}
+
+.active {
+    background-color: var(--secondary);
+    color: var(--color-text);
+}
+
+.btn-disabled {
+    border: none;
+    background-color: transparent;
+    font-size: 1.2rem;
+    width: 25px;
+    cursor: default;
+}
+@media (max-width: 950px) {
+    .bottom-options{
+        margin-bottom: 4rem;
+    }
+}
+
+@media (max-width: 850px) {
+    .select-number-words {
+        width: 10vw;
+    }
+}
+
+@media (max-width: 400px) {
+    .select-number-words {
+        width: 20vw;
+    }
+}

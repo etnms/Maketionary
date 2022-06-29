@@ -15,7 +15,7 @@
   flex-direction: column;
   background-color: var(--bg-secondary);
   gap: 0.8rem;
-  margin-top: 0.2rem;
+  margin: 0.3rem 0;
 }
 
 .listitem {
@@ -78,6 +78,10 @@
 .btn:hover {
   transform: scale(1.1);
   transition: transform 300ms;
+}
+
+.btn-delete:hover {
+  color: var(--red-icon);
 }
 
 .wrapper-content {
@@ -195,6 +199,7 @@
   .titles {
     display: none;
   }
+
 }
 
 @media (max-width: 575px) {

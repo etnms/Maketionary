@@ -1,7 +1,7 @@
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { setSearchFilter, setSearchInput } from "../features/searchSlice";
-import letters from "../data/letters.json";
-import styles from "../components/FilterLetter.module.css";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { setSearchFilter, setSearchInput } from "../../features/searchSlice";
+import letters from "../../data/letters.json";
+import styles from "./FilterLetter.module.css";
 import { Dispatch } from "redux";
 
 const FilterLetter = () => {

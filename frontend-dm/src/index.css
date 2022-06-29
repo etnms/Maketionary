@@ -4,7 +4,7 @@
   --font: -apple-system, BlinkMacSystemFont, "Poppins", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
     "Droid Sans", "Helvetica Neue", sans-serif;
   box-sizing: border-box;
-  --second-font: "Hind Madurai", "Poppins","Roboto", sans-serif;
+  --second-font: "Hind Madurai", "Poppins", "Roboto", sans-serif;
   padding: 0;
   margin: 0;
   font-size: 18px;
@@ -12,8 +12,6 @@
   --main-height: 92vh;
   --create-menu-width: 25vw;
   --main-width: 75vw;
-  --red: #cc3939;
-  --red-hover: #ba3434;
 }
 
 html[data-color-scheme="light"] {
@@ -25,7 +23,7 @@ html[data-color-scheme="light"] {
   --bg-tertiary-selected: #f2f2f293;
   --primary: #7a69bf;
   --primary-hover: #564a87;
-  --secondary: #BB2CDB;
+  --secondary: #bb2cdb;
   --tertiary: #3f2d63;
   --quaternary: #843ecc;
   --quintary: #1b1725;
@@ -34,6 +32,9 @@ html[data-color-scheme="light"] {
   --shadow: 0px 0px 12px -3px rgba(0, 0, 0, 0.5);
   --shadow-item: 0px 2px 5px 1px rgba(0, 0, 0, 0.295);
   --shadow-primary: 0px 2px 4px 0px var(--primary);
+  --red-icon: #e6514e;
+  --red: #cc3939;
+  --red-hover: #ba3434;
 }
 html[data-color-scheme="dark"] {
   color-scheme: dark;
@@ -53,6 +54,9 @@ html[data-color-scheme="dark"] {
   --shadow: 0px 0px 12px -3px rgba(34, 34, 34, 0.5);
   --shadow-item: 0;
   --shadow-primary: 0;
+  --red-icon: #ff5a56;
+  --red: #fc4747;
+  --red-hover: #FF5B59;
 }
 
 * {
@@ -65,5 +69,4 @@ html[data-color-scheme="dark"] {
 
 body {
   margin: 0;
-
 }

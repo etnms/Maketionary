@@ -9,7 +9,7 @@ import ConfirmDelete from "../components/ConfirmDelete";
 import { setProjectID, setProjectName } from "../features/projectItemSlice";
 import { useTranslation } from "react-i18next";
 import { setSearchInput } from "../features/searchSlice";
-import Loader from "../components/Loader";
+import Loader from "../components/Loaders/Loader";
 import adapter from "../helpers/axiosAdapter";
 
 const OpenProject = () => {

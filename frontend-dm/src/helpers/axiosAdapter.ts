@@ -1,14 +1,25 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import refreshAccessToken from "./refreshAccessToken";
 
-const accessToken: string | null = sessionStorage.getItem("accessToken");
+const accessToken: string = sessionStorage.getItem("accessToken")!;
 
 const adapter = axios.create({
   baseURL: `${process.env.REACT_APP_BACKEND}/api`,
   headers: {
-    authorization: accessToken!,
+    "Content-Type": "application/json",
+    authorization: accessToken,
   },
 });
+
+adapter.interceptors.request.use(
+  (config) => {
+    config.headers!.authorization = sessionStorage.getItem("accessToken")!;
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 const createAxiosResponseIntercepter = (axiosInstance: AxiosInstance) => {
   axiosInstance.interceptors.response.use(
@@ -21,14 +32,15 @@ const createAxiosResponseIntercepter = (axiosInstance: AxiosInstance) => {
       if (
         error.response.status === 403 &&
         originalRequest.url === `${process.env.REACT_APP_BACKEND}/api/token`
-      ) {    
+      ) {
         return Promise.reject(error);
       }
       if (error.response.status === 403 && !originalRequest._retry) {
         originalRequest._retry = true;
         adapter.interceptors.response.eject(error);
-        const access_token = await refreshAccessToken();
-        originalRequest.headers["authorization"] = "Bearer " + access_token;
+        const newAccessToken = await refreshAccessToken();
+        originalRequest.headers["authorization"] = "Bearer " + newAccessToken;
+        sessionStorage.setItem("accessToken", "Bearer " + newAccessToken);
         return adapter(originalRequest);
       }
       return Promise.reject(error);

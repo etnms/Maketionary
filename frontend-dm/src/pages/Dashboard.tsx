@@ -1,12 +1,12 @@
 import styles from "../styles/Dashboard.module.css";
 import TopNav from "../components/TopNav/TopNav";
-import ListWords from "../components/ListWords";
+import ListWords from "../components/ListWords/ListWords";
 import CreateWordMenu from "../components/CreateWordMenu";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { setFirstConnection, setUsername } from "../features/authSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import LoaderPage from "../components/LoaderPage";
+import LoaderPage from "../components/Loaders/LoaderPage";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { Dispatch } from "redux";
 import adapter from "../helpers/axiosAdapter";

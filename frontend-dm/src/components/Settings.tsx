@@ -1,16 +1,18 @@
-import DarkThemeToggle from "./settings/DarkThemeToggle";
+import DarkThemeToggle from "./Settings/DarkThemeToggle";
 import styles from "./Settings.module.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
 import React, { useEffect } from "react";
-import Toggle from "./settings/Toggle";
+import Toggle from "./Settings/Toggle";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { setInLineDisplay } from "../features/settingsSlice";
+import useWindowResize from "../helpers/useWindowResize";
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
   const navigate: NavigateFunction = useNavigate();
-
+  const widthWindow = useWindowResize();
+  
   useEffect(() => {
     const languageValue: string | null = localStorage.getItem("i18nextLng") || "en";
     (document.querySelector("select[name='language-select']") as HTMLSelectElement).value = languageValue;

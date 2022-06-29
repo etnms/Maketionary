@@ -6,7 +6,7 @@ import { addWord } from "../features/arrayWordsSlice";
 import { renderGlossOptions } from "../helpers/renderSelect";
 import styles from "./CreateWordMenu.module.css";
 import ErrorMessage from "./ErrorMessage";
-import Loader from "./Loader";
+import Loader from "./Loaders/Loader";
 import useWindowResize from "../helpers/useWindowResize";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import adapter from "../helpers/axiosAdapter";
@@ -53,6 +53,7 @@ const CreateWordMenu = () => {
         setLoading(false);
       })
       .catch((err) => {
+        setLoading(false);
         if (err.response.status === 403) return navigate("/expired");
         if (err.response.data === "Error empty field") return setErrorMessage(t("errorMessages.errorWord"));
         else setErrorMessage(t("errorMessages.errorProblem"));
@@ -65,7 +66,6 @@ const CreateWordMenu = () => {
     (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value = "";
     (document.querySelector("select[name='pos']") as HTMLSelectElement).value = "";
     (document.querySelector("select[name='gloss']") as HTMLSelectElement).value = "";
-    console.log("called");
   };
 
   // Handle the change to the word value to remove error message
@@ -87,7 +87,7 @@ const CreateWordMenu = () => {
     if (width <= 950) {
       const el = document.querySelector(`.${styles["create-word"]}`);
       el?.classList.toggle(`${styles["phone-view"]}`);
-      setIsMenuOpen((prev) => !prev);
+      setIsMenuOpen((prev: boolean) => !prev);
     }
   };
 

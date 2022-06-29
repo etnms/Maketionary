@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { updateWordList } from "../features/arrayWordsSlice";
-import { IWordDb } from "../interfaces/interfaceWord";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { updateWordList } from "../../features/arrayWordsSlice";
+import { IWordDb } from "../../interfaces/interfaceWord";
 import FilterLetter from "./FilterLetter";
 import styles from "./ListWords.module.css";
 import filterStyle from "./FilterLetter.module.css";
-import Loader from "./Loader";
+import Loader from "../Loaders/Loader";
 import Word from "./Word";
 import { Dispatch } from "redux";
 import DisplayOptions from "./DisplayOptions";
-import adapter from "../helpers/axiosAdapter";
+import adapter from "../../helpers/axiosAdapter";
+import ListWordsNavigation from "./ListWordsNavigation";
 
 const ListWords = () => {
   const projectID: string | null = localStorage.getItem("project");
@@ -21,7 +22,7 @@ const ListWords = () => {
 
   const [filteredResults, setFilteredResults] = useState<IWordDb[]>();
 
-  const listWord: IWordDb[] = useAppSelector((state) => state.arrayWords.value);
+  const listWords: IWordDb[] = useAppSelector((state) => state.arrayWords.value);
   const searchInput: string = useAppSelector((state) => state.search.searchInput);
   // Search bar input and filtering
   const searchFilter: string = useAppSelector((state) => state.search.searchFilter);
@@ -29,6 +30,14 @@ const ListWords = () => {
   // View without search filtering
   const displayTypeFilter: string = useAppSelector((state) => state.search.displayTypeFilter);
   const isDescendingFilter: boolean = useAppSelector((state) => state.search.isDescendingFilter);
+
+  // Display pages and number of items per pages
+  const [numberItemsPerPage, setNumberItemsPerPage] = useState<number>(parseInt(localStorage.getItem("nbItemPage")!) || 100);
+  // Selection of items in array 
+  const [selectionFirst, setSelectionFirst] = useState<number>(0);
+  const [selectionSecond, setSelectionSecond] = useState<number>(numberItemsPerPage);
+  // Length of current array to display
+  const [lengthArrayFiltered, setLengthArrayFiltered] = useState<number>();
 
   // sort array function to use in memo
   const createSortedArray = useCallback(
@@ -47,8 +56,8 @@ const ListWords = () => {
 
   // Get the actual sorted array
   const sortedArray: IWordDb[] = useMemo(
-    () => createSortedArray([...listWord], displayTypeFilter),
-    [listWord, displayTypeFilter, createSortedArray]
+    () => createSortedArray([...listWords], displayTypeFilter),
+    [listWords, displayTypeFilter, createSortedArray]
   );
 
   // Setting
@@ -65,7 +74,7 @@ const ListWords = () => {
       .then((res) => {
         dispatch(updateWordList(res.data.results.words));
       })
-      .catch((err) => console.log(err));
+      .catch();
   }, [projectID, dispatch]);
 
   useEffect(() => {
@@ -79,17 +88,21 @@ const ListWords = () => {
       const filtered: IWordDb[] = [
         ...sortedArray.filter((word: any) => word[searchTypeFilter].toLowerCase().startsWith(searchInput)),
       ];
+      const slicedArray = filtered.slice(selectionFirst, selectionSecond);
+      setLengthArrayFiltered(filtered.length);
       // Update filtered results to be displayed
-      setFilteredResults(filtered);
+      setFilteredResults(slicedArray);
     } else {
       startTransition(() => {
         const filtered: IWordDb[] = [
           ...sortedArray.filter((word: any) => word[searchTypeFilter].toLowerCase().startsWith(searchInput)),
-        ];
-        setFilteredResults(filtered);
+        ];     
+        const slicedArray = filtered.slice(selectionFirst, selectionSecond);
+        setLengthArrayFiltered(filtered.length);
+        setFilteredResults(slicedArray);
       });
-    }
-  }, [sortedArray, searchInput, searchFilter, searchTypeFilter]);
+    }   
+  }, [sortedArray, searchInput, searchFilter, searchTypeFilter, selectionFirst, selectionSecond]);
 
   const filterResults = () => {
     if (filteredResults === undefined) return;
@@ -112,9 +125,9 @@ const ListWords = () => {
       <div className={styles["info-menu"]}>
         <span>
           {t("main.numberEntries")}
-          {listWord.length}
+          {listWords.length}
         </span>
-        <DisplayOptions/>
+        <DisplayOptions />
       </div>
       <FilterLetter />
       <ul className={styles.list}>
@@ -140,6 +153,14 @@ const ListWords = () => {
           filterResults()
         )}
       </ul>
+      <ListWordsNavigation
+      lengthArrayFiltered = {lengthArrayFiltered!}
+        numberItemsPerPage={numberItemsPerPage}
+        setNumberItemsPerPage={setNumberItemsPerPage}
+        setSelectionFirst={setSelectionFirst}
+        setSelectionSecond={setSelectionSecond}
+        filteredResults={filteredResults!}
+      />
     </main>
   );
 };

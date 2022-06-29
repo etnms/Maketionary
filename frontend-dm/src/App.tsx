@@ -10,7 +10,7 @@ import PageNotFound from "./pages/PageNotFound";
 import ExpiredSession from "./pages/ExpiredSession";
 import Home from "./pages/Home";
 import { Suspense } from "react";
-import HomeLoader from "./components/HomeLoader";
+import HomeLoader from "./components/Loaders/HomeLoader";
 import Settings from "./components/Settings";
 import DownloadWindow from "./components/DownloadWindow";
 

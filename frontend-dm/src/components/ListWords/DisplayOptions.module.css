@@ -6,7 +6,7 @@
 }
 
 .btn-filter {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-tertiary);
   color: var(--primary);
   border: none;
   padding: 0.3rem 0.7rem;

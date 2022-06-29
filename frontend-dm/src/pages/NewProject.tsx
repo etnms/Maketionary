@@ -4,7 +4,7 @@ import buttons from "../styles/Buttons.module.css";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ErrorMessage from "../components/ErrorMessage";
-import Loader from "../components/Loader";
+import Loader from "../components/Loaders/Loader";
 import adapter from "../helpers/axiosAdapter";
 
 const NewProjectMenu = () => {

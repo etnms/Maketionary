@@ -1,5 +1,5 @@
 .message {
-    color: red;
+    color: var(--red);
     animation: shake 300ms ;
     width: 80%;
     text-align: center;
