@@ -9,7 +9,8 @@ const Word = new Schema({
     example: {type: String},
     pos: {type: String},
     gloss: {type: String},
-    language: {type: Schema.Types.ObjectId, ref: "Language", required: true}
+    language: {type: Schema.Types.ObjectId, ref: "Language", required: true},
+    user: {type: Schema.Types.ObjectId, required: true},
 })
 
 export default mongoose.model("Word", Word)

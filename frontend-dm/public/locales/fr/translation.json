@@ -43,6 +43,7 @@
     "newProjectTitle": "Nouveau projet",
     "openProjectTitle": "Ouvrir projet",
     "loading": "Chargement des projets...",
+    "noProjects": "Aucun projet",
     "createBtn": "Créer",
     "openBtn": "Ouvrir",
     "cancelBtn": "Annuler",

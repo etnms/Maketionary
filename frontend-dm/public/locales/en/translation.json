@@ -43,6 +43,7 @@
     "newProjectTitle": "New project",
     "openProjectTitle": "Open project",
     "loading": "Loading your projects...",
+    "noProjects": "No project",
     "createBtn": "Create",
     "openBtn": "Open",
     "cancelBtn": "Cancel",

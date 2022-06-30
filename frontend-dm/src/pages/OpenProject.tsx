@@ -22,9 +22,11 @@ const OpenProject = () => {
   const projectID = useAppSelector((state) => state.projectItem.projectID);
   const projectName = useAppSelector((state) => state.projectItem.projectName);
 
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    setLoading(true);
     document.title = t("pageTitles.openProject");
 
     if (localStorage.getItem("darktheme") === "darktheme")
@@ -32,13 +34,19 @@ const OpenProject = () => {
     else document.documentElement.setAttribute("data-color-scheme", "light");
 
     adapter
-    .get("/language")
-    .then((res) => {setLanguageList(res.data.results.languages)})
-    .catch(() =>  navigate("/expired"));
-   
+      .get("/language")
+      .then((res) => {
+        setLanguageList(res.data.results.languages);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+        navigate("/expired");
+      });
   }, [t, navigate]);
 
   const displayListProject = () => {
+    if (languageList.length === 0) return <span>{t("projects.noProjects")}</span>;
     return languageList.map((language) => (
       <ProjectItem key={language._id} _id={language._id} name={language.name} />
     ));
@@ -66,7 +74,7 @@ const OpenProject = () => {
     <main className={styles.main}>
       <div className={styles.menu}>
         <h1 className={styles.title}>{t("projects.openProjectTitle")}</h1>
-        {languageList.length === 0 ? (
+        {loading ? (
           <div className={styles["wrapper-loader"]}>
             <Loader width={24} height={24} />
             <p>{t("projects.loading")}</p>
@@ -75,7 +83,7 @@ const OpenProject = () => {
           <ul className={styles["list-link"]}>{displayListProject()}</ul>
         )}
         <span className={buttons["wrapper-btns"]}>
-          {languageList === [] ? null : (
+          {languageList.length === 0 ? null : (
             <button onClick={() => openProject(projectID, projectName)} className={buttons["btn-open"]}>
               {t("projects.openBtn")}
             </button>

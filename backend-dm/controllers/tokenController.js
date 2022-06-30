@@ -13,7 +13,7 @@ const getAccessToken = (req, res) => {
       if (err) {
         return res.sendStatus(403);
       }
-      const accessToken = generateAccessToken(user.user);
+      const accessToken = generateAccessToken(user);
       return res.status(200).json({ accessToken });
     });
   });

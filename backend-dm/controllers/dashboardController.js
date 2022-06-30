@@ -5,8 +5,8 @@ import User from "../models/user.js";
 const checkUserLogin = (req, res) => {
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(403);
-    else{
-     return res.json(authData.username);
+    else {
+      return res.json(authData.user.username);
     }
   });
 };
@@ -29,7 +29,7 @@ const changePassword = (req, res) => {
   // Verify length
   if (newPassword.length < 6) return res.status(400).json("password");
 
-  // Verify same passwords 
+  // Verify same passwords
   if (newPassword !== confirmPassword) return res.status(400).json("Passwords don't match");
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
@@ -41,20 +41,20 @@ const changePassword = (req, res) => {
       else {
         // Match, create update tmp user to update DB
         user = result;
-        // Check password 
+        // Check password
         bcrypt.compare(currentPassword, result.password, (err, result) => {
           if (err) return res.status(400).json("There was a problem");
           if (!result) return res.status(400).json("Wrong password");
           if (result) {
             bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
-              if (err) return res.status(400).json("There was a problem" );
+              if (err) return res.status(400).json("There was a problem");
               // Update the password
-            User.findByIdAndUpdate({ _id: authData._id }, { password: hashedPassword },
-              (err) => {
+              User.findByIdAndUpdate({ _id: authData._id }, { password: hashedPassword }, (err) => {
                 if (err) return res.status(400).json("There was a problem");
                 return res.status(200).json("Password updated");
               });
-          })}
+            });
+          }
         });
       }
     });

@@ -28,14 +28,19 @@ const userLogin = (req, res) => {
         if (!result) return res.status(400).json("Incorrect username or password");
         if (result) {
           // Log in user
-          jwt.sign({ user }, process.env.REFRESH_TOKEN, { expiresIn: "7d" }, (err, token) => {
-            if (err) return res.sendStatus(403);
-            new Token({token}).save();
-            const accessToken = generateAccessToken({ user });
-            return res
-              .status(200)
-              .json({ refreshToken: `Bearer ${token}`, accessToken: `Bearer ${accessToken}` });
-          });
+          const refreshToken = jwt.sign(
+            { user },
+            process.env.REFRESH_TOKEN,
+            { expiresIn: "7d" },
+            (err, token) => {
+              if (err) return res.sendStatus(403);
+              new Token({ token }).save();
+            }
+          );
+          const accessToken = generateAccessToken({ user });
+          return res
+            .status(200)
+            .json({ refreshToken: `Bearer ${refreshToken}`, accessToken: `Bearer ${accessToken}` });
         }
       });
     }
@@ -87,18 +92,21 @@ const userSignup = (req, res) => {
               else return res.status(400).json("There was an error");
             } else {
               // Log in user
-              jwt.sign({ user }, process.env.REFRESH_TOKEN, { expiresIn: "7d" }, (err, token) => {
-                if (err) return res.sendStatus(403);
-                const accessToken = generateAccessToken({ user });
-                // save token in db if it needs to be invalidated
-                new Token({token}).save();
-                return res
-                  .status(200)
-                  .json({
-                    refreshToken: `Bearer ${token}`,
-                    accessToken: `Bearer ${accessToken}`,
-                    message: "User created",
-                  });
+              const refreshToken = jwt.sign(
+                { user },
+                process.env.REFRESH_TOKEN,
+                { expiresIn: "7d" },
+                (err, token) => {
+                  if (err) return res.sendStatus(403);
+                  const accessToken = generateAccessToken({ user });
+                  // save token in db if it needs to be invalidated
+                  new Token({ token }).save();
+                }
+              );
+              return res.status(200).json({
+                refreshToken: `Bearer ${refreshToken}`,
+                accessToken: `Bearer ${accessToken}`,
+                message: "User created",
               });
             }
           });

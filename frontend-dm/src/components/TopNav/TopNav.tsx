@@ -21,7 +21,8 @@ const TopNav = () => {
     const refreshToken: string | null = localStorage.getItem("refreshToken");
     axios
       .delete(`${process.env.REACT_APP_BACKEND}/api/token`, { data: { refreshToken } })
-      .then((res) => console.log(res)).catch(err => console.log(err));
+      .then()
+      .catch();
     localStorage.removeItem("refreshToken");
     sessionStorage.removeItem("accessToken");
     dispatch(setFirstConnection(true));

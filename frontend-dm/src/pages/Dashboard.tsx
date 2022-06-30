@@ -39,7 +39,7 @@ const Dashboard = () => {
           // If user has refreshed the page (the state) then set frstConnection back to false after response from server
           dispatch(setFirstConnection(false));
         })
-        .catch(() =>  navigate("/expired"));   
+        .catch((err) => {console.log(err);  navigate("/expired")});   
   }
   }, [dispatch, firstConnection, navigate]);
 
