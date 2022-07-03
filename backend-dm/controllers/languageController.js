@@ -7,7 +7,7 @@ import Language from "../models/language.js";
 const getLanguage = (req, res) => {
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(403);
-    User.findById(authData.user._id).exec((err, result) => {
+    User.findById(authData._id).exec((err, result) => {
       if (err) return res.status(400).json({ error: "Error login" });
      
       else
@@ -37,7 +37,7 @@ const postLanguage = (req, res) => {
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(403);
     else {
-      User.findOne({ username: authData.user.username }).exec((err, result) => {
+      User.findOne({ username: authData.username }).exec((err, result) => {
         if (err) return res.status(400).json("Error creation collection");
 
         if (result) {

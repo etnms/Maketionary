@@ -11,7 +11,7 @@ const getWord = (req, res) => {
     async.parallel(
       {
         words: (callback) => {
-          Word.find({ language, user: authData.user._id }).exec(callback);
+          Word.find({ language, user: authData._id }).exec(callback);
         },
       },
       (err, results) => {
@@ -33,7 +33,7 @@ const createWord = (req, res) => {
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(403);
-    Language.findOne({ _id: languageID, user: authData.user._id }, (err, result) => {
+    Language.findOne({ _id: languageID, user: authData._id }, (err, result) => {
       if (err) return res.status(400).json({ message: "Project not found" });
       else {
         new Word({
@@ -44,7 +44,7 @@ const createWord = (req, res) => {
           pos,
           gloss,
           language: result,
-          user: authData.user._id
+          user: authData._id
         }).save((err, results) => {
           if (err) return res.status(400).json("Error empty field");
           return res.status(200).json({ results });
@@ -59,7 +59,7 @@ const deleteWord = (req, res) => {
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(403);
-    Word.findOneAndDelete({ _id, user: authData.user._id }, (err) => {
+    Word.findOneAndDelete({ _id, user: authData._id }, (err) => {
       if (err) return res.status(400).json({ message: "Error deleting word" });
       return res.status(200).json({ message: "Word deleted" });
     });
@@ -78,7 +78,7 @@ const updateWord = (req, res) => {
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(403);
     else {
-      Word.findOneAndUpdate({ _id, user: authData.user._id }, { word, translation, definition, example, pos, gloss }, (err) => {
+      Word.findOneAndUpdate({ _id, user: authData._id }, { word, translation, definition, example, pos, gloss }, (err) => {
         if (err) return res.sendStatus(403);
         return res.status(200).json({ message: "Word was updated" });
       });
