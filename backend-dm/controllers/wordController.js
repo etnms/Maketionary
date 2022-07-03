@@ -4,7 +4,7 @@ import Language from "../models/language.js";
 import Word from "../models/word.js";
 
 const getWord = (req, res) => {
-  const language = req.query.projectID;
+  const language = req.params.id;
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(403);
@@ -55,7 +55,7 @@ const createWord = (req, res) => {
 };
 
 const deleteWord = (req, res) => {
-  const _id = req.body._id;
+  const _id = req.params.id;
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(403);
@@ -67,7 +67,7 @@ const deleteWord = (req, res) => {
 };
 
 const updateWord = (req, res) => {
-  const _id = req.body._id;
+  const _id = req.params.id;
   const word = req.body.word;
   const translation = req.body.translation;
   const definition = req.body.definition;

@@ -58,8 +58,7 @@ const postLanguage = (req, res) => {
 };
 
 const deletelanguage = (req, res) => {
-  const _id = req.body._id;
-
+  const _id = req.params.id;
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err) => {
     if (err) {
       return res.sendStatus(403);
@@ -83,7 +82,7 @@ const deletelanguage = (req, res) => {
 };
 
 const editLanguage = (req, res) => {
-  const _id = req.body._id;
+  const _id = req.params.id;
   const name = req.body.newName;
 
   // Prevent long name

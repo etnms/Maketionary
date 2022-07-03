@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/ProjectMenu.module.css";
 import buttons from "../styles/Buttons.module.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ErrorMessage from "../components/ErrorMessage";
 import Loader from "../components/Loaders/Loader";
@@ -74,6 +74,11 @@ const NewProjectMenu = () => {
     }
   };
 
+  const cancelNewProject = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    navigate("/dashboard")
+  }
+
   return (
     <div className={styles.menu}>
       <form className={styles["form-new-project"]} onSubmit={(e) => createNewProject(e)}>
@@ -87,7 +92,7 @@ const NewProjectMenu = () => {
             <button type="submit" className={buttons["btn-open"]}>
               {t("projects.createBtn")}
             </button>
-            <button type="submit" className={buttons["btn-cancel"]} onClick={() => navigate("/dashboard")}>
+            <button type="submit" className={buttons["btn-cancel"]} onClick={(e) => cancelNewProject(e)}>
               {t("projects.cancelBtn")}
             </button>
           </div>

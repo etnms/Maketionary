@@ -75,9 +75,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   const deleteWord = () => {
     setIsLoading(true);
     adapter
-      .delete("/word", {
-        data: { _id },
-      })
+      .delete(`/word/${_id}`)
       .then(() => {
         // Filter list to remove deleted item
         const updatedList: IWordDb[] = listWord.filter((word: IWord) => word._id !== _id);
@@ -114,7 +112,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     const gloss: string = (document.querySelector("select[name='edit-gloss']") as HTMLSelectElement).value;
 
     adapter
-      .put("/word", { word, translation, definition, example, pos, gloss, _id })
+      .put(`/word/${_id}`, { word, translation, definition, example, pos, gloss })
       .then(() => {
         resetValue.current.word = word;
         resetValue.current.definition = translation;

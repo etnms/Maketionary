@@ -14,9 +14,8 @@ import adapter from "../helpers/axiosAdapter";
 const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
   const { _id, name } = props;
 
-  const token: string | null = localStorage.getItem("token");
-
   const [projectValue, setProjectValue] = useState<string>(name);
+
   const [edit, setEdit] = useState<boolean>(false);
 
   const stateID: string = useAppSelector((state) => state.projectItem.projectID);
@@ -29,13 +28,13 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
     const newName: string = (document.querySelector("input[name='edit-project']") as HTMLInputElement).value;
     adapter
       .put(
-        "/language",
-        { newName, _id },
-        { headers: { Authorization: token! } }
+        `/language/${_id}`,
+        { newName },
       )
       .then(() => {
         setEdit(false);
         localStorage.setItem("projectName", newName);
+        setProjectValue(newName)
       })
       .catch((err) => {
         setEdit(false);
@@ -77,8 +76,8 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
   return (
     <li
       className={styles["language-li"]}
-      onClick={(e) => selectProject(e, _id, name)}
-      onKeyDown={(e) => handleKeyPress(e, _id, name)}
+      onClick={(e) => selectProject(e, _id, projectValue)}
+      onKeyDown={(e) => handleKeyPress(e, _id, projectValue)}
       tabIndex={0}>
       {edit && stateID === _id? (
         <input

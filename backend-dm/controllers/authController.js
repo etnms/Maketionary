@@ -32,12 +32,9 @@ const userLogin = (req, res) => {
             { user },
             process.env.REFRESH_TOKEN,
             { expiresIn: "7d" },
-            (err, token) => {
-              if (err) return res.sendStatus(403);
-              new Token({ token }).save();
-            }
           );
-          const accessToken = generateAccessToken({ user });
+          new Token({ token: refreshToken }).save();
+          const accessToken = generateAccessToken(user);
           return res
             .status(200)
             .json({ refreshToken: `Bearer ${refreshToken}`, accessToken: `Bearer ${accessToken}` });
@@ -95,14 +92,10 @@ const userSignup = (req, res) => {
               const refreshToken = jwt.sign(
                 { user },
                 process.env.REFRESH_TOKEN,
-                { expiresIn: "7d" },
-                (err, token) => {
-                  if (err) return res.sendStatus(403);
-                  const accessToken = generateAccessToken({ user });
-                  // save token in db if it needs to be invalidated
-                  new Token({ token }).save();
-                }
-              );
+                { expiresIn: "7d" })
+                new Token({ token: refreshToken }).save();
+                const accessToken = generateAccessToken(user);
+
               return res.status(200).json({
                 refreshToken: `Bearer ${refreshToken}`,
                 accessToken: `Bearer ${accessToken}`,

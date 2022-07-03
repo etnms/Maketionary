@@ -32,8 +32,10 @@ const ListWords = () => {
   const isDescendingFilter: boolean = useAppSelector((state) => state.search.isDescendingFilter);
 
   // Display pages and number of items per pages
-  const [numberItemsPerPage, setNumberItemsPerPage] = useState<number>(parseInt(localStorage.getItem("nbItemPage")!) || 100);
-  // Selection of items in array 
+  const [numberItemsPerPage, setNumberItemsPerPage] = useState<number>(
+    parseInt(localStorage.getItem("nbItemPage")!) || 100
+  );
+  // Selection of items in array
   const [selectionFirst, setSelectionFirst] = useState<number>(0);
   const [selectionSecond, setSelectionSecond] = useState<number>(numberItemsPerPage);
   // Length of current array to display
@@ -66,11 +68,8 @@ const ListWords = () => {
   useEffect(() => {}, [columnDisplay]);
 
   useEffect(() => {
-    adapter({
-      method: "get",
-      url: "/word",
-      params: { projectID },
-    })
+    adapter
+      .get(`/word/${projectID}`)
       .then((res) => {
         dispatch(updateWordList(res.data.results.words));
       })
@@ -96,12 +95,12 @@ const ListWords = () => {
       startTransition(() => {
         const filtered: IWordDb[] = [
           ...sortedArray.filter((word: any) => word[searchTypeFilter].toLowerCase().startsWith(searchInput)),
-        ];     
+        ];
         const slicedArray = filtered.slice(selectionFirst, selectionSecond);
         setLengthArrayFiltered(filtered.length);
         setFilteredResults(slicedArray);
       });
-    }   
+    }
   }, [sortedArray, searchInput, searchFilter, searchTypeFilter, selectionFirst, selectionSecond]);
 
   const filterResults = () => {
@@ -154,7 +153,7 @@ const ListWords = () => {
         )}
       </ul>
       <ListWordsNavigation
-      lengthArrayFiltered = {lengthArrayFiltered!}
+        lengthArrayFiltered={lengthArrayFiltered!}
         numberItemsPerPage={numberItemsPerPage}
         setNumberItemsPerPage={setNumberItemsPerPage}
         setSelectionFirst={setSelectionFirst}

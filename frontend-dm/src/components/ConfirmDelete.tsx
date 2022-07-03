@@ -22,9 +22,7 @@ const ConfirmDelete = (props: React.PropsWithChildren<IConfirmDelete>) => {
 
   const deleteProject = () => {
     adapter
-      .delete("/language", {
-        data: { _id: projectID },
-      })
+      .delete(`/language/${projectID}`)
       .then(() => {
         closeWindow();
         //Update the list

@@ -4,16 +4,17 @@ import Token from "../models/token.js";
 
 const getAccessToken = (req, res) => {
   const refreshToken = req.body.refreshToken;
+
   const token = refreshToken.split(" ")[1];
   if (refreshToken === null) return res.sendStatus(401);
   Token.findOne({ token }, (err, result) => {
     if (err) return res.sendStatus(403);
     if (result === null ) return res.sendStatus(403);
-    jwt.verify(token, process.env.REFRESH_TOKEN, (err, user) => {
+    jwt.verify(token, process.env.REFRESH_TOKEN, (err, authData) => {
       if (err) {
         return res.sendStatus(403);
       }
-      const accessToken = generateAccessToken(user);
+      const accessToken = generateAccessToken(authData.user);
       return res.status(200).json({ accessToken });
     });
   });

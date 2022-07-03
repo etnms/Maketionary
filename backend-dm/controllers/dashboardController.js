@@ -6,7 +6,7 @@ const checkUserLogin = (req, res) => {
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(403);
     else {
-      return res.json(authData.user.username);
+      return res.json(authData.username);
     }
   });
 };
