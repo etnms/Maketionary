@@ -13,6 +13,8 @@ import { Suspense } from "react";
 import HomeLoader from "./components/Loaders/HomeLoader";
 import Settings from "./components/Settings";
 import DownloadWindow from "./components/DownloadWindow";
+import ShareProject from "./components/ShareProjects/ShareProject";
+import ReceivedRequestMenu from "./components/ShareProjects/ReceivedRequestMenu";
 
 function App() {
   return (
@@ -25,11 +27,14 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="settings" element={<Settings/>}/>
             <Route path="download" element={<DownloadWindow/>}/>
+            <Route path="notifications" element={<ReceivedRequestMenu/>}/>
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/new-project" element={<NewProjectMenu />} />
-          <Route path="/open-project" element={<OpenProject />} />
+          <Route path="/open-project" element={<OpenProject />}>
+            <Route path="share-project" element={<ShareProject/>}/>
+          </Route>
           <Route path="/expired" element={<ExpiredSession />} />
           <Route path="/404" element={<PageNotFound />} />
           <Route path="*" element={<Navigate replace to="/404" />} />

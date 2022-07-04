@@ -5,26 +5,48 @@ import Word from "../models/word.js";
 import Language from "../models/language.js";
 
 const getLanguage = (req, res) => {
+  const type = req.params.type;
+
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(403);
-    User.findById(authData._id).exec((err, result) => {
-      if (err) return res.status(400).json({ error: "Error login" });
-     
-      else
-        async.parallel(
-          {
-            languages: (callback) => {
-              Language.find({ user: result }).populate("name").exec(callback);
+    if (type === "personal") {
+      User.findById(authData._id).exec((err, result) => {
+        if (err) return res.status(400).json({ error: "Error login" });
+        else
+          async.parallel(
+            {
+              languages: (callback) => {
+                Language.find({ user: result }).populate("name").exec(callback);
+              },
             },
-          },
-          (err, results) => {
-            if (err) {
-              return res.status(400).send(err);
+            (err, results) => {
+              if (err) {
+                return res.status(400).send(err);
+              }
+              return res.status(200).json({ results });
             }
-            return res.status(200).json({ results });
-          }
-        );
-    });
+          );
+      });
+    }
+    if (type === "collab") {
+      User.findById(authData._id).exec((err, result) => {
+        if (err) return res.status(400).json({ error: "Error login" });
+        else
+          async.parallel(
+            {
+              languages: (callback) => {
+                Language.find({ guestUser: result }).populate("name").exec(callback);
+              },
+            },
+            (err, results) => {
+              if (err) {
+                return res.status(400).send(err);
+              }
+              return res.status(200).json({ results });
+            }
+          );
+      });
+    }
   });
 };
 

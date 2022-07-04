@@ -6,12 +6,10 @@ import React, { useEffect } from "react";
 import Toggle from "./Settings/Toggle";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { setInLineDisplay } from "../features/settingsSlice";
-import useWindowResize from "../helpers/useWindowResize";
 
 const Settings = () => {
   const { t, i18n } = useTranslation();
   const navigate: NavigateFunction = useNavigate();
-  const widthWindow = useWindowResize();
   
   useEffect(() => {
     const languageValue: string | null = localStorage.getItem("i18nextLng") || "en";

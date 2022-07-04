@@ -31,7 +31,6 @@ const Login = () => {
         localStorage.removeItem("project");
         localStorage.removeItem("projectName");
         // Save token
-        console.log(res.data)
         localStorage.setItem("refreshToken", res.data.refreshToken);
         sessionStorage.setItem("accessToken", res.data.accessToken);
         navigate("/dashboard");

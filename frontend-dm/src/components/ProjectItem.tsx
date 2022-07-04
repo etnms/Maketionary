@@ -10,6 +10,7 @@ import { setProjectID, setProjectName } from "../features/projectItemSlice";
 import { useTranslation } from "react-i18next";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import adapter from "../helpers/axiosAdapter";
+import ShareIcon from '@mui/icons-material/Share';
 
 const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
   const { _id, name } = props;
@@ -92,6 +93,7 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
       )}
       {stateID === _id ? (
         <span className={styles["wrapper-edit-btns"]}>
+         
           {edit ? (
             <button onClick={updateProjectName} className={styles["edit-btn"]} aria-label={t("ariaLabels.editConfirm")}>
               <CheckCircleIcon />
@@ -104,6 +106,7 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
           <button onClick={openConfirmDelete} className={styles["delete-btn"]} aria-label={t("ariaLabels.delete")}>
             <DeleteIcon />
           </button>
+           <button className={styles["edit-btn"]} onClick={() => navigate("share-project")} aria-label={t("ariaLabels.share")}><ShareIcon/></button>
         </span>
       ) : null}
     </li>

@@ -5,9 +5,11 @@
   align-items: center;
   flex-direction: column;
   position: relative;
+  gap: 1.3rem;
 }
 
 .menu {
+
   box-shadow: var(--shadow);
   border-radius: 8px;
   display: flex;
@@ -17,6 +19,33 @@
   height: 70vh;
   width: 40vw;
   gap: 1rem;
+  position: relative;
+}
+
+.tab {
+  box-shadow: 0px 3px 6px -1px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: row;
+}
+
+.tab-nav {
+  background-color: var(--bg-secondary);
+  border: none;
+  font-size: 1.3rem;
+  padding: 0.3rem;
+  min-width: 20vw;
+}
+
+.tab-nav:hover {
+  background-color:var(--bg-secondary-selected);
+}
+
+.tab-selected {
+  background-color: var(--primary);
+  color: var(--color-text);
+}
+.tab-selected:hover {
+  background-color: var(--primary-hover);
 }
 
 .wrapper-loader {
@@ -52,9 +81,10 @@
   min-width: 20vw;
   transition: 300ms;
   gap: 0.5rem;
+  word-break: break-all;
 }
 
-.language-li:focus-visible     {
+.language-li:focus-visible {
   outline: 1.3px solid var(--main);
   transition: 100ms;
 }
@@ -88,7 +118,8 @@
   transition: 300ms;
 }
 
-.edit-btn, .delete-btn {
+.edit-btn,
+.delete-btn {
   transition: 300ms;
   cursor: pointer;
   background-color: transparent;
@@ -96,7 +127,8 @@
   color: white;
 }
 
-.edit-btn:hover, .delete-btn:hover {
+.edit-btn:hover,
+.delete-btn:hover {
   transform: scale(1.1);
   transition: 300ms;
 }

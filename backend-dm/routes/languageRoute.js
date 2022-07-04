@@ -6,7 +6,7 @@ const router = express.Router();
 
 const deleteLanguageRoute = router.delete("/api/language/:id", verifyToken, deletelanguage);
 const editLanguageRoute = router.put("/api/language/:id", verifyToken, editLanguage);
-const getlanguageRoute = router.get("/api/language", verifyToken, getLanguage);
+const getlanguageRoute = router.get("/api/language/:type", verifyToken, getLanguage);
 const postLanguageRoute = router.post("/api/language", verifyToken, postLanguage);
 
 

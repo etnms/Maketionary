@@ -32,6 +32,7 @@ html[data-color-scheme="light"] {
   --shadow: 0px 0px 12px -3px rgba(0, 0, 0, 0.5);
   --shadow-item: 0px 2px 5px 1px rgba(0, 0, 0, 0.295);
   --shadow-primary: 0px 2px 4px 0px var(--primary);
+  --shadow-secondary: 0px 2px 4px 0px var(--secondary);
   --red-icon: #e6514e;
   --red: #cc3939;
   --red-hover: #ba3434;
@@ -51,9 +52,11 @@ html[data-color-scheme="dark"] {
   --quintary: #1b1725;
   --color-text: black;
   --main: white;
-  --shadow: 0px 0px 12px -3px rgba(34, 34, 34, 0.5);
+  /*--shadow: 0px 0px 12px -3px rgba(34, 34, 34, 0.5);*/
+  --shadow: 0;
   --shadow-item: 0;
   --shadow-primary: 0;
+  --shadow-secondary: 0;
   --red-icon: #ff5a56;
   --red: #fc4747;
   --red-hover: #FF5B59;

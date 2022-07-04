@@ -8,6 +8,7 @@ import { Dispatch } from "redux";
 import { useDispatch } from "react-redux";
 import { setFirstConnection } from "../../features/authSlice";
 import axios from "axios";
+import Notification from "./Notification";
 
 const TopNav = () => {
   const navigate: NavigateFunction = useNavigate();
@@ -42,7 +43,8 @@ const TopNav = () => {
             {t("nav.current")} <em>{projectName}</em>
           </span>
         ) : null}
-        <span>
+        <Notification/>
+        <span>    
           {t("nav.welcome")}
           {useAppSelector((state) => state.auth.username)}
         </span>

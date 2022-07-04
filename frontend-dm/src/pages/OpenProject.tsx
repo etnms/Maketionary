@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import styles from "../styles/OpenProject.module.css";
 import buttons from "../styles/Buttons.module.css";
 import ProjectItem from "../components/ProjectItem";
@@ -22,6 +22,8 @@ const OpenProject = () => {
   const projectID = useAppSelector((state) => state.projectItem.projectID);
   const projectName = useAppSelector((state) => state.projectItem.projectName);
 
+  const [listSelected, setListSelected] = useState<string>("personal");
+
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
@@ -34,7 +36,7 @@ const OpenProject = () => {
     else document.documentElement.setAttribute("data-color-scheme", "light");
 
     adapter
-      .get("/language")
+      .get(`/language/${listSelected}`)
       .then((res) => {
         setLanguageList(res.data.results.languages);
         setLoading(false);
@@ -43,13 +45,20 @@ const OpenProject = () => {
         setLoading(false);
         navigate("/expired");
       });
-  }, [t, navigate]);
+  }, [t, navigate, listSelected]);
 
   const displayListProject = () => {
     if (languageList.length === 0) return <span>{t("projects.noProjects")}</span>;
     return languageList.map((language) => (
       <ProjectItem key={language._id} _id={language._id} name={language.name} />
     ));
+  };
+
+  const selectTab = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, value: string) => {
+    const prevSelected = document.querySelector(`.${styles["tab-selected"]}`);
+    prevSelected?.classList.remove(styles["tab-selected"]);
+    e.currentTarget.classList.add(styles["tab-selected"]);
+    setListSelected(value);
   };
 
   const openProject = (projectID: string, projectName: string) => {
@@ -72,6 +81,16 @@ const OpenProject = () => {
 
   return (
     <main className={styles.main}>
+      <span className={styles.tab}>
+        <button
+          className={`${styles["tab-nav"]} ${styles["tab-selected"]}`}
+          onClick={(e) => selectTab(e, "personal")}>
+          My projects
+        </button>
+        <button className={styles["tab-nav"]} onClick={(e) => selectTab(e, "collab")}>
+          Shared projects
+        </button>
+      </span>
       <div className={styles.menu}>
         <h1 className={styles.title}>{t("projects.openProjectTitle")}</h1>
         {loading ? (
@@ -96,6 +115,7 @@ const OpenProject = () => {
       {projectID === "" ? null : (
         <ConfirmDelete languageList={languageList} setLanguageList={setLanguageList} />
       )}
+      <Outlet />
     </main>
   );
 };

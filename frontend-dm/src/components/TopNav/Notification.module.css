@@ -1,0 +1,35 @@
+.notification-btn {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    margin: 0 1rem;
+    transition: transform 300ms;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+}
+
+.notification-btn:hover {
+    transform: scale(1.1);
+    transition: transform 300ms;
+}
+
+.icon {
+    height: 25px;
+    width: 25px;
+}
+.notification-alert {
+    position: absolute;
+    top: 50%;
+    left: -30%;
+    background-color: var(--red);
+    border-radius: 50%;
+    height: 18px;
+    width: 18px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
