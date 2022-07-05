@@ -58,20 +58,7 @@
   background-color: var(--red);
   color: white;
 }
-.btn-close {
-  position: absolute;
-  top: 0%;
-  right: 0%;
-  background-color: var(--red);
-  color: white;
-  border: none;
-  font-size: 1rem;
-  height: 2rem;
-  width: 2rem;
-  padding: 0;
-}
 
-.btn-confirm:hover,
-.btn-close:hover {
+.btn-confirm:hover{
   background-color: var(--red-hover);
 }

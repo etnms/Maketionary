@@ -12,7 +12,6 @@ import { NavigateFunction, useNavigate } from "react-router-dom";
 import adapter from "../helpers/axiosAdapter";
 
 const CreateWordMenu = () => {
-
   const dispatch: Dispatch<any> = useAppDispatch();
   const navigate: NavigateFunction = useNavigate();
   const { t } = useTranslation();
@@ -51,22 +50,22 @@ const CreateWordMenu = () => {
       .then((res) => {
         dispatch(addWord(res.data.results));
         setLoading(false);
+        // Reset values to default
+        (document.querySelector("input[name='word']") as HTMLInputElement).value = "";
+        (document.querySelector("input[name='translation']") as HTMLInputElement).value = "";
+        (document.querySelector("textarea[name='definition']") as HTMLTextAreaElement).value = "";
+        (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value = "";
+        (document.querySelector("select[name='pos']") as HTMLSelectElement).value = "";
+        (document.querySelector("select[name='gloss']") as HTMLSelectElement).value = "";
       })
       .catch((err) => {
         console.log(err);
         setLoading(false);
         if (err.response.status === 403) return navigate("/expired");
         if (err.response.data === "Error empty field") return setErrorMessage(t("errorMessages.errorWord"));
+        if (err.response.data === "Error create word") return setErrorMessage(t("errorMessages.errorWordDb"));
         else setErrorMessage(t("errorMessages.errorProblem"));
       });
-
-    // Reset values to default
-    (document.querySelector("input[name='word']") as HTMLInputElement).value = "";
-    (document.querySelector("input[name='translation']") as HTMLInputElement).value = "";
-    (document.querySelector("textarea[name='definition']") as HTMLTextAreaElement).value = "";
-    (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value = "";
-    (document.querySelector("select[name='pos']") as HTMLSelectElement).value = "";
-    (document.querySelector("select[name='gloss']") as HTMLSelectElement).value = "";
   };
 
   // Handle the change to the word value to remove error message

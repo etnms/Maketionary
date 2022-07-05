@@ -1,32 +1,3 @@
-.settings {
-  position: fixed;
-  z-index: 1;
-  top: 50%;
-  right: 50%;
-  transform: translate(50%, -50%);
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: transparent;
-  backdrop-filter: blur(3.3px);
-}
-
-.settings-box {
-  position: sticky;
-  background-color: var(--bg-secondary);
-  box-shadow: var(--shadow);
-  border-radius: 8px;
-  width: 60vw;
-  min-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
 .title {
   font-size: 2.3rem;
 }
@@ -48,38 +19,22 @@
 .language-select {
   width: 30%;
 }
-
-.btn-close {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 0.3rem;
-  border: none;
-  background-color: var(--red);
-  color: white;
-  font-size: 1.2rem;
-  height: 1.8rem;
-  width: 1.8rem;
-  text-align: center;
-  border-radius: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.btn-close:hover {
-  background-color: var(--red-hover);
-}
-
-@media (max-width: 700px) {
-  .settings-box {
-    width: 80vw;
-    min-height: 60vh;
+@media (max-width: 750px) {
+  .wrapper-language {
+    flex-direction: column;
+  }
+  .language-select {
+    width: 50%;
   }
 }
 
-@media (max-width:300px) {
+@media (max-width: 450px) {
+  .language-select {
+    width: 80%;
+  }
+}
+
+@media (max-width: 300px) {
   .title {
     font-size: 1.5rem;
   }

@@ -2,8 +2,9 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import adapter from "../../helpers/axiosAdapter";
+import pageStyles from "../../styles/PageOverlay.module.css";
 import styles from "./ShareProject.module.css";
-
+import CloseIcon from "@mui/icons-material/Close";
 const ShareProject = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -15,16 +16,23 @@ const ShareProject = () => {
     const user: string = (document.querySelector("input[name='input-share']") as HTMLInputElement).value;
     adapter
       .post(`/shared-projects/${projectID}`, { user })
-      .then((res) => {console.log(res); navigate("/open-project")})
-      .catch((err) => {console.log(err); navigate("/open-project")});
+      .then((res) => {
+        navigate("/open-project");
+      })
+      .catch((err) => {
+        navigate("/open-project");
+      });
   };
 
   return (
-    <div className={styles.page}>
-      <div className={styles.box}>
-        <p>
+    <div className={pageStyles.page}>
+      <div className={pageStyles.box}>
+        <button className={pageStyles["btn-close"]} onClick={() => navigate("/open-project")}>
+          <CloseIcon />
+        </button> 
+        <h1 className={styles.title}>
           Sharing project: <em>{projectName}</em>
-        </p>
+        </h1>
         <label htmlFor="input-share" className={styles.label}>
           Username or email of the user you want to share your project with:
         </label>
@@ -37,9 +45,6 @@ const ShareProject = () => {
             Cancel
           </button>
         </span>
-        <button className={`${styles.btn} ${styles["btn-close"]}`} onClick={() => navigate("/open-project")}>
-          X
-        </button>
       </div>
     </div>
   );

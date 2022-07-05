@@ -21,7 +21,7 @@ const downloadJSON = (req, res) => {
         },
       },
       (err, results) => {
-        if (err) return res.status(400);
+        if (err) return res.sendStatus(500);
         // Translate the pos 
         results.words.forEach(el => el.pos = translatePos(el.pos, lang))
         return res.status(200).json({ results });
@@ -57,7 +57,7 @@ const downloadRTF = (req, res) => {
         },
       },
       (err, results) => {
-        if (err) return res.status(400);
+        if (err) return res.sendStatus(500);
         // Sort the array by words
         const sortedArray = results.words.sort((a, b) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
         // Create stream to write all the data
@@ -84,8 +84,7 @@ const downloadRTF = (req, res) => {
         stream.on("finish", () => {
           return res.download(file, filename, (err) => {
             if (err) {
-              console.log(err);
-              res.status(400).json({ error: "Error downloading file" });
+              res.status(500).json({ error: "Error downloading file" });
             }
             // If no error then delete file from server
             else fs.unlinkSync(file);
@@ -180,7 +179,7 @@ const downloadDocx = (req, res) => {
         },
       },
       (err, results) => {
-        if (err) return res.status(400);
+        if (err) return res.sendStatus(500);
         // Sort the array by words
         const sortedArray = results.words.sort((a, b) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
         // Create the docx
@@ -191,7 +190,7 @@ const downloadDocx = (req, res) => {
           fs.writeFileSync(file, buffer);
           return res.download(file, filename, (err) => {
             if (err) {
-              res.status(400).json({ error: "Error downloading file" });
+              res.status(500).json({ error: "Error downloading file" });
             }
             // If no error then delete file from server
             else fs.unlinkSync(file);
@@ -228,7 +227,7 @@ const downloadXML = (req, res) => {
         },
       },
       (err, results) => {
-        if (err) return res.status(400);
+        if (err) return res.sendStatus(500);
         // Sort the array by words
         const sortedArray = results.words.sort((a, b) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
         // Create stream to write all the data
@@ -255,8 +254,7 @@ const downloadXML = (req, res) => {
         stream.on("finish", () => {
           return res.download(file, filename, (err) => {
             if (err) {
-              console.log(err);
-              res.status(400).json({ error: "Error downloading file" });
+              res.status(500).json({ error: "Error downloading file" });
             }
             // If no error then delete file from server
             else fs.unlinkSync(file);
@@ -284,7 +282,7 @@ const downloadPDF = (req, res) => {
         },
       },
       (err, results) => {
-        if (err) return res.status(400);
+        if (err) return res.sendStatus(500);
         // Sort the array by words
         const sortedArray = results.words.sort((a, b) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
         // pipe res to directly send http answer no need to write file

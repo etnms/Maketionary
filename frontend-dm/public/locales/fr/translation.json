@@ -105,6 +105,7 @@
     "errorNameTooLong": "Erreur: le nom du projet est trop long.",
     "errorProjectNameEmpty" : "Erreur: le nom est vide.",
     "errorWord": "Erreur: le champt mot ne peut pas être vide.",
+    "errorWordDb": "Erreur lors de l'ajout du mot, veuillez réessayer.",
     "errorInvalidEmail": "Erreur: cette adresse email n'est pas valide.",
     "errorEditWord": "Erreur: il y a eu un problème, veuillez réessayer.",
     "errorProblem": "Erreur inattendue: veuillez réessayer."
@@ -141,5 +142,8 @@
     "text": "Préparation du fichier. Cela peut prendre quelques instants.",
     "noDownload": "Aucun fichier à télécharger.",
     "errorDownload": "Une erreur est parvenue pendant le téléchargement. Veuillez réessayer."
+  },
+  "shareProject": {
+
   }
 }

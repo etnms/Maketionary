@@ -1,4 +1,5 @@
 import DarkThemeToggle from "./Settings/DarkThemeToggle";
+import pageStyles from "../styles/PageOverlay.module.css";
 import styles from "./Settings.module.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
@@ -35,9 +36,9 @@ const Settings = () => {
   };
 
   return (
-    <div className={styles.settings} data-settings="settings-menu">
-      <div className={styles["settings-box"]} data-settings="btn-close-settings">
-        <button onClick={() => navigate("/dashboard")} className={styles["btn-close"]}>
+    <div className={pageStyles.page} data-settings="settings-menu">
+      <div className={pageStyles.box} data-settings="btn-close-settings">
+        <button onClick={() => navigate("/dashboard")} className={pageStyles["btn-close"]}>
           <CloseIcon />
         </button>
         <h1 className={styles.title}>{t("settings.title")}</h1>

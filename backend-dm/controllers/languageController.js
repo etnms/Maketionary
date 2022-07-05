@@ -21,7 +21,7 @@ const getLanguage = (req, res) => {
             },
             (err, results) => {
               if (err) {
-                return res.status(400).send(err);
+                return res.sendStatus(500).json({err});
               }
               return res.status(200).json({ results });
             }
@@ -40,7 +40,7 @@ const getLanguage = (req, res) => {
             },
             (err, results) => {
               if (err) {
-                return res.status(400).send(err);
+                return res.sendStatus(500).json({err});
               }
               return res.status(200).json({ results });
             }
@@ -60,7 +60,7 @@ const postLanguage = (req, res) => {
     if (err) return res.sendStatus(403);
     else {
       User.findOne({ username: authData.username }).exec((err, result) => {
-        if (err) return res.status(400).json("Error creation collection");
+        if (err) return res.status(500).json("Error creation collection");
 
         if (result) {
           new Language({
@@ -87,12 +87,12 @@ const deletelanguage = (req, res) => {
     } else {
       // Delete language project
       Language.findByIdAndDelete({ _id }, (err, result) => {
-        if (err) return res.status(400).json({ error: "Error deleting collection" });
+        if (err) return res.status(500).json({ error: "Error deleting collection" });
         else {
           // Delete each word that were associated with the project
           // Otherwise the words would still exist in the DB
           Word.deleteMany({ language: result }, (err, result) => {
-            if (err) return res.status(400).json({ error: "Error deleting" });
+            if (err) return res.status(500).json({ error: "Error deleting" });
             else {
               return res.status(200).json({ message: "Successfully deleted" });
             }
@@ -116,7 +116,7 @@ const editLanguage = (req, res) => {
     }
     Language.findByIdAndUpdate({ _id }, { name }, (err) => {
       if (err) {
-        return res.status(400).json({ error: "Problem renaming project" });
+        return res.status(500).json({ error: "Problem renaming project" });
       }
       return res.status(200).json({ message: "Project name updated" });
     });

@@ -5,6 +5,8 @@ import { useAppSelector } from "../app/hooks";
 import adapter from "../helpers/axiosAdapter";
 import { IProjectItem } from "../interfaces/interfaceProjectItem";
 import styles from "./ConfirmDelete.module.css";
+import pageStyle from "../styles/PageOverlay.module.css";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface IConfirmDelete {
   languageList: Array<IProjectItem>;
@@ -15,7 +17,7 @@ const ConfirmDelete = (props: React.PropsWithChildren<IConfirmDelete>) => {
   const { languageList, setLanguageList } = props;
 
   const navigate = useNavigate();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const projectID: string = useAppSelector((state) => state.projectItem.projectID);
   const projectName: string = useAppSelector((state) => state.projectItem.projectName);
@@ -32,7 +34,9 @@ const ConfirmDelete = (props: React.PropsWithChildren<IConfirmDelete>) => {
           localStorage.removeItem("projectName");
         }
       })
-      .catch((err) =>{if (err.response.status === 403) return navigate("/expired")});
+      .catch((err) => {
+        if (err.response.status === 403) return navigate("/expired");
+      });
   };
 
   const closeWindow = () => {
@@ -43,19 +47,19 @@ const ConfirmDelete = (props: React.PropsWithChildren<IConfirmDelete>) => {
   return (
     <div className={styles.page} data-confirm-delete="window">
       <div className={styles.box}>
-        <p>{t('projects.deleteConfirmText')}</p>
+        <p>{t("projects.deleteConfirmText")}</p>
         <p className={styles["project-name"]}>{projectName}</p>
         <p>?</p>
         <span className={styles["wrapper-btns"]}>
           <button className={`${styles.btn} ${styles["btn-confirm"]}`} onClick={deleteProject}>
-          {t('projects.yesBtn')}
+            {t("projects.yesBtn")}
           </button>
           <button className={styles.btn} onClick={closeWindow}>
-          {t('projects.noBtn')}
+            {t("projects.noBtn")}
           </button>
         </span>
-        <button className={`${styles.btn} ${styles["btn-close"]}`} onClick={closeWindow}>
-          X
+        <button className={pageStyle["btn-close"]} onClick={closeWindow}>
+          <CloseIcon />
         </button>
       </div>
     </div>

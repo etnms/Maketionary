@@ -9,7 +9,7 @@ import { deleteWordRoute, getWordRoute, postWordRoute, updateWordRoute } from ".
 import { downloadDocxRoute, downloadJSONRoute, downloadPDFRoute, downloadRTFRoute, downloadXMLRoute } from "./routes/downloadRoute.js";
 import mongoSanitize from "express-mongo-sanitize"
 import { logOutRoute, tokenRoute } from "./routes/tokenRoute.js";
-import { checkRequestsRoute, shareProjectrequestRoute } from "./routes/shareProjectRoute.js";
+import { answerRequestRoute, checkRequestsRoute, shareProjectrequestRoute } from "./routes/shareProjectRoute.js";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -64,6 +64,7 @@ app.use("/", downloadPDFRoute);
 // Shared projects
 app.use("/", shareProjectrequestRoute);
 app.use("/", checkRequestsRoute);
+app.use("/", answerRequestRoute);
 
 const server = app.listen(PORT, () => {
   console.log(`app is listening on port ${PORT}`);

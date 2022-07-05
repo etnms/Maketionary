@@ -1,0 +1,57 @@
+.title {
+  font-size: 2rem;
+}
+
+.subtitle {
+  font-size: 0.8rem;
+}
+.list-notif {
+  display: flex;
+  gap: 0.8rem;
+  flex-direction: column;
+  overflow-y: auto;
+  width: 100%;
+  min-height: 30vh;
+  align-items: center;
+  padding: 1rem;
+}
+
+.notif {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-item);
+  padding: 0.5rem 2rem;
+  border-radius: 8px;
+  transition: all 300ms;
+  cursor: default;
+  width: 60%;
+  font-size: 1rem;
+}
+
+.selected-notif {
+  background-color: var(--bg-secondary-selected);
+  transition: all 300ms;
+}
+
+.btn-refuse {
+  background-color: var(--red);
+  color: var(--color-text);
+}
+
+.btn-refuse:hover {
+  background-color: var(--red-hover);
+  color: var(--color-text);
+}
+
+.btn-cancel {
+  background-color: var(--bg-secondary);
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background-color: var(--bg-secondary-selected);
+}

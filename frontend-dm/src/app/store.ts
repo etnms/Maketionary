@@ -6,6 +6,7 @@ import projectItemReducer from "../features/projectItemSlice";
 import settingsReducer from "../features/settingsSlice";
 import authReducer from "../features/authSlice";
 import downloadFileReducer from "../features/downloadFileSlice";
+import shareRequestsReducer from "../features/shareRequestsSlice";
 export const store = configureStore({
   reducer: {
     arrayWords: arrayWordsReducer,
@@ -14,7 +15,8 @@ export const store = configureStore({
     projectItem: projectItemReducer,
     settings: settingsReducer,
     auth: authReducer,
-    download: downloadFileReducer
+    download: downloadFileReducer,
+    collabRequests: shareRequestsReducer
   },
 });
 

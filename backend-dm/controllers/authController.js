@@ -16,7 +16,7 @@ const userLogin = (req, res) => {
   }
 
   User.findOne({ username }).exec((err, result) => {
-    if (err) return res.status(400).json("There was a problem");
+    if (err) return res.status(500).json("There was a problem");
     if (!result) return res.status(400).json("Incorrect username or password");
     else {
       // Update tmp user to the corresponding user
@@ -24,7 +24,7 @@ const userLogin = (req, res) => {
 
       // Check passwords
       bcrypt.compare(password, result.password, (err, result) => {
-        if (err) return res.status(400).json("There was a problem");
+        if (err) return res.status(500).json("There was a problem");
         if (!result) return res.status(400).json("Incorrect username or password");
         if (result) {
           // Log in user
@@ -71,7 +71,7 @@ const userSignup = (req, res) => {
         return res.status(400).json("Invalid email");
       else {
         bcrypt.hash(password, 10, (err, hashedPassword) => {
-          if (err) return res.status(400).json("There was a problem");
+          if (err) return res.status(500).json("There was a problem");
 
           const user = new User({
             username,
@@ -86,7 +86,7 @@ const userSignup = (req, res) => {
                 return res.status(400).json("Username already exists");
               if (err.code === 11000 && err.keyPattern.email === 1)
                 return res.status(400).json("Email already exists");
-              else return res.status(400).json("There was an error");
+              else return res.status(500).json("There was an error");
             } else {
               // Log in user
               const refreshToken = jwt.sign(

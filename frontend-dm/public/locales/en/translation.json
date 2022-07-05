@@ -105,6 +105,7 @@
     "errorNameTooLong": "Error: the name of the project is too long.",
     "errorProjectNameEmpty" : "Error: the name is empty.",
     "errorWord": "Error: the word field cannot be empty.",
+    "errorWordDb": "Error while adding word, please try again.",
     "errorInvalidEmail": "Error: this email is not valid.",
     "errorEditWord": "Error: there was a problem, please try again.",
     "errorProblem": "Unexpected error: please try again."
@@ -141,5 +142,8 @@
     "text": "Preparing your file. This may take a moment.",
     "noDownload": "No file to download.",
     "errorDownload": "Error while downloading file. Please try again."
+  },
+  "shareProject": {
+
   }
 }

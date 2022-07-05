@@ -24,7 +24,7 @@ const logOut = (req, res) => {
   const refreshToken = req.body.refreshToken;
   const token = refreshToken.split(" ")[1];
   Token.findOneAndDelete({ token }, (err) => {
-    if (err) return res.status(400).json("error deleting token");
+    if (err) return res.status(500).json("error deleting token");
     return res.sendStatus(200);
   });
 };

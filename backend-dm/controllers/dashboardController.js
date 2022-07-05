@@ -36,21 +36,21 @@ const changePassword = (req, res) => {
     if (err) return res.sendStatus(403);
     // Find corresponding user with _id from authdata
     User.findById({ _id: authData._id }).exec((err, result) => {
-      if (err) return res.status(400).json("There was a problem");
+      if (err) return res.status(500).json("There was a problem");
       if (!result) return res.status(400).json("Incorrect username or password");
       else {
         // Match, create update tmp user to update DB
         user = result;
         // Check password
         bcrypt.compare(currentPassword, result.password, (err, result) => {
-          if (err) return res.status(400).json("There was a problem");
+          if (err) return res.status(500).json("There was a problem");
           if (!result) return res.status(400).json("Wrong password");
           if (result) {
             bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
-              if (err) return res.status(400).json("There was a problem");
+              if (err) return res.status(500).json("There was a problem");
               // Update the password
               User.findByIdAndUpdate({ _id: authData._id }, { password: hashedPassword }, (err) => {
-                if (err) return res.status(400).json("There was a problem");
+                if (err) return res.status(500).json("There was a problem");
                 return res.status(200).json("Password updated");
               });
             });

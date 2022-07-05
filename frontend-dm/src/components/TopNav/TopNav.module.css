@@ -49,6 +49,7 @@
     margin: 0.2rem;
   }
 }
+
 @media (max-width: 950px) {
   .nav {
     height: 20vh;
@@ -59,8 +60,10 @@
 
 @media (max-width: 600px) {
   .nav {
-    min-height: 40vh;
+    height: 20vh;
     flex-direction: column-reverse;
+    overflow-y: auto;
+    gap: 0.3rem;
   }
   .wrapper-user {
     flex-direction: column;
