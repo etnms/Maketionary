@@ -35,7 +35,7 @@ const ConfirmDelete = (props: React.PropsWithChildren<IConfirmDelete>) => {
         }
       })
       .catch((err) => {
-        if (err.response.status === 403) return navigate("/expired");
+        if (err.response.status === 401) return navigate("/expired");
       });
   };
 

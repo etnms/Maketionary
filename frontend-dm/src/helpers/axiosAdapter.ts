@@ -30,12 +30,12 @@ const createAxiosResponseIntercepter = (axiosInstance: AxiosInstance) => {
       const originalRequest = error.config;
       // prevent looping
       if (
-        error.response.status === 403 &&
+        error.response.status === 401 &&
         originalRequest.url === `${process.env.REACT_APP_BACKEND}/api/token`
       ) {
         return Promise.reject(error);
       }
-      if (error.response.status === 403 && !originalRequest._retry) {
+      if (error.response.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
         adapter.interceptors.response.eject(error);
         const newAccessToken = await refreshAccessToken();

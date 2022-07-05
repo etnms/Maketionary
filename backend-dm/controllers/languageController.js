@@ -8,7 +8,7 @@ const getLanguage = (req, res) => {
   const type = req.params.type;
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(401);
     if (type === "personal") {
       User.findById(authData._id).exec((err, result) => {
         if (err) return res.status(400).json({ error: "Error login" });
@@ -57,7 +57,7 @@ const postLanguage = (req, res) => {
   if (language.length > 30) return res.status(400).json("Name too long");
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(401);
     else {
       User.findOne({ username: authData.username }).exec((err, result) => {
         if (err) return res.status(500).json("Error creation collection");
@@ -83,7 +83,7 @@ const deletelanguage = (req, res) => {
   const _id = req.params.id;
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err) => {
     if (err) {
-      return res.sendStatus(403);
+      return res.sendStatus(401);
     } else {
       // Delete language project
       Language.findByIdAndDelete({ _id }, (err, result) => {
@@ -112,7 +112,7 @@ const editLanguage = (req, res) => {
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err) => {
     if (err) {
-      return res.sendStatus(403);
+      return res.sendStatus(401);
     }
     Language.findByIdAndUpdate({ _id }, { name }, (err) => {
       if (err) {

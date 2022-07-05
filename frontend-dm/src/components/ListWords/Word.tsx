@@ -85,7 +85,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
       })
       .catch((err) => {
         setIsLoading(false);
-        if (err.response.status === 403) return navigate("/expired");
+        if (err.response.status === 401) return navigate("/expired");
         setErrorMessage(t("errorMessages.errorEditWord"));
       });
   };
@@ -125,7 +125,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
       })
       .catch((err) => {
         setIsLoading(false);
-        if (err.response.status === 403) return navigate("/expired");
+        if (err.response.status === 401) return navigate("/expired");
         setErrorMessage(t("errorMessages.errorEditWord"));
       });
   };

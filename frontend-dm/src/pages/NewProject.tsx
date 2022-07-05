@@ -44,7 +44,7 @@ const NewProjectMenu = () => {
       .catch((err) => {
         // Hide loading screen
         setLoading(false);
-        if (err.response.status === 403) return navigate("/expired")
+        if (err.response.status === 401) return navigate("/expired")
         switch (err.response.data) {
           case "Name too long":
             return setErrorMessage(t("errorMessages.errorNameTooLong"));

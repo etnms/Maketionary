@@ -61,7 +61,7 @@ const CreateWordMenu = () => {
       .catch((err) => {
         console.log(err);
         setLoading(false);
-        if (err.response.status === 403) return navigate("/expired");
+        if (err.response.status === 401) return navigate("/expired");
         if (err.response.data === "Error empty field") return setErrorMessage(t("errorMessages.errorWord"));
         if (err.response.data === "Error create word") return setErrorMessage(t("errorMessages.errorWordDb"));
         else setErrorMessage(t("errorMessages.errorProblem"));

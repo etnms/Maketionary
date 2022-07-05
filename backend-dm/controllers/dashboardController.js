@@ -4,7 +4,7 @@ import User from "../models/user.js";
 
 const checkUserLogin = (req, res) => {
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(401);
     else {
       return res.json(authData.username);
     }
@@ -33,7 +33,7 @@ const changePassword = (req, res) => {
   if (newPassword !== confirmPassword) return res.status(400).json("Passwords don't match");
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(401);
     // Find corresponding user with _id from authdata
     User.findById({ _id: authData._id }).exec((err, result) => {
       if (err) return res.status(500).json("There was a problem");

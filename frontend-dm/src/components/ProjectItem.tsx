@@ -39,7 +39,7 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
       })
       .catch((err) => {
         setEdit(false);
-        if (err.response.status === 403) return navigate("/expired")
+        if (err.response.status === 401) return navigate("/expired")
       });
   };
 

@@ -12,7 +12,7 @@ const shareProjectRequest = (req, res) => {
   const userInfo = req.body.user;
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(401);
     User.findOne({ $or: [{ username: userInfo }, { email: userInfo }] }, (err, result) => {
       if (err) res.status(400).json("Error: user not found");
       new CollabRequest({
@@ -28,7 +28,7 @@ const shareProjectRequest = (req, res) => {
 
 const checkRequests = (req, res) => {
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(401);
     async.parallel(
       {
         collabRequest: (callback) => {
@@ -53,7 +53,7 @@ const answerRequest = (req, res) => {
   const accepted = req.body.accepted;
   if (accepted === null || accepted === undefined) return res.status(400).json("Empty request response");
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(401);
     if (accepted)
       CollabRequest.findByIdAndDelete(requestId, (err, result) => {
         if (err) return res.sendStatus(500);

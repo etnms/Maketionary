@@ -12,7 +12,7 @@ const downloadJSON = (req, res) => {
   const projectID = req.query.projectID;
   const lang = req.query.lang;
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(401);
     async.parallel(
       {
         words: (callback) => {
@@ -48,7 +48,7 @@ const downloadRTF = (req, res) => {
   const file = `${path}\\${filename}`;
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(401);
     async.parallel(
       {
         words: (callback) => {
@@ -170,7 +170,7 @@ const downloadDocx = (req, res) => {
   const file = `${path}\\${filename}`;
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(401);
     async.parallel(
       {
         words: (callback) => {
@@ -218,7 +218,7 @@ const downloadXML = (req, res) => {
   const file = `${path}\\${filename}`;
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(401);
     async.parallel(
       {
         words: (callback) => {
@@ -271,7 +271,7 @@ const downloadPDF = (req, res) => {
   const lang = req.query.lang;
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(401);
     const doc = new PDFDocument();
 
     async.parallel(

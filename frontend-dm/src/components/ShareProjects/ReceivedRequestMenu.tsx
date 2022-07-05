@@ -38,14 +38,19 @@ const ReceivedRequestMenu = () => {
   };
 
   const answerRequest = (value: boolean) => {
-    adapter.post(`/shared-projects/answer/${selectedRequest}`, {accepted: value }).then(res => console.log(res)).catch(err => console.log(err))
-  }
-
-
+    adapter
+      .post(`/shared-projects/answer/${selectedRequest}`, { accepted: value })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
 
   const diplayListRequest = () => {
     return listRequest.map((req: IRequest) => (
-      <li key={req._id} className={styles.notif} tabIndex={0} onDoubleClick={(e) => selectRequest(e, req._id)}>
+      <li
+        key={req._id}
+        className={styles.notif}
+        tabIndex={0}
+        onDoubleClick={(e) => selectRequest(e, req._id)}>
         <span>
           You were invited on the project <em>{req.project.name}</em>
         </span>{" "}
@@ -61,16 +66,29 @@ const ReceivedRequestMenu = () => {
           <CloseIcon />
         </button>
         <h1 className={styles.title}>Shared projects notifications</h1>
-        {listRequest.length !== 0? <p className={styles.subtitle}>Double click to select a request</p> : null}
-        {listRequest.length !== 0?
-        <ul className={styles["list-notif"]}>{diplayListRequest()}</ul> : <p>You have no notification</p>}
+        {listRequest.length !== 0 ? (
+          <p className={styles.subtitle}>Double click to select a request</p>
+        ) : null}
+        {listRequest.length !== 0 ? (
+          <ul className={styles["list-notif"]}>{diplayListRequest()}</ul>
+        ) : (
+          <p>You have no notification</p>
+        )}
         {isAnyItemSelected ? (
           <span className={buttons["wrapper-btns"]}>
-            <button className={buttons["btn-open"]} onClick={() => answerRequest(true)}>Accept</button>
-            <button className={`${buttons["btn-cancel"]} ${styles["btn-refuse"]}`} onClick={() => answerRequest(false)}>Refuse</button>
+            <button className={buttons["btn-open"]} onClick={() => answerRequest(true)}>
+              Accept
+            </button>
+            <button
+              className={`${buttons["btn-cancel"]} ${styles["btn-refuse"]}`}
+              onClick={() => answerRequest(false)}>
+              Refuse
+            </button>
           </span>
         ) : null}
-        <button className={styles["btn-cancel"]}  onClick={() => navigate("/dashboard")}>Cancel</button>
+        <button className={styles["btn-cancel"]} onClick={() => navigate("/dashboard")}>
+          Cancel
+        </button>
       </div>
     </div>
   );
