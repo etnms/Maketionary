@@ -40,6 +40,8 @@
     "signout": "Se déconnecter"
   },
   "projects": {
+    "allProjects": "Tous les projets",
+    "sharedProjects": "Projets partagés",
     "newProjectTitle": "Nouveau projet",
     "openProjectTitle": "Ouvrir projet",
     "loading": "Chargement des projets...",
@@ -70,7 +72,8 @@
     "pos": "PDD",
     "gloss": "Glose",
     "noProjectOpen": "Aucun projet n'est ouvert pour le moment.",
-    "sortText": "Trier par:"
+    "sortText": "Trier par:",
+    "noResult": "Aucun résultat trouvé."
   },
   "selectPOS" : {
     "noun": "Nom",
@@ -144,6 +147,21 @@
     "errorDownload": "Une erreur est parvenue pendant le téléchargement. Veuillez réessayer."
   },
   "shareProject": {
-
+    "shareTitle": "Partage du projet: ",
+    "shareInfoText": "Nom d'utilisateur ou email de l'utilisateur avec qui vous voulez partager votre projet:",
+    "shareBtnShare": "Partager",
+    "shareBtnCancel": "Annuler",
+    "notifTitle": "Notifications des projets partagés",
+    "notifSubtitle": "Faites un double clique pour selectionner une requête",
+    "notifNoNotif": "Vous n'avez aucun notification.",
+    "notifInvite": " vous a invité sur le projet ",
+    "notifBtnAccept":"Accepter",
+    "notifBtnRefuse":"Refuser",
+    "notifBtnCancel":"Annuler",
+    "requestAccepted": "Requête acceptée avec succès.",
+    "requestRefused": "Requête refusée avec succès.",
+    "requestErrorUser": "Erreur: utilisateur introuvable.",
+    "requestErrorAlreadySent": "Une requête a déjà été envoyée à cet utilisateur.",
+    "requestSent": "Requête envoyé avec succès"
   }
 }

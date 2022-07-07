@@ -6,6 +6,7 @@
 }
 
 .form-new-project {
+  background-color: var(--bg-secondary);
   box-shadow: var(--shadow);
   border-radius: 8px;
   display: flex;

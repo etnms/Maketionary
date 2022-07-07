@@ -5,6 +5,10 @@
 .subtitle {
   font-size: 0.8rem;
 }
+
+.req-text {
+  word-wrap: break-word;
+}
 .list-notif {
   display: flex;
   gap: 0.8rem;
@@ -35,6 +39,7 @@
 }
 
 .btn-refuse {
+  border: none !important;
   background-color: var(--red);
   color: var(--color-text);
 }
@@ -50,8 +55,15 @@
   font-size: 1.2rem;
   border-radius: 16px;
   cursor: pointer;
+  border: 2px solid #424242;
 }
 
 .btn-cancel:hover {
   background-color: var(--bg-secondary-selected);
+}
+
+@media (max-width: 900px) {
+  .title {
+    font-size: 1.4rem;
+  }
 }

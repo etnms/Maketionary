@@ -12,6 +12,9 @@ const getAccessToken = (req, res) => {
     if (result === null ) return res.sendStatus(401);
     jwt.verify(token, process.env.REFRESH_TOKEN, (err, authData) => {
       if (err) {
+        Token.findOneAndDelete({token}, (err, result) => {
+          if (err) return res.sendStatus(500);
+        });
         return res.sendStatus(401);
       }
       const accessToken = generateAccessToken(authData.user);
@@ -24,7 +27,7 @@ const logOut = (req, res) => {
   const refreshToken = req.body.refreshToken;
   const token = refreshToken.split(" ")[1];
   Token.findOneAndDelete({ token }, (err) => {
-    if (err) return res.status(500).json("error deleting token");
+    if (err) return res.status(500).json("Error deleting token");
     return res.sendStatus(200);
   });
 };

@@ -71,7 +71,7 @@ const ListWords = () => {
     adapter
       .get(`/word/${projectID}`)
       .then((res) => {
-        dispatch(updateWordList(res.data.results.words));
+        dispatch(updateWordList(res.data.words));
       })
       .catch();
   }, [projectID, dispatch]);
@@ -105,6 +105,7 @@ const ListWords = () => {
 
   const filterResults = () => {
     if (filteredResults === undefined) return;
+    if (filteredResults.length === 0) return <p className={styles["no-result"]}>{t("main.noResult")}</p>
     return filteredResults!.map((word: IWordDb) => (
       <Word
         key={word._id}

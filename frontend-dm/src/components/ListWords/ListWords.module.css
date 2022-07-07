@@ -43,6 +43,12 @@
   box-shadow: none;
 }
 
+.no-result {
+  text-align: center;
+  margin: 0.5rem;
+  font-size: 1.1rem;
+}
+
 .selected {
   transition: 300ms;
   transform: scale(1.01);

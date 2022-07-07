@@ -17,7 +17,7 @@ export const arrayWordSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    updateWordList: (state, action: PayloadAction<Array<IWordDb>>) => {
+    updateWordList: (state, action: PayloadAction<IWordDb[]>) => {
       state.value = action.payload;
     },
     addWord: (state, action: PayloadAction<IWordDb>) => {

@@ -1,0 +1,5 @@
+.message {
+    color: var(--green);
+    width: 80%;
+    text-align: center;
+}

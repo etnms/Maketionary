@@ -3,7 +3,6 @@ import styles from "./ListWordsNavigation.module.css";
 import stylesFilter from "./FilterLetter.module.css";
 import { IWordDb } from "../../interfaces/interfaceWord";
 
-
 interface IWordPerPages {
   lengthArrayFiltered: number;
   numberItemsPerPage: number;
@@ -12,6 +11,7 @@ interface IWordPerPages {
   setSelectionSecond: Function;
   filteredResults: IWordDb[];
 }
+
 const ListWordsNavigation = (props: React.PropsWithChildren<IWordPerPages>) => {
   const {
     lengthArrayFiltered,
@@ -80,7 +80,6 @@ const ListWordsNavigation = (props: React.PropsWithChildren<IWordPerPages>) => {
           );
         if (activePage > nbPages!) {
           setActivePage(nbPages! - 1);
-          //updateSelection(nbPages!)
           return (
             <button
               key={"pages" + i}

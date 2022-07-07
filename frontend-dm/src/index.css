@@ -36,6 +36,7 @@ html[data-color-scheme="light"] {
   --red-icon: #e6514e;
   --red: #cc3939;
   --red-hover: #ba3434;
+  --green: #24871F;
 }
 html[data-color-scheme="dark"] {
   color-scheme: dark;
@@ -60,6 +61,7 @@ html[data-color-scheme="dark"] {
   --red-icon: #ff5a56;
   --red: #fc4747;
   --red-hover: #FF5B59;
+  --green: #2FB028;
 }
 
 * {

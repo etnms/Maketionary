@@ -1,6 +1,5 @@
-import React from "react";
-import settingsStyle from "./Settings.module.css";
 import styles from "./DownloadWindow.module.css";
+import pageStyles from "../styles/PageOverlay.module.css";
 import Loader from "./Loaders/Loader";
 import CloseIcon from "@mui/icons-material/Close";
 import { NavigateFunction, useNavigate } from "react-router-dom";
@@ -25,7 +24,7 @@ const DownloadWindow = () => {
   return (
     <div className={styles.download}>
       <div className={styles["download-box"]}>
-        <button onClick={closeWindow} className={settingsStyle["btn-close"]}>
+        <button onClick={closeWindow} className={pageStyles["btn-close"]}>
           <CloseIcon />
         </button>
         {errorDownload ? ( // Check for error

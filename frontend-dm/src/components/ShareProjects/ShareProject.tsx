@@ -5,6 +5,10 @@ import adapter from "../../helpers/axiosAdapter";
 import pageStyles from "../../styles/PageOverlay.module.css";
 import styles from "./ShareProject.module.css";
 import CloseIcon from "@mui/icons-material/Close";
+import ErrorMessage from "../ErrorMessage";
+import { useState } from "react";
+import ConfirmMessage from "../ConfirmMessage";
+import Loader from "../Loaders/Loader";
 const ShareProject = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -12,16 +16,46 @@ const ShareProject = () => {
   const projectID: string = useAppSelector((state) => state.projectItem.projectID);
   const projectName: string = useAppSelector((state) => state.projectItem.projectName);
 
+  const [message, setMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const shareProject = () => {
     const user: string = (document.querySelector("input[name='input-share']") as HTMLInputElement).value;
+    setIsLoading(true);
     adapter
       .post(`/shared-projects/${projectID}`, { user })
-      .then((res) => {
-        navigate("/open-project");
+      .then(() => {
+        setIsLoading(false);
+        setMessage(t("shareProject.requestSent"));
+        (document.querySelector("input[name='input-share']") as HTMLInputElement).value = "";
+       
       })
       .catch((err) => {
-        navigate("/open-project");
+        setIsLoading(false);
+        if (err.response.data === "Error: user not found") setMessage(t("shareProject.requestErrorUser"));
+        if (err.response.data === "Error: request already sent")
+          setMessage(t("shareProject.requestErrorAlreadySent"));
+        if (err.response.status === 401) return navigate("/expired");
       });
+  };
+
+  const renderMessage = () => {
+    switch (message) {
+      case "":
+        return null;
+      case t("shareProject.requestErrorUser"):
+        return <ErrorMessage message={message} />;
+      case t("shareProject.requestErrorAlreadySent"):
+        return <ErrorMessage message={message} />;
+      case t("shareProject.requestSent"):
+        return <ConfirmMessage message={message} />;
+      default:
+        return null;
+    }
+  };
+
+  const handleChange = () => {
+    if (message !== "") setMessage("");
   };
 
   return (
@@ -29,22 +63,23 @@ const ShareProject = () => {
       <div className={pageStyles.box}>
         <button className={pageStyles["btn-close"]} onClick={() => navigate("/open-project")}>
           <CloseIcon />
-        </button> 
+        </button>
         <h1 className={styles.title}>
-          Sharing project: <em>{projectName}</em>
+          {t("shareProject.shareTitle")} <em>{projectName}</em>
         </h1>
         <label htmlFor="input-share" className={styles.label}>
-          Username or email of the user you want to share your project with:
+          {t("shareProject.shareInfoText")}
         </label>
-        <input name="input-share" className={styles["input-share"]} />
+        <input name="input-share" className={styles["input-share"]} onChange={handleChange} />
         <span className={styles["wrapper-btns"]}>
           <button className={`${styles.btn} ${styles["btn-confirm"]}`} onClick={shareProject}>
-            Share
+            {t("shareProject.shareBtnShare")}
           </button>
           <button className={styles.btn} onClick={() => navigate("/open-project")}>
-            Cancel
+            {t("shareProject.shareBtnCancel")}
           </button>
         </span>
+        {isLoading? <Loader width={24} height={24}/> : renderMessage()}
       </div>
     </div>
   );

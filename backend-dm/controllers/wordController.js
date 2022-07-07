@@ -24,7 +24,7 @@ const getWord = (req, res) => {
             },
             (err, results) => {
               if (err) return res.sendStatus(500);
-              return res.status(200).json({ results });
+              return res.status(200).json(results);
             }
           );
         }
@@ -60,7 +60,7 @@ const createWord = (req, res) => {
             user: authData._id,
           }).save((err, results) => {
             if (err) return res.status(500).json("Error create word");
-            return res.status(200).json({ results });
+            return res.status(200).json(results);
           });
         }
       }

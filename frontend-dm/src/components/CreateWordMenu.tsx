@@ -48,7 +48,7 @@ const CreateWordMenu = () => {
     adapter
       .post("/word", { word, translation, definition, example, pos, gloss, languageID })
       .then((res) => {
-        dispatch(addWord(res.data.results));
+        dispatch(addWord(res.data));
         setLoading(false);
         // Reset values to default
         (document.querySelector("input[name='word']") as HTMLInputElement).value = "";

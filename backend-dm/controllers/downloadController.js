@@ -84,7 +84,7 @@ const downloadRTF = (req, res) => {
         stream.on("finish", () => {
           return res.download(file, filename, (err) => {
             if (err) {
-              res.status(500).json({ error: "Error downloading file" });
+              res.status(500).json( "Error downloading file" );
             }
             // If no error then delete file from server
             else fs.unlinkSync(file);
@@ -190,7 +190,7 @@ const downloadDocx = (req, res) => {
           fs.writeFileSync(file, buffer);
           return res.download(file, filename, (err) => {
             if (err) {
-              res.status(500).json({ error: "Error downloading file" });
+              res.status(500).json( "Error downloading file" );
             }
             // If no error then delete file from server
             else fs.unlinkSync(file);
@@ -254,7 +254,7 @@ const downloadXML = (req, res) => {
         stream.on("finish", () => {
           return res.download(file, filename, (err) => {
             if (err) {
-              res.status(500).json({ error: "Error downloading file" });
+              res.status(500).json( "Error downloading file" );
             }
             // If no error then delete file from server
             else fs.unlinkSync(file);

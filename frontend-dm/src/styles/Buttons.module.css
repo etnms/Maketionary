@@ -40,7 +40,7 @@
 .btn-cancel {
   background-color: var(--bg-secondary);
   cursor: pointer;
-  border: 2px solid black !important;
+  border: 2px solid #424242 !important;
   font-family: var(--second-font);
 }
 

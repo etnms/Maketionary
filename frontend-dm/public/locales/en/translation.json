@@ -40,6 +40,8 @@
     "signout": "Sign out"
   },
   "projects": {
+    "allProjects": "All projects",
+    "sharedProjects": "Shared projects",
     "newProjectTitle": "New project",
     "openProjectTitle": "Open project",
     "loading": "Loading your projects...",
@@ -70,7 +72,8 @@
     "pos": "POS",
     "gloss": "Gloss",
     "noProjectOpen": "No project is currently open.",
-    "sortText": "Sort by:"
+    "sortText": "Sort by:",
+    "noResult": "No result found."
   },
   "selectPOS" : {
     "noun": "Noun",
@@ -144,6 +147,21 @@
     "errorDownload": "Error while downloading file. Please try again."
   },
   "shareProject": {
-
+    "shareTitle": "Sharing project: ",
+    "shareInfoText": "Username or email of the user you want to share your project with:",
+    "shareBtnShare": "Share",
+    "shareBtnCancel": "Cancel",
+    "notifTitle": "Shared projects notifications",
+    "notifSubtitle": "Double click to select a request",
+    "notifNoNotif": "You have no notification",
+    "notifInvite": " invited you on the project ",
+    "notifBtnAccept":"Accept",
+    "notifBtnRefuse":"Refuse",
+    "notifBtnCancel":"Cancel",
+    "requestAccepted": "Request succesfully accepted.",
+    "requestRefused": "Request succesfully refused.",
+    "requestErrorUser": "Error: user not found.",
+    "requestErrorAlreadySent": "Request already sent to this user.",
+    "requestSent": "Request successfully sent."
   }
 }

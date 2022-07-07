@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { setSearchInput } from "../features/searchSlice";
 import Loader from "../components/Loaders/Loader";
 import adapter from "../helpers/axiosAdapter";
+import ErrorMessage from "../components/ErrorMessage";
 
 const OpenProject = () => {
   const navigate = useNavigate();
@@ -22,9 +23,10 @@ const OpenProject = () => {
   const projectID = useAppSelector((state) => state.projectItem.projectID);
   const projectName = useAppSelector((state) => state.projectItem.projectName);
 
-  const [listSelected, setListSelected] = useState<string>("personal");
+  const [listSelected, setListSelected] = useState<string>("all");
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -38,7 +40,7 @@ const OpenProject = () => {
     adapter
       .get(`/language/${listSelected}`)
       .then((res) => {
-        setLanguageList(res.data.results.languages);
+        setLanguageList(res.data.languages);
         setLoading(false);
       })
       .catch(() => {
@@ -50,7 +52,7 @@ const OpenProject = () => {
   const displayListProject = () => {
     if (languageList.length === 0) return <span>{t("projects.noProjects")}</span>;
     return languageList.map((language) => (
-      <ProjectItem key={language._id} _id={language._id} name={language.name} />
+      <ProjectItem key={language._id} _id={language._id} name={language.name} setErrorMessage={setErrorMessage} owner={language.owner}/>
     ));
   };
 
@@ -84,11 +86,11 @@ const OpenProject = () => {
       <span className={styles.tab}>
         <button
           className={`${styles["tab-nav"]} ${styles["tab-selected"]}`}
-          onClick={(e) => selectTab(e, "personal")}>
-          My projects
+          onClick={(e) => selectTab(e, "all")}>
+          {t("projects.allProjects")}
         </button>
         <button className={styles["tab-nav"]} onClick={(e) => selectTab(e, "collab")}>
-          Shared projects
+        {t("projects.sharedProjects")}
         </button>
       </span>
       <div className={styles.menu}>
@@ -101,6 +103,7 @@ const OpenProject = () => {
         ) : (
           <ul className={styles["list-link"]}>{displayListProject()}</ul>
         )}
+        {errorMessage === "" ? null : <ErrorMessage message={errorMessage} />}
         <span className={buttons["wrapper-btns"]}>
           {languageList.length === 0 ? null : (
             <button onClick={() => openProject(projectID, projectName)} className={buttons["btn-open"]}>

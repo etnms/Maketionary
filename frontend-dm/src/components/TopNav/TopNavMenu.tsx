@@ -136,7 +136,6 @@ const TopNavMenu = () => {
       })
       .catch((err) => {
         dispatch(setErrorDownload(true));
-        console.log(err);
       });
   };
 

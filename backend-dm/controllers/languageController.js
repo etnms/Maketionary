@@ -9,40 +9,61 @@ const getLanguage = (req, res) => {
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(401);
-    if (type === "personal") {
+    if (type === "all") {
       User.findById(authData._id).exec((err, result) => {
-        if (err) return res.status(400).json({ error: "Error login" });
+        if (err) return res.status(500).json("Error login");
         else
           async.parallel(
             {
               languages: (callback) => {
-                Language.find({ user: result }).populate("name").exec(callback);
+                Language.find({ $or: [{ user: result }, { guestUser: result }] })
+                  .lean()
+                  .exec(callback);
               },
             },
             (err, results) => {
               if (err) {
-                return res.sendStatus(500).json({err});
+                return res.sendStatus(500).json(err);
               }
-              return res.status(200).json({ results });
+              results.languages.forEach((item) => {
+                if (item.user.toString() === authData._id) item.owner = true;
+                else item.owner = false;
+              });
+              return res.status(200).json(results);
             }
           );
       });
     }
     if (type === "collab") {
       User.findById(authData._id).exec((err, result) => {
-        if (err) return res.status(400).json({ error: "Error login" });
+        if (err) return res.status(500).json("Error login");
         else
           async.parallel(
             {
               languages: (callback) => {
-                Language.find({ guestUser: result }).populate("name").exec(callback);
+                //Language.find({ $or: [{ user: result }, { guestUser: result }] })
+                //.lean()
+                //.exec(callback);
+                Language.find({
+                  $or: [
+                    { $and: [{ user: result }, { guestUser: { $exists: true } }] },
+                    { guestUser: result },
+                  ],
+                })
+                  .lean()
+                  .exec(callback);
               },
             },
             (err, results) => {
               if (err) {
-                return res.sendStatus(500).json({err});
+                return res.status(500).json(err);
               }
-              return res.status(200).json({ results });
+              results.languages.forEach((item) => {
+                if (item.user.toString() === authData._id) item.owner = true;
+                else item.owner = false;
+              });
+
+              return res.status(200).json(results);
             }
           );
       });
@@ -86,13 +107,13 @@ const deletelanguage = (req, res) => {
       return res.sendStatus(401);
     } else {
       // Delete language project
-      Language.findByIdAndDelete({ _id }, (err, result) => {
-        if (err) return res.status(500).json({ error: "Error deleting collection" });
+      Language.findOne({ _id, user: authData }, (err, result) => {
+        if (err) return res.status(500).json("Error deleting collection");
         else {
           // Delete each word that were associated with the project
           // Otherwise the words would still exist in the DB
           Word.deleteMany({ language: result }, (err, result) => {
-            if (err) return res.status(500).json({ error: "Error deleting" });
+            if (err) return res.status(500).json("Error deleting");
             else {
               return res.status(200).json({ message: "Successfully deleted" });
             }
@@ -108,16 +129,17 @@ const editLanguage = (req, res) => {
   const name = req.body.newName;
 
   // Prevent long name
-  if (name.length > 30) return res.status(400).json({ error: "Name too long" });
+  if (name.length > 30) return res.status(400).json("Name too long");
 
-  jwt.verify(req.token, process.env.ACCESS_TOKEN, (err) => {
+  jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) {
       return res.sendStatus(401);
     }
-    Language.findByIdAndUpdate({ _id }, { name }, (err) => {
+    Language.findOneAndUpdate({ _id, user: authData }, { name }, (err, results) => {
       if (err) {
-        return res.status(500).json({ error: "Problem renaming project" });
+        return res.status(500).json("Problem renaming project");
       }
+      if (results === null || results === undefined) return res.status(400).json("Not authorized");
       return res.status(200).json({ message: "Project name updated" });
     });
   });

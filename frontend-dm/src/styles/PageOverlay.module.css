@@ -15,7 +15,7 @@
 
 .box {
   position: sticky;
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-tertiary);
   border-radius: 8px;
   display: flex;
   align-items: center;

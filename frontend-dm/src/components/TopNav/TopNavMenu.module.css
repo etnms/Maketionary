@@ -16,6 +16,7 @@
   display: flex;
   align-items: center;
   font-family: var(--font);
+
 }
 
 .btn-settings {
@@ -56,13 +57,6 @@
   text-align: left;
 }
 
-.wrapper-user {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
 .nav-btn:hover {
   background-color: var(--bg-secondary-selected);
 }
@@ -71,4 +65,6 @@
   .wrapper-nav {
     flex-direction: column;
   }
+
+  
 }
