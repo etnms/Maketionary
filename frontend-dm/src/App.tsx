@@ -15,6 +15,7 @@ import Settings from "./components/Settings";
 import DownloadWindow from "./components/DownloadWindow";
 import ShareProject from "./components/ShareProjects/ShareProject";
 import ReceivedRequestMenu from "./components/ShareProjects/ReceivedRequestMenu";
+import ProjectInformation from "./components/ShareProjects/ProjectInformation";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/new-project" element={<NewProjectMenu />} />
           <Route path="/open-project" element={<OpenProject />}>
+            <Route path="project-info" element={<ProjectInformation/>}/>
             <Route path="share-project" element={<ShareProject/>}/>
           </Route>
           <Route path="/expired" element={<ExpiredSession />} />

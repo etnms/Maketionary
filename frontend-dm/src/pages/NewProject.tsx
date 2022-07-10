@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import styles from "../styles/ProjectMenu.module.css";
+import styles from "../styles/NewProject.module.css";
 import buttons from "../styles/Buttons.module.css";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

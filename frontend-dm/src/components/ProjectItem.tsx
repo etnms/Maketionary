@@ -6,14 +6,15 @@ import styles from "../styles/OpenProject.module.css";
 import { IProjectItem } from "../interfaces/interfaceProjectItem";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import confirmDeleteStyle from "./ConfirmDelete.module.css";
-import { setProjectID, setProjectName } from "../features/projectItemSlice";
+import { setProjectGuests, setProjectID, setProjectName, setProjectOwner } from "../features/projectItemSlice";
 import { useTranslation } from "react-i18next";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import adapter from "../helpers/axiosAdapter";
 import ShareIcon from "@mui/icons-material/Share";
+import InfoIcon from '@mui/icons-material/Info';
 
 const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
-  const { _id, owner, name, setErrorMessage } = props;
+  const { _id, user, guestUser, owner, name, setErrorMessage } = props;
 
   const [projectValue, setProjectValue] = useState<string>(name);
 
@@ -66,6 +67,8 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
     setEdit(false);
     dispatch(setProjectID(_id));
     dispatch(setProjectName(name));
+    dispatch(setProjectOwner(user));
+    dispatch(setProjectGuests(guestUser));
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLLIElement>, _id: string, name: string) => {
@@ -94,6 +97,7 @@ const ProjectItem = (props: React.PropsWithChildren<IProjectItem>) => {
       ) : (
         `${projectValue}`
       )}
+      {stateID === _id? <button className={styles["info-btn"]} onClick={() => navigate("project-info")}><InfoIcon/></button> : null}
       {stateID === _id && owner ? (
         <span className={styles["wrapper-edit-btns"]}>
           {edit ? (

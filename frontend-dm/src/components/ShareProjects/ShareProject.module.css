@@ -1,16 +1,16 @@
 .label {
-    width: 100%;
+  width: 100%;
 }
 
 .input-share {
-    outline: none;
-    font-size: 1.2rem;
-    border-radius: 8px;
-    border: 2px solid var(--secondary);
-    padding: 0.2rem;
+  outline: none;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  border: 2px solid var(--secondary);
+  padding: 0.2rem;
 }
 .input-share:focus {
-    box-shadow: var(--shadow-secondary);
+  box-shadow: var(--shadow-secondary);
 }
 
 .wrapper-btns {
@@ -25,6 +25,7 @@
   font-size: 1.3rem;
   border-radius: 4px;
   cursor: pointer;
+  border: 2px solid #424242;
 }
 
 .btn:hover {
@@ -37,7 +38,6 @@
   color: white;
 }
 
-
 .btn-confirm:hover {
-    background-color: var(--primary-hover);
+  background-color: var(--primary-hover);
 }

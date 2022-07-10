@@ -9,6 +9,7 @@
 .req-text {
   word-wrap: break-word;
 }
+
 .list-notif {
   display: flex;
   gap: 0.8rem;

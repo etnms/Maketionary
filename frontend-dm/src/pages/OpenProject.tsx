@@ -17,7 +17,6 @@ const OpenProject = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  //const access = localStorage.getItem("token");
   const [languageList, setLanguageList] = useState<IProjectItem[]>([]);
 
   const projectID = useAppSelector((state) => state.projectItem.projectID);
@@ -52,11 +51,20 @@ const OpenProject = () => {
   const displayListProject = () => {
     if (languageList.length === 0) return <span>{t("projects.noProjects")}</span>;
     return languageList.map((language) => (
-      <ProjectItem key={language._id} _id={language._id} name={language.name} setErrorMessage={setErrorMessage} owner={language.owner}/>
+      <ProjectItem
+        key={language._id}
+        user={language.user}
+        guestUser={language.guestUser}
+        _id={language._id}
+        name={language.name}
+        setErrorMessage={setErrorMessage}
+        owner={language.owner}
+      />
     ));
   };
 
   const selectTab = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, value: string) => {
+    dispatch(setProjectID(""));
     const prevSelected = document.querySelector(`.${styles["tab-selected"]}`);
     prevSelected?.classList.remove(styles["tab-selected"]);
     e.currentTarget.classList.add(styles["tab-selected"]);
@@ -90,7 +98,7 @@ const OpenProject = () => {
           {t("projects.allProjects")}
         </button>
         <button className={styles["tab-nav"]} onClick={(e) => selectTab(e, "collab")}>
-        {t("projects.sharedProjects")}
+          {t("projects.sharedProjects")}
         </button>
       </span>
       <div className={styles.menu}>

@@ -1,0 +1,99 @@
+.title {
+  font-size: 1.8rem;
+  word-wrap: break-word;
+  width: 100%;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+}
+
+.btn {
+  padding: 0.4rem 1.1rem;
+  background-color: var(--bg-secondary);
+  font-size: 1.3rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 2px solid #424242;
+}
+
+.btn:hover {
+  background-color: var(--bg-secondary-selected);
+}
+
+.btn-confirm {
+  background-color: var(--red);
+  color: var(--color-text);
+}
+
+.btn-confirm:hover {
+  background-color: var(--red-hover);
+}
+
+.btn-refuse {
+  background-color: var(--bg-secondary);
+  border: 2px solid #424242 !important;
+}
+.btn-refuse:hover {
+  background-color: var(--bg-secondary-selected);
+}
+
+.btn-confirm,
+.btn-refuse {
+  cursor: pointer;
+}
+
+.list-guests {
+  overflow-y: auto;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  list-style: none;
+  margin: 0.3rem;
+}
+
+.guest {
+  padding: 0.3rem;
+  box-shadow: var(--shadow-item);
+  width: 80%;
+  border-radius: 5px;
+  word-wrap: break-word;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.guest-text {
+  word-wrap: break-word;
+  max-width: 80%;
+  text-align: left;
+}
+
+.remove-text {
+  font-size: 1rem;
+}
+
+.remove-btn {
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  background-color: var(--red);
+  color: var(--color-text);
+  width: 20%;
+  border: none;
+}
+
+.remove-btn:hover {
+  background-color: var(--red-hover);
+}
+
+@media (max-width:900px) {
+  .guest {
+    flex-direction: column;
+  }
+  .remove-btn {
+    width: 60%;
+  }
+}

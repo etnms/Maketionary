@@ -19,7 +19,10 @@ const shareProjectRequest = (req, res) => {
       CollabRequest.findOne({ project: id, requestedUser: result }, (err, results) => {
         if (err) return res.sendStatus(500);
         if (results !== null) return res.status(400).json("Error: request already sent");
-        else {
+        Language.findOne({_id: id, guestUser: result }, (err, languageResult) => {
+          if (err) return res.sendStatus(500);
+          if (languageResult !== null)
+            return res.status(400).json("Error: user already in project");
           new CollabRequest({
             project: id,
             sender: authData.username,
@@ -28,7 +31,7 @@ const shareProjectRequest = (req, res) => {
             if (err) return res.status(500).json("Error db");
             return res.sendStatus(200);
           });
-        }
+        });
       });
     });
   });
@@ -78,4 +81,18 @@ const answerRequest = (req, res) => {
   });
 };
 
-export { answerRequest, checkRequests, shareProjectRequest };
+const removeUserFromProject = (req, res) => {
+  const _id = req.params.id;
+  const user = req.body.idUserToRemove;
+  console.log(user)
+  jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
+    if (err) return res.sendStatus(401);
+    Language.findByIdAndUpdate({_id}, {$pull: {guestUser: user}}, (err, result) => {
+      if (err) return res.sendStatus(500);
+      return res.status(200).json("Success")
+    } )
+  })
+
+}
+
+export { answerRequest, checkRequests, shareProjectRequest, removeUserFromProject };

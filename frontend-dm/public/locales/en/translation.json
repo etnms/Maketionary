@@ -51,7 +51,10 @@
     "cancelBtn": "Cancel",
     "deleteConfirmText": "Are you sure you want to delete the following project:",
     "yesBtn": "Yes",
-    "noBtn": "No"
+    "noBtn": "No",
+    "projectText": "Project",
+    "ownerText": "Owner: ",
+    "contributorsText": "Contributors: "
   },
   "newWord": {
     "title": "Add new word",
@@ -127,6 +130,7 @@
     "editConfirm" : "edit confirm",
     "delete" : "delete",
     "share": "share",
+    "information": "information",
     "searchBar" : "search bar",
     "searchIcon": "search filtering"
   },
@@ -162,6 +166,11 @@
     "requestRefused": "Request succesfully refused.",
     "requestErrorUser": "Error: user not found.",
     "requestErrorAlreadySent": "Request already sent to this user.",
-    "requestSent": "Request successfully sent."
+    "requestUserThere": "User already part of the project.",
+    "requestSent": "Request successfully sent.",
+    "removeUserText": "Remove user",
+    "confirmRemoveText": "Are you sure you want to remove the following user from the project:",
+    "successRemove": "Success! The user was removed from the project.",
+    "failureRemove": "Error: the user could not be removed from the project."
   }
 }

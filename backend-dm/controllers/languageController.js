@@ -17,6 +17,9 @@ const getLanguage = (req, res) => {
             {
               languages: (callback) => {
                 Language.find({ $or: [{ user: result }, { guestUser: result }] })
+                  .populate({path: "guestUser", select: "-email -password -__v"})
+                  .populate({path: "user", select: "-email -password -__v"})
+                  .select("-__v")
                   .lean()
                   .exec(callback);
               },
@@ -26,7 +29,7 @@ const getLanguage = (req, res) => {
                 return res.sendStatus(500).json(err);
               }
               results.languages.forEach((item) => {
-                if (item.user.toString() === authData._id) item.owner = true;
+                if (item.user._id.toString() === authData._id) item.owner = true;
                 else item.owner = false;
               });
               return res.status(200).json(results);
@@ -41,9 +44,6 @@ const getLanguage = (req, res) => {
           async.parallel(
             {
               languages: (callback) => {
-                //Language.find({ $or: [{ user: result }, { guestUser: result }] })
-                //.lean()
-                //.exec(callback);
                 Language.find({
                   $or: [
                     { $and: [{ user: result }, { guestUser: { $exists: true } }] },

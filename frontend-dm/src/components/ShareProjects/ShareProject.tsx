@@ -9,6 +9,7 @@ import ErrorMessage from "../ErrorMessage";
 import { useState } from "react";
 import ConfirmMessage from "../ConfirmMessage";
 import Loader from "../Loaders/Loader";
+
 const ShareProject = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -28,13 +29,14 @@ const ShareProject = () => {
         setIsLoading(false);
         setMessage(t("shareProject.requestSent"));
         (document.querySelector("input[name='input-share']") as HTMLInputElement).value = "";
-       
       })
       .catch((err) => {
         setIsLoading(false);
         if (err.response.data === "Error: user not found") setMessage(t("shareProject.requestErrorUser"));
         if (err.response.data === "Error: request already sent")
           setMessage(t("shareProject.requestErrorAlreadySent"));
+        if (err.response.data === "Error: user already in project")
+          setMessage(t("shareProject.requestUserThere"));
         if (err.response.status === 401) return navigate("/expired");
       });
   };
@@ -43,6 +45,8 @@ const ShareProject = () => {
     switch (message) {
       case "":
         return null;
+      case t("shareProject.requestUserThere"):
+        return <ErrorMessage message={message} />;
       case t("shareProject.requestErrorUser"):
         return <ErrorMessage message={message} />;
       case t("shareProject.requestErrorAlreadySent"):
@@ -79,7 +83,7 @@ const ShareProject = () => {
             {t("shareProject.shareBtnCancel")}
           </button>
         </span>
-        {isLoading? <Loader width={24} height={24}/> : renderMessage()}
+        {isLoading ? <Loader width={24} height={24} /> : renderMessage()}
       </div>
     </div>
   );

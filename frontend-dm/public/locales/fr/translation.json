@@ -34,7 +34,7 @@
     "exportPdf": "Exporter en pdf",
     "settings": "Paramètres",
     "search": "Chercher",
-    "filterBy": "Filtrer par:",
+    "filterBy": "Filtrer par :",
     "current": "Projet : ",
     "welcome": "Bienvenue, ",
     "signout": "Se déconnecter"
@@ -51,7 +51,10 @@
     "cancelBtn": "Annuler",
     "deleteConfirmText": "Etes-vous sur de vouloir supprimer le projet suivant:",
     "yesBtn": "Oui",
-    "noBtn": "Non"
+    "noBtn": "Non",
+    "projectText": "Projet",
+    "ownerText": "Auteur: ",
+    "contributorsText": "Contributeurs : "
   },
   "newWord": {
     "title": "Ajouter un mot",
@@ -72,7 +75,7 @@
     "pos": "PDD",
     "gloss": "Glose",
     "noProjectOpen": "Aucun projet n'est ouvert pour le moment.",
-    "sortText": "Trier par:",
+    "sortText": "Trier par :",
     "noResult": "Aucun résultat trouvé."
   },
   "selectPOS" : {
@@ -96,22 +99,22 @@
     "column": "Colonne"
   },
   "errorMessages": {
-    "emptyFields": "Erreur: l'un des champs est vide.",
-    "errorIncorrectAuthCreds": "Erreur: nom d'utilisateur ou mot de passe incorrect.",
-    "errorEmptyUsername": "Erreur: nom d'utilisateur est vide",
-    "errorExistingUsername": "Erreur: ce nom d'utilisateur n'est pas disponible.",
-    "errorExistingEmail": "Erreur: cet email est déjà utilisé.",
-    "errorEmptyEmail": "Erreur: vous devez entrer une adresse email.",
-    "errorPasswordLength": "Erreur: votre mot de passe doit être long d'au minimum 6 caractères.",
-    "errorPasswordCharacters":  "Erreur: votre mot de passe doit contenir au moins 1 lettre majuscule, 1 lettre minuscule, 1 chiffre et 1 caractère spécial.",
-    "errorPasswordMatch": "Erreur: les mots de passes ne correspondent pas.",
-    "errorNameTooLong": "Erreur: le nom du projet est trop long.",
-    "errorProjectNameEmpty" : "Erreur: le nom est vide.",
-    "errorWord": "Erreur: le champt mot ne peut pas être vide.",
+    "emptyFields": "Erreur : l'un des champs est vide.",
+    "errorIncorrectAuthCreds": "Erreur : nom d'utilisateur ou mot de passe incorrect.",
+    "errorEmptyUsername": "Erreur : nom d'utilisateur est vide",
+    "errorExistingUsername": "Erreur : ce nom d'utilisateur n'est pas disponible.",
+    "errorExistingEmail": "Erreur : cet email est déjà utilisé.",
+    "errorEmptyEmail": "Erreur : vous devez entrer une adresse email.",
+    "errorPasswordLength": "Erreur : votre mot de passe doit être long d'au minimum 6 caractères.",
+    "errorPasswordCharacters":  "Erreur : votre mot de passe doit contenir au moins 1 lettre majuscule, 1 lettre minuscule, 1 chiffre et 1 caractère spécial.",
+    "errorPasswordMatch": "Erreur : les mots de passes ne correspondent pas.",
+    "errorNameTooLong": "Erreur : le nom du projet est trop long.",
+    "errorProjectNameEmpty" : "Erreur : le nom est vide.",
+    "errorWord": "Erreur : le champt mot ne peut pas être vide.",
     "errorWordDb": "Erreur lors de l'ajout du mot, veuillez réessayer.",
-    "errorInvalidEmail": "Erreur: cette adresse email n'est pas valide.",
-    "errorEditWord": "Erreur: il y a eu un problème, veuillez réessayer.",
-    "errorProblem": "Erreur inattendue: veuillez réessayer."
+    "errorInvalidEmail": "Erreur : cette adresse email n'est pas valide.",
+    "errorEditWord": "Erreur : il y a eu un problème, veuillez réessayer.",
+    "errorProblem": "Erreur inattendue : veuillez réessayer."
   },
   "expired": {
     "title": "Votre session a expiré.",
@@ -127,6 +130,7 @@
     "editConfirm" : "confirmer les changements",
     "delete" : "supprimer",
     "share" : "partager",
+    "information": "information",
     "searchBar" : "barre de recherche",
     "searchIcon": "Filtrer une recherche"
   },
@@ -160,8 +164,13 @@
     "notifBtnCancel":"Annuler",
     "requestAccepted": "Requête acceptée avec succès.",
     "requestRefused": "Requête refusée avec succès.",
-    "requestErrorUser": "Erreur: utilisateur introuvable.",
+    "requestErrorUser": "Erreur : utilisateur introuvable.",
     "requestErrorAlreadySent": "Une requête a déjà été envoyée à cet utilisateur.",
-    "requestSent": "Requête envoyé avec succès"
+    "requestUserThere": "Cet utilisateur fait déjà parti du projet.",
+    "requestSent": "Requête envoyé avec succès",
+    "removeUserText": "Supprimer l'utilisateur",
+    "confirmRemoveText": "Etes-vous sûr de vouloir supprimer l'utilisateur suivant du projet:",
+    "successRemove": "Succès! l'utilisateur a été enlevé du projet.",
+    "failureRemove": "Erreurr : l'utilisateur n'a pas pu être enlevé du projet."
   }
 }

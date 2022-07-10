@@ -37,7 +37,7 @@
 }
 
 .tab-nav:hover {
-  background-color:var(--bg-secondary-selected);
+  background-color: var(--bg-secondary-selected);
 }
 
 .tab-selected {
@@ -65,7 +65,7 @@
   align-items: center;
   max-height: 60%;
   overflow-y: auto;
-  width: 70%;
+  width: 90%;
 }
 
 .language-li {
@@ -79,10 +79,12 @@
   border: 2px solid var(--main);
   border-radius: 4px;
   font-size: 1.2rem;
-  min-width: 20vw;
+  min-width: 60%;
+  max-width: 95%;
   transition: 300ms;
   gap: 0.5rem;
   word-break: break-all;
+  position: relative;
 }
 
 .language-li:focus-visible {
@@ -128,12 +130,32 @@
   color: white;
 }
 
+.info-btn {
+  position: absolute;
+  background-color: transparent;
+  border: none;
+  left: -10%;
+  top: 20%;
+  transition: 300ms;
+  cursor: pointer;
+}
+
 .edit-btn:hover,
-.delete-btn:hover {
+.delete-btn:hover,
+.info-btn:hover {
   transform: scale(1.1);
   transition: 300ms;
 }
 
+@media (max-width: 1200px) {
+  .info-btn {
+    left: -15%
+  }
+  .language-li {
+    min-width: 50%;
+    max-width: 60%;
+  }
+}
 @media (max-width: 800px) {
   .menu {
     width: 80vw;
@@ -145,3 +167,21 @@
     min-width: 30vw;
   }
 }
+
+@media (max-width: 550px) {
+  .language-li {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 500px) {
+  .info-btn {
+    left: -19%
+  }
+}
+@media (max-width: 400px) {
+  .info-btn {
+    left: -15%
+  }
+}
+
