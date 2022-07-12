@@ -29,6 +29,7 @@ const Home = () => {
       // If token is valid then set username and firstConnection to false
       // firstConnection makes sure that the api is not called twice (in dashboard)
       dispatch(setUsername(res.data));
+      sessionStorage.setItem("username", res.data)
       dispatch(setFirstConnection(false));
       navigate("/dashboard");
     })
