@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import styles from "./ListWordsNavigation.module.css";
 import stylesFilter from "./FilterLetter.module.css";
 import { IWordDb } from "../../interfaces/interfaceWord";
+import { useTranslation } from "react-i18next";
 
 interface IWordPerPages {
   lengthArrayFiltered: number;
@@ -22,6 +23,7 @@ const ListWordsNavigation = (props: React.PropsWithChildren<IWordPerPages>) => {
     filteredResults,
   } = props;
 
+  const {t} = useTranslation();
   const [activePage, setActivePage] = useState<number>(0);
 
   const numberPages = useCallback(() => {
@@ -94,11 +96,11 @@ const ListWordsNavigation = (props: React.PropsWithChildren<IWordPerPages>) => {
   return (
     <>
       <span>
-        Pages: {pagesLinks()}{" "}
+        {t("main.pages")} {pagesLinks()}{" "}
         <button className={styles["btn-disabled"]} disabled>
           {"..."}
         </button>{" "}
-        <span>Go to </span>
+        <span>{t("main.goTo")}</span>
         <select
           className={styles["select-number-words"]}
           value={activePage}
@@ -107,7 +109,7 @@ const ListWordsNavigation = (props: React.PropsWithChildren<IWordPerPages>) => {
         </select>
       </span>
       <div className={styles["bottom-options"]}>
-        Maximum number of words per pages:{" "}
+      {t("main.itemPages")}
         <select
           onChange={(e) => updateNumberItemsPage(parseInt(e.currentTarget.value))}
           defaultValue={parseInt(localStorage.getItem("nbItemPage")!) || 100}

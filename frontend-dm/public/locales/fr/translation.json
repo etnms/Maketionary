@@ -76,7 +76,11 @@
     "gloss": "Glose",
     "noProjectOpen": "Aucun projet n'est ouvert pour le moment.",
     "sortText": "Trier par :",
-    "noResult": "Aucun résultat trouvé."
+    "filterByLetter": "Filtrer par lettre : ",
+    "noResult": "Aucun résultat trouvé.",
+    "pages": "Pages",
+    "goTo": "Aller à ",
+    "itemPages": "Nombre maximum d'entrées par page : "
   },
   "selectPOS" : {
     "noun": "Nom",

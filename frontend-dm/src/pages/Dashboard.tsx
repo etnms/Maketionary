@@ -37,6 +37,7 @@ const Dashboard = () => {
           // Request for username
           dispatch(setUsername(res.data));
           sessionStorage.setItem("username", res.data)
+          console.log("hey")
           // If user has refreshed the page (the state) then set frstConnection back to false after response from server
           dispatch(setFirstConnection(false));
         })

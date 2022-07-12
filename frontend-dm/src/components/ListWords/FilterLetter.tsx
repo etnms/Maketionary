@@ -3,9 +3,11 @@ import { setSearchFilter, setSearchInput } from "../../features/searchSlice";
 import letters from "../../data/letters.json";
 import styles from "./FilterLetter.module.css";
 import { Dispatch } from "redux";
+import { useTranslation } from "react-i18next";
 
 const FilterLetter = () => {
   const dispatch: Dispatch<any> = useAppDispatch();
+  const {t} = useTranslation();
   const searchInput: string = useAppSelector((state) => state.search.searchInput);
 
   const filterByLetter = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, searchValue: string) => {
@@ -35,7 +37,7 @@ const FilterLetter = () => {
 
   return (
     <div className={styles.list}>
-      <span>Filter by letter:</span>
+      <span>{t("main.filterByLetter")}</span>
       <span>{letterLinks()}</span>
     </div>
   );
