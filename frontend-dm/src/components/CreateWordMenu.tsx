@@ -10,6 +10,7 @@ import Loader from "./Loaders/Loader";
 import useWindowResize from "../helpers/useWindowResize";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import adapter from "../helpers/axiosAdapter";
+import socketIOClient from "socket.io-client";
 
 const CreateWordMenu = () => {
   const dispatch: Dispatch<any> = useAppDispatch();
@@ -21,6 +22,9 @@ const CreateWordMenu = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const createWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+
+    const socket = socketIOClient(`${process.env.REACT_APP_ENDPOINT}`);
+
     e.preventDefault();
     // Get all parameters
     // Remove any upper case letters for word/translation
@@ -57,9 +61,10 @@ const CreateWordMenu = () => {
         (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value = "";
         (document.querySelector("select[name='pos']") as HTMLSelectElement).value = "";
         (document.querySelector("select[name='gloss']") as HTMLSelectElement).value = "";
+        
+        socket.emit("msg", res.data);
       })
       .catch((err) => {
-        console.log(err);
         setLoading(false);
         if (err.response.status === 401) return navigate("/expired");
         if (err.response.data === "Error empty field") return setErrorMessage(t("errorMessages.errorWord"));

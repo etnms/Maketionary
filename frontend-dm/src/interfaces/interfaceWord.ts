@@ -6,6 +6,7 @@ export default interface IWord {
   example: string;
   pos: string;
   gloss: string;
+  user: string
 }
 
 export interface IWordDb {
@@ -17,5 +18,6 @@ export interface IWordDb {
   translation: string,
   word: string,
   __v: string,
-  _id: string
+  _id: string,
+  user: string
 }

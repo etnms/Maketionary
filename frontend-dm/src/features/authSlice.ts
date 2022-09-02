@@ -3,14 +3,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // Define a type for the slice state
 interface IAuth {
   firstConnection: boolean;
-
   username: string;
 }
 
 // Define the initial state using that type
 const initialState: IAuth = {
   firstConnection: true,
-
   username: "",
 };
 

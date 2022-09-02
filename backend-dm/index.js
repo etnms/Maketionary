@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import { Server } from "socket.io";
+import http from "http";
 import { login, signup } from "./routes/authRoute.js";
 import { dashboard } from "./routes/dashboardRoute.js";
 import { deleteLanguageRoute, editLanguageRoute, getlanguageRoute, postLanguageRoute } from "./routes/languageRoute.js";
@@ -27,6 +29,7 @@ app.use(
     allowDots: true,
   }),
 );
+
 
 dotenv.config();
 
@@ -67,10 +70,42 @@ app.use("/", checkRequestsRoute);
 app.use("/", answerRequestRoute);
 app.use("/", removeUserRoute)
 
-const server = app.listen(PORT, () => {
-  console.log(`app is listening on port ${PORT}`);
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
 });
 
-server;
+io.on("connection", (socket) => {
 
+  socket.on("join", (args) => {
+    socket.join(args)
+    })
+    
+  socket.on("msg", (args) => {
+    socket.broadcast.to(args.language._id).emit("msg", {room:args.language._id, args: args});
+    socket.leave(args.language._id)
+    //io.emit('chat message', args);
+    //socket.broadcast.emit("msg", args);
+  })
+  
+  socket.on("delete", (word) => {
+    socket.broadcast.to(word.language).emit("delete", {room: word.language, word: word});
+    socket.leave(word.language);
+  })
+
+  socket.on("update", (word) => {
+    socket.broadcast.to(word.language).emit("update", {room: word.language, word: word});
+    socket.leave(word.language);
+  })
+  
+  
+  socket.on("disconnect", () => {
+    //console.log("Client disconnected");
+
+  })
+});
+server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 server.setTimeout(45000);

@@ -10,9 +10,9 @@ import LoaderPage from "../components/Loaders/LoaderPage";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { Dispatch } from "redux";
 import adapter from "../helpers/axiosAdapter";
+import socketIOClient from "socket.io-client";
 
 const Dashboard = () => {
-
   const projectID: string | null = localStorage.getItem("project");
 
   const { t } = useTranslation();
@@ -21,6 +21,8 @@ const Dashboard = () => {
 
   const username: string = useAppSelector((state) => state.auth.username);
   const firstConnection: boolean = useAppSelector((state) => state.auth.firstConnection);
+
+  const socket = socketIOClient(`${process.env.REACT_APP_ENDPOINT}`);
 
   useEffect(() => {
     document.title = "Maketionary";
@@ -35,13 +37,15 @@ const Dashboard = () => {
         .get("/dashboard")
         .then((res) => {
           // Request for username
-          dispatch(setUsername(res.data));
+          dispatch(setUsername(res.data.username));
           // If user has refreshed the page (the state) then set frstConnection back to false after response from server
           dispatch(setFirstConnection(false));
         })
-        .catch(() => {navigate("/expired")});   
-  }
-  }, [dispatch, firstConnection, navigate]);
+        .catch(() => {
+          navigate("/expired");
+        });
+    }
+  }, [dispatch, firstConnection, navigate, socket]);
 
   const renderDashboard = () => {
     if (username === "") return <LoaderPage />;

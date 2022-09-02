@@ -73,10 +73,13 @@ const deleteWord = (req, res) => {
 
   jwt.verify(req.token, process.env.ACCESS_TOKEN, (err, authData) => {
     if (err) return res.sendStatus(401);
-    Word.findOneAndDelete({ _id, user: authData._id }, (err) => {
-      if (err) return res.status(500).json({ message: "Error deleting word" });
-      return res.status(200).json({ message: "Word deleted" });
-    });
+    Word.findOneAndDelete(
+      { _id, $or: [{ user: authData._id }, { guestUser: authData._id }] },
+      (err, result) => {
+        if (err) return res.status(500).json({ message: "Error deleting word" });
+        return res.status(200).json(result);
+      }
+    );
   });
 };
 
@@ -93,13 +96,15 @@ const updateWord = (req, res) => {
     if (err) return res.sendStatus(401);
     else {
       Word.findOneAndUpdate(
-        { _id, user: authData._id },
-        { word, translation, definition, example, pos, gloss },
-        (err) => {
+        { _id, $or: [{ user: authData._id }, { guestUser: authData._id }] },
+        { word, translation, definition, example, pos, gloss }
+      )
+        .lean()
+        .exec((err, result) => {
           if (err) return res.sendStatus(401);
-          return res.status(200).json({ message: "Word was updated" });
-        }
-      );
+          const obj = { ...result, word, translation, definition, example, pos, gloss };
+          return res.status(200).json(obj);
+        });
     }
   });
 };

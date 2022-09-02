@@ -15,9 +15,12 @@ import { NavigateFunction, useNavigate } from "react-router-dom";
 import Loader from "../Loaders/Loader";
 import adapter from "../../helpers/axiosAdapter";
 import CancelIcon from "@mui/icons-material/Cancel";
+import socketIOClient from "socket.io-client";
 
 const Word = (props: React.PropsWithChildren<IWord>) => {
-  const { _id, word, translation, definition, example, pos, gloss } = props;
+  const { _id, word, translation, definition, example, pos, gloss, user } = props;
+
+  const userid: string | null = sessionStorage.getItem("userid");
 
   const navigate: NavigateFunction = useNavigate();
   const { t } = useTranslation();
@@ -25,8 +28,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   // Setting
   const columnDisplay: boolean = useAppSelector((state) => state.settings.inLineDisplay);
   // Rerender when change in the settings
-  useEffect(() => {
-  }, [columnDisplay]);
+  useEffect(() => {}, [columnDisplay]);
 
   const listWord: IWordDb[] = useAppSelector((state) => state.arrayWords.value);
   // Using global state to determine the status of the edit mode
@@ -42,7 +44,12 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     pos,
     gloss,
     _id,
+    user
   });
+
+  useEffect(() => {
+    setWordObject({ word, translation, definition, example, pos, gloss, _id, user });
+  }, [word, translation, definition, example, pos, gloss, _id, user]);
 
   const resetValue = useRef(wordObject);
 
@@ -73,15 +80,17 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   };
 
   const deleteWord = () => {
+    const socket = socketIOClient(`${process.env.REACT_APP_ENDPOINT}`);
     setIsLoading(true);
     adapter
       .delete(`/word/${_id}`)
-      .then(() => {
+      .then((res) => {
         // Filter list to remove deleted item
         const updatedList: IWordDb[] = listWord.filter((word: IWord) => word._id !== _id);
         // Update the list for new render
         dispatch(updateWordList(updatedList));
         setIsLoading(false);
+        socket.emit("delete", res.data);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -96,6 +105,8 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   };
 
   const updateWord = () => {
+    const socket = socketIOClient(`${process.env.REACT_APP_ENDPOINT}`);
+
     setIsLoading(true);
     // Updating a word function
     // This function does not uppercase/lowercase entries as opposed to the create word one
@@ -113,7 +124,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
 
     adapter
       .put(`/word/${_id}`, { word, translation, definition, example, pos, gloss })
-      .then(() => {
+      .then((res) => {
         resetValue.current.word = word;
         resetValue.current.definition = translation;
         resetValue.current.translation = definition;
@@ -122,6 +133,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
         resetValue.current.pos = pos;
         dispatch(setEditMode(false));
         setIsLoading(false);
+        socket.emit("update", res.data);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -178,7 +190,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   // Render list element
   return (
     <li
-      className={styles.listitem}
+      className={`${styles.listitem} ${user === userid? "" : styles.collabitem}` }
       onDoubleClick={(e) => selectLine(e)}
       tabIndex={0}
       onKeyDown={(e) => handleKeypress(e)}>

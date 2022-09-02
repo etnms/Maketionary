@@ -12,6 +12,7 @@ import { Dispatch } from "redux";
 import DisplayOptions from "./DisplayOptions";
 import adapter from "../../helpers/axiosAdapter";
 import ListWordsNavigation from "./ListWordsNavigation";
+import { io } from "socket.io-client";
 
 const ListWords = () => {
   const projectID: string | null = localStorage.getItem("project");
@@ -65,6 +66,51 @@ const ListWords = () => {
   // Setting
   const columnDisplay: boolean = useAppSelector((state) => state.settings.inLineDisplay);
   // Rerender when change in the settings
+
+  useEffect(() => {
+    console.log("hey");
+    const socket = io(`${process.env.REACT_APP_ENDPOINT}`);
+    socket.emit("join", localStorage.getItem("project")!);
+
+    socket.on("msg", (msg: any) => {
+      console.log(msg);
+      dispatch(updateWordList([...listWords].concat(msg.args)));
+    });
+
+    socket.on("delete", (word: any) => {
+      console.log(word);
+      dispatch(updateWordList([...listWords.filter((item: any) => item._id !== word.word._id)]));
+    });
+
+    socket.on("update", (word: any) => {
+      console.log("updated", word);
+      dispatch(
+        updateWordList([
+          ...listWords.map((item: any) => {
+            if (item._id === word.word._id) {
+              return {
+                ...item,
+                word: word.word.word,
+                translation: word.word.translation,
+                definition: word.word.definition,
+                example: word.word.example,
+                pos: word.word.pos,
+                gloss: word.word.gloss,
+              };
+            }
+            else return item;
+          }),
+        ])
+      );
+    });
+
+    return () => {
+      socket.off("msg");
+      socket.off("delete");
+      socket.off("update");
+    };
+  }, [dispatch, listWords]);
+
   useEffect(() => {}, [columnDisplay]);
 
   useEffect(() => {
@@ -105,7 +151,8 @@ const ListWords = () => {
 
   const filterResults = () => {
     if (filteredResults === undefined) return;
-    if (filteredResults.length === 0) return <p className={styles["no-result"]}>{t("main.noResult")}</p>
+    if (filteredResults.length === 0) return <p className={styles["no-result"]}>{t("main.noResult")}</p>;
+
     return filteredResults!.map((word: IWordDb) => (
       <Word
         key={word._id}
@@ -116,6 +163,7 @@ const ListWords = () => {
         example={word.example}
         pos={word.pos}
         gloss={word.gloss}
+        user = {word.user}
       />
     ));
   };

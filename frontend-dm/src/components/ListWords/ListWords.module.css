@@ -191,6 +191,10 @@
   height: 60vh;
 }
 
+.collabitem {
+  border: 2px solid var(--quaternary);
+  border-radius: 8px;
+}
 
 @media (max-width: 950px) {
   .main {
