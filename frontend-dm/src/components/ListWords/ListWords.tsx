@@ -68,7 +68,6 @@ const ListWords = () => {
   // Rerender when change in the settings
 
   useEffect(() => {
-    console.log("hey");
     const socket = io(`${process.env.REACT_APP_ENDPOINT}`);
     socket.emit("join", localStorage.getItem("project")!);
 
