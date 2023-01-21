@@ -1,0 +1,180 @@
+{
+  "home": {
+    "title": "Maketionary",
+    "subtitle": "Create your own dictionaries. Anytime. Anywhere. For free.",
+    "getStarted": "Get started"
+  },
+  "login": {
+    "title": "Login",
+    "username": "Username",
+    "password": "Password",
+    "tooltip": "Passwords contain at least 6 characters, including 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.",
+    "loginBtn": "Login",
+    "homeBtn": "Home"
+  },
+  "signup": {
+    "title": "Sign up",
+    "email": "Email",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "tooltip": "Passwords must contain at least 6 characters, including 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.",
+    "signupBtn": "Sign up",
+    "homeBtn": "Home"
+  },
+  "nav": {
+    "file": "File",
+    "newProject": "New project",
+    "openProject": "Open project",
+    "export": "Export",
+    "exportJson": "Export as json",
+    "exportRtf": "Export as rtf",
+    "exportDocx": "Export as docx",
+    "exportXml": "Export as xml",
+    "exportPdf": "Export as pdf",
+    "settings": "Settings",
+    "search": "Search",
+    "filterBy": "Filter by:",
+    "current": "Current project: ",
+    "welcome": "Welcome, ",
+    "signout": "Sign out"
+  },
+  "projects": {
+    "allProjects": "All projects",
+    "sharedProjects": "Shared projects",
+    "newProjectTitle": "New project",
+    "openProjectTitle": "Open project",
+    "loading": "Loading your projects...",
+    "noProjects": "No project",
+    "createBtn": "Create",
+    "openBtn": "Open",
+    "cancelBtn": "Cancel",
+    "deleteConfirmText": "Are you sure you want to delete the following project:",
+    "yesBtn": "Yes",
+    "noBtn": "No",
+    "projectText": "Project",
+    "ownerText": "Owner: ",
+    "contributorsText": "Contributors: "
+  },
+  "newWord": {
+    "title": "Add new word",
+    "word": "Word",
+    "translation": "Translation",
+    "definition": "Definition",
+    "example": "Example",
+    "pos": "Part of speech",
+    "gloss": "Gloss",
+    "addWordBtn": "Add word"
+  },
+  "main": {
+    "numberEntries": "Number of entries: ",
+    "word": "Word",
+    "translation": "Translation",
+    "definition": "Definition",
+    "example": "Example",
+    "pos": "POS",
+    "gloss": "Gloss",
+    "noProjectOpen": "No project is currently open.",
+    "sortText": "Sort by:",
+    "filterByLetter": "Filter by letter: ",
+    "noResult": "No result found.",
+    "pages": "Pages",
+    "goTo": "Go to ",
+    "itemPages": "Maximum number of entries per page: "
+  },
+  "selectPOS" : {
+    "noun": "Noun",
+    "verb": "Verb",
+    "pronoun": "Pronoun",
+    "adjective": "Adjective",
+    "adverb" : "Adverb",
+    "interjection": "Interjection",
+    "preposition" : "Preposition",
+    "conjunction": "Conjuntion",
+    "determiner": "Determiner",
+    "number": "Number"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme:",
+    "language": "Language:",
+    "display": "Display",
+    "inLine": "Line",
+    "column": "Column"
+  },
+  "errorMessages": {
+    "emptyFields": "Error: one of the fields is empty.",
+    "errorIncorrectAuthCreds": "Error: incorrect username or password.",
+    "errorEmptyUsername": "Error: username is empty",
+    "errorExistingUsername": "Error: username is not available.",
+    "errorExistingEmail": "Error: email is already being used.",
+    "errorEmptyEmail": "Error: you need to enter an email adress.",
+    "errorPasswordLength": "Error: your password needs to be at least 6 characters long.",
+    "errorPasswordCharacters":  "Error: your password must contain 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.",
+    "errorPasswordMatch": "Error: passwords need to match.",
+    "errorNameTooLong": "Error: the name of the project is too long.",
+    "errorProjectNameEmpty" : "Error: the name is empty.",
+    "errorWord": "Error: the word field cannot be empty.",
+    "errorWordDb": "Error while adding word, please try again.",
+    "errorInvalidEmail": "Error: this email is not valid.",
+    "errorEditWord": "Error: there was a problem, please try again.",
+    "errorProblem": "Unexpected error: please try again."
+  },
+  "expired": {
+    "title": "Your session has expired.",
+    "redirectP1": "You will be redirected in ",
+    "redirectP2": " second(s)."
+  },
+  "404": {
+    "title": "This page does not exist.",
+    "btnHome": "Home"
+  },
+  "ariaLabels": {
+    "edit": "edit",
+    "editConfirm" : "edit confirm",
+    "delete" : "delete",
+    "share": "share",
+    "information": "information",
+    "searchBar" : "search bar",
+    "searchIcon": "search filtering"
+  },
+  "pageTitles": {
+    "login": "Maketionary - Login",
+    "signup": "Maketionary - Sign up",
+    "newProject": "Maketionary - New project",
+    "openProject": "Maketionary - Open project",
+    "expiredSession": "Session expired",
+    "pageNotFound": "404 - Page not found"
+  },
+  "loading": {
+    "title": "Loading Maketionary"
+  },
+  "download": {
+    "text": "Preparing your file. This may take a moment.",
+    "noDownload": "No file to download.",
+    "errorDownload": "Error while downloading file. Please try again."
+  },
+  "shareProject": {
+    "shareTitle": "Sharing project: ",
+    "shareInfoText": "Username or email of the user you want to share your project with:",
+    "shareBtnShare": "Share",
+    "shareBtnCancel": "Cancel",
+    "notifTitle": "Shared projects notifications",
+    "notifSubtitle": "Double click to select a request",
+    "notifNoNotif": "You have no notification",
+    "notifInvite": " invited you on the project ",
+    "notifBtnAccept":"Accept",
+    "notifBtnRefuse":"Refuse",
+    "notifBtnCancel":"Cancel",
+    "requestAccepted": "Request succesfully accepted.",
+    "requestRefused": "Request succesfully refused.",
+    "requestErrorUser": "Error: user not found.",
+    "requestErrorAlreadySent": "Request already sent to this user.",
+    "requestUserThere": "User already part of the project.",
+    "requestSent": "Request successfully sent.",
+    "removeUserText": "Remove user",
+    "confirmRemoveText": "Are you sure you want to remove the following user from the project:",
+    "successRemove": "Success! The user was removed from the project.",
+    "failureRemove": "Error: the user could not be removed from the project."
+  }
+}
