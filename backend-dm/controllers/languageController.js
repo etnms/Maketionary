@@ -29,6 +29,7 @@ const getLanguage = (req, res) => {
                 return res.sendStatus(500).json(err);
               }
               results.languages.forEach((item) => {
+                if (item.user === null) return res.status(500).json("Error"); 
                 if (item.user._id.toString() === authData._id) item.owner = true;
                 else item.owner = false;
               });
