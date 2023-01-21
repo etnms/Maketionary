@@ -29,7 +29,7 @@ const Signup = () => {
       .value;
 
     axios
-      .post(`${process.env.REACT_APP_BACKEND}/api/signup`, { email, username, password, confirmPassword })
+      .post("https://maketionary-backend.onrender.com/api/signup", { email, username, password, confirmPassword })
       .then((res) => {
         if (res.data.message === "User created") {
           // Remove project parameters for new connexion

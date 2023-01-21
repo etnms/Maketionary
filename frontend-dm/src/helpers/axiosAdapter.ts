@@ -4,7 +4,7 @@ import refreshAccessToken from "./refreshAccessToken";
 const accessToken: string = sessionStorage.getItem("accessToken")!;
 
 const adapter = axios.create({
-  baseURL: `${process.env.REACT_APP_BACKEND}/api`,
+  baseURL: "https://maketionary-backend.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
     authorization: accessToken,

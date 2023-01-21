@@ -22,7 +22,7 @@ const Dashboard = () => {
   const username: string = useAppSelector((state) => state.auth.username);
   const firstConnection: boolean = useAppSelector((state) => state.auth.firstConnection);
 
-  const socket = socketIOClient(`${process.env.REACT_APP_ENDPOINT}`);
+  const socket = socketIOClient("https://maketionary-backend.onrender.com");
 
   useEffect(() => {
     document.title = "Maketionary";

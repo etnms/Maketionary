@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import NewProjectMenu from "./pages/NewProject";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -22,7 +22,7 @@ function App() {
     // Suspense for the sole purpose of having a fallback while waiting on translations
     <Suspense fallback={<HomeLoader/>}>
     <Provider store={store}>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />}>
@@ -41,7 +41,7 @@ function App() {
           <Route path="/404" element={<PageNotFound />} />
           <Route path="*" element={<Navigate replace to="/404" />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </Provider>
     </Suspense>
   );

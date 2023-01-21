@@ -80,7 +80,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   };
 
   const deleteWord = () => {
-    const socket = socketIOClient(`${process.env.REACT_APP_ENDPOINT}`);
+    const socket = socketIOClient("https://maketionary-backend.onrender.com");
     setIsLoading(true);
     adapter
       .delete(`/word/${_id}`)
@@ -105,7 +105,7 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   };
 
   const updateWord = () => {
-    const socket = socketIOClient(`${process.env.REACT_APP_ENDPOINT}`);
+    const socket = socketIOClient("https://maketionary-backend.onrender.com");
 
     setIsLoading(true);
     // Updating a word function

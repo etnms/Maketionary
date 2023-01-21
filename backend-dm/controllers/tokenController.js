@@ -6,7 +6,9 @@ const getAccessToken = (req, res) => {
   const refreshToken = req.body.refreshToken;
 
   if (refreshToken === null) return res.sendStatus(401);
+
   const token = refreshToken.split(" ")[1];
+  
   Token.findOne({ token }, (err, result) => {
     if (err) return res.sendStatus(500);
     if (result === null ) return res.sendStatus(401);

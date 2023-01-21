@@ -25,7 +25,7 @@ const Login = () => {
     const username = (document.querySelector("input[name='username']") as HTMLInputElement).value;
     const password = (document.querySelector("input[name='password']") as HTMLInputElement).value;
     axios
-      .post(`${process.env.REACT_APP_BACKEND}/api/login`, { username, password })
+      .post("https://maketionary-backend.onrender.com/api/login", { username, password })
       .then((res) => {
         // Remove project parameters for new connexion
         localStorage.removeItem("project");

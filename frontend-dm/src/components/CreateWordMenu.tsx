@@ -23,7 +23,7 @@ const CreateWordMenu = () => {
 
   const createWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 
-    const socket = socketIOClient(`${process.env.REACT_APP_ENDPOINT}`);
+    const socket = socketIOClient("https://maketionary-backend.onrender.com");
 
     e.preventDefault();
     // Get all parameters

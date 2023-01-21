@@ -68,7 +68,7 @@ const ListWords = () => {
   // Rerender when change in the settings
 
   useEffect(() => {
-    const socket = io(`${process.env.REACT_APP_ENDPOINT}`);
+    const socket = io("https://maketionary-backend.onrender.com");
     socket.emit("join", localStorage.getItem("project")!);
 
     socket.on("msg", (msg: any) => {
