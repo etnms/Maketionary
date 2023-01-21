@@ -3,7 +3,7 @@
 ## Description
 Maketionary is a web application that allows you to create dictionaries. You can work alone or in team to create language dictionaries. You can create multiple projects, work with others in real time, or export your dictionaries in multiple formats (.docx, .json, .pdf etc.).
 
-![Maketionary homepage](./readme_files/maketionary_screen2.png "Homepage")
+![Maketionary homepage](./readme_files/maketionary_screenshot.png "Homepage")
 
 ## Features
 - Signup/Login, with token authentication
@@ -16,7 +16,7 @@ Maketionary is a web application that allows you to create dictionaries. You can
 - Notification for team projects: you can be notified when someones invited you on their project
 - Light theme/dark theme
 
-![Maketionary dashboard](./readme_files/maketionary_screen2.png "Dashboard")
+![Maketionary dashboard](./readme_files/maketionary_screenshot2.png "Dashboard")
 ## Available in different languages
 Maketionary has supports multilingual interfaces. As of now it is available in the following:
 - English
