@@ -1,6 +1,6 @@
 # Maketionary - A dictionnary maker webapp
 
-Demo: [Maketionary](https://etnms.github.io/Maketionary/)
+### [Demo](https://etnms.github.io/Maketionary/)
 
 ## Description
 Maketionary is a web application that allows you to create dictionaries. You can work alone or in team to create language dictionaries. You can create multiple projects, work with others in real time, or export your dictionaries in multiple formats (.docx, .json, .pdf etc.).
