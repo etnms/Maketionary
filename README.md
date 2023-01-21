@@ -26,4 +26,5 @@ Maketionary has supports multilingual interfaces. As of now it is available in t
 - NodeJS
 - MongoDB 
 - Typescript/Javascript (ReactJS)
+- Redux
 - CSS
