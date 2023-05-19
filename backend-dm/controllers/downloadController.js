@@ -8,6 +8,7 @@ import pkg from "docx";
 import { translateTextDocument } from "../helpers/translateTextDocument.js";
 const { Document, Packer, Paragraph, TextRun } = pkg;
 
+// download JSON format
 const downloadJSON = (req, res) => {
   const projectID = req.query.projectID;
   const lang = req.query.lang;
@@ -30,6 +31,7 @@ const downloadJSON = (req, res) => {
   });
 };
 
+// Download rtf file
 const downloadRTF = (req, res) => {
   const projectID = req.query.projectID;
   const lang = req.query.lang;
@@ -68,8 +70,7 @@ const downloadRTF = (req, res) => {
         // Loop through each word and write with stream
         sortedArray.forEach((el) => {
           stream.write(
-            `{\\pard{\\b ${el.word}} (${translatePos(el.pos, lang)}) ${
-              el.translation
+            `{\\pard{\\b ${el.word}} (${translatePos(el.pos, lang)}) ${el.translation
             } ${translateTextDocument("definition", lang)}: ${el.definition} {${translateTextDocument(
               "example",
               lang
@@ -84,7 +85,7 @@ const downloadRTF = (req, res) => {
         stream.on("finish", () => {
           return res.download(file, filename, (err) => {
             if (err) {
-              res.status(500).json( "Error downloading file" );
+              res.status(500).json("Error downloading file");
             }
             // If no error then delete file from server
             else fs.unlinkSync(file);
@@ -190,7 +191,7 @@ const downloadDocx = (req, res) => {
           fs.writeFileSync(file, buffer);
           return res.download(file, filename, (err) => {
             if (err) {
-              res.status(500).json( "Error downloading file" );
+              res.status(500).json("Error downloading file");
             }
             // If no error then delete file from server
             else fs.unlinkSync(file);
@@ -239,10 +240,8 @@ const downloadXML = (req, res) => {
         // Loop through each word and write with stream
         sortedArray.forEach((el) => {
           stream.write(
-            `\n<Entry><Word>${el.word}</Word><Translation>${el.translation}</Translation><Definition>${
-              el.definition
-            }</Definition><Example>${el.example}</Example><POS>${translatePos(el.pos, lang)}</POS><Gloss>${
-              el.gloss
+            `\n<Entry><Word>${el.word}</Word><Translation>${el.translation}</Translation><Definition>${el.definition
+            }</Definition><Example>${el.example}</Example><POS>${translatePos(el.pos, lang)}</POS><Gloss>${el.gloss
             }</Gloss></Entry>`
           );
         });
@@ -254,7 +253,7 @@ const downloadXML = (req, res) => {
         stream.on("finish", () => {
           return res.download(file, filename, (err) => {
             if (err) {
-              res.status(500).json( "Error downloading file" );
+              res.status(500).json("Error downloading file");
             }
             // If no error then delete file from server
             else fs.unlinkSync(file);
@@ -308,8 +307,74 @@ const downloadPDF = (req, res) => {
   });
 };
 
-const downloadLaTeX = (req, res) => {
-  
+// Download latex format
+
+// First generate latex content
+const generateLaTeXContent = (data, lang) => {
+  let content = "";
+  data.forEach((word) => {
+    content += `\\newline \\textbf{${word.word}}: ${word.translation} (${translatePos(word.pos, lang)}). Definition: ${word.definition}. Example: ${word.example}`;
+  });
+
+  return content;
 }
 
-export { downloadDocx, downloadJSON, downloadPDF, downloadRTF, downloadXML };
+const downloadLatex = (req, res) => {
+  const projectID = req.query.projectID;
+  const lang = req.query.lang;
+
+  // Get the path
+  const cwd = process.cwd();
+  const path = `${cwd}\\downloads\\`;
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path);
+  }
+
+  const date = Date.now();
+  const filename = `${projectID}${date}.tex`;
+  const file = `${path}\\${filename}`;
+
+  jwt.verify(req.token, process.env.ACCESS_TOKEN, (err) => {
+    if (err) return res.sendStatus(401);
+    async.parallel(
+      {
+        words: (callback) => {
+          // Callback to get each word, then remove non-required field for users with select
+          Word.find({ language: projectID }).select("-_id -language -__v").exec(callback);
+        },
+      },
+      (err, results) => {
+        if (err) return res.sendStatus(500);
+        // Sort the array by words
+        const sortedArray = results.words.sort((a, b) => (a.word > b.word ? 1 : a.word === b.word ? 0 : -1));
+        // Generate LaTeX content
+        const latexContent = generateLaTeXContent(sortedArray, lang);
+
+        // Generate LaTeX document
+        const latexDocument = `\\documentclass[12pt]{article}\\begin{document} 
+        \\title {Dictionary} \\  ${latexContent}\\end{document}`;
+
+        const stream = fs.createWriteStream(file, { flags: "a" });
+
+        stream.write(
+          latexDocument
+        );
+
+        stream.end();
+
+        // Once the stream is over then download file
+        stream.on("finish", () => {
+          return res.download(file, filename, (err) => {
+            if (err) {
+              res.status(500).json("Error downloading file");
+            }
+            // If no error then delete file from server
+            else fs.unlinkSync(file);
+          });
+        });
+      }
+    );
+  });
+};
+
+export { downloadDocx, downloadJSON, downloadPDF, downloadRTF, downloadXML, downloadLatex };

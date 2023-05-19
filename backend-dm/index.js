@@ -23,7 +23,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.FRONTEND, // process.env.FRONTEND
+    origin: process.env.FRONTEND,
   })
 );
 

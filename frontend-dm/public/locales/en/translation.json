@@ -32,6 +32,7 @@
     "exportDocx": "Export as docx",
     "exportXml": "Export as xml",
     "exportPdf": "Export as pdf",
+    "exportLatex": "Export as LaTeX",
     "settings": "Settings",
     "search": "Search",
     "filterBy": "Filter by:",

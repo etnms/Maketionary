@@ -190,6 +190,11 @@ const TopNavMenu = () => {
             onClick={() => downloadFile(token!, projectID!, projectName!, "pdf", "blob", "text/plain")}>
             {t("nav.exportPdf")}
           </button>
+          <button
+            className={styles["nav-btn"]}
+            onClick={() => downloadFile(token!, projectID!, projectName!, "tex", "blob", "text/plain")}>
+            {t("nav.exportLatex")}
+          </button>
         </div>
       </span>
       <button onClick={() => navigate("settings")} className={styles["btn-settings"]}>
