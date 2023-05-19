@@ -13,6 +13,9 @@ import mongoSanitize from "express-mongo-sanitize"
 import { logOutRoute, tokenRoute } from "./routes/tokenRoute.js";
 import { answerRequestRoute, checkRequestsRoute, removeUserRoute, shareProjectrequestRoute } from "./routes/shareProjectRoute.js";
 
+
+dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT || 8000;
 
@@ -20,7 +23,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.FRONTEND,
+    origin: process.env.FRONTEND, // process.env.FRONTEND
   })
 );
 
@@ -31,7 +34,6 @@ app.use(
 );
 
 
-dotenv.config();
 
 const mongoDb = process.env.MONGOKEY;
 mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });

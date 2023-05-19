@@ -265,7 +265,7 @@ const downloadXML = (req, res) => {
   });
 };
 
-// Download RTF file
+// Download PDf file
 const downloadPDF = (req, res) => {
   const projectID = req.query.projectID;
   const lang = req.query.lang;
@@ -307,5 +307,9 @@ const downloadPDF = (req, res) => {
     );
   });
 };
+
+const downloadLaTeX = (req, res) => {
+  
+}
 
 export { downloadDocx, downloadJSON, downloadPDF, downloadRTF, downloadXML };
