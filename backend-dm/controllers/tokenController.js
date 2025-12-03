@@ -7,13 +7,14 @@ const getAccessToken = (req, res) => {
 
   if (refreshToken === null) return res.sendStatus(401);
   const token = refreshToken.split(" ")[1];
-  
+
+
   Token.findOne({ token }, (err, result) => {
     if (err) return res.sendStatus(500);
-    if (result === null ) return res.sendStatus(401);
+    if (result === null) return res.sendStatus(401);
     jwt.verify(token, process.env.REFRESH_TOKEN, (err, authData) => {
       if (err) {
-        Token.findOneAndDelete({token}, (err, result) => {
+        Token.findOneAndDelete({ token }, (err, result) => {
           if (err) return res.sendStatus(500);
         });
         return res.sendStatus(401);
