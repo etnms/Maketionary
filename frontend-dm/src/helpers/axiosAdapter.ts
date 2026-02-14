@@ -4,7 +4,7 @@ import refreshAccessToken from "./refreshAccessToken";
 const accessToken: string = sessionStorage.getItem("accessToken")!;
 
 const adapter = axios.create({
-  baseURL: `${process.env.REACT_APP_BACKEND}/api`,
+  baseURL: `${import.meta.env.VITE_APP_BACKEND}/api`,
   headers: {
     "Content-Type": "application/json",
     authorization: accessToken,
@@ -18,7 +18,7 @@ adapter.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 const createAxiosResponseIntercepter = (axiosInstance: AxiosInstance) => {
@@ -31,7 +31,7 @@ const createAxiosResponseIntercepter = (axiosInstance: AxiosInstance) => {
       // prevent looping
       if (
         error.response.status === 401 &&
-        originalRequest.url === `${process.env.REACT_APP_BACKEND}/api/token`
+        originalRequest.url === `${import.meta.env.VITE_APP_BACKEND}/api/token`
       ) {
         return Promise.reject(error);
       }
@@ -44,7 +44,7 @@ const createAxiosResponseIntercepter = (axiosInstance: AxiosInstance) => {
         return adapter(originalRequest);
       }
       return Promise.reject(error);
-    }
+    },
   );
 };
 

@@ -22,8 +22,7 @@ const CreateWordMenu = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const createWord = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-
-    const socket = socketIOClient(`${process.env.REACT_APP_ENDPOINT}`);
+    const socket = socketIOClient(`${import.meta.env.VITE_APP_ENDPOINT}`);
 
     e.preventDefault();
     // Get all parameters
@@ -35,47 +34,87 @@ const CreateWordMenu = () => {
       document.querySelector("input[name='translation']") as HTMLInputElement
     ).value.toLowerCase();
     // Uppercase the first letter for definition and examples
-    let definition: string = (document.querySelector("textarea[name='definition']") as HTMLTextAreaElement)
-      .value;
+    let definition: string = (
+      document.querySelector(
+        "textarea[name='definition']",
+      ) as HTMLTextAreaElement
+    ).value;
     // Making sure the field is not empty, if not uppercase it
-    if (definition !== "") definition = definition[0].toUpperCase() + definition.slice(1);
-    let example: string = (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value;
+    if (definition !== "")
+      definition = definition[0].toUpperCase() + definition.slice(1);
+    let example: string = (
+      document.querySelector("textarea[name='example']") as HTMLTextAreaElement
+    ).value;
     // Making sure the field is not empty, if not uppercase it
     if (example !== "") example = example[0].toUpperCase() + example.slice(1);
     //pos and gloss don't require changes since they are select values
-    const pos: string = (document.querySelector("select[name='pos']") as HTMLSelectElement).value;
-    const gloss: string = (document.querySelector("select[name='gloss']") as HTMLSelectElement).value;
+    const pos: string = (
+      document.querySelector("select[name='pos']") as HTMLSelectElement
+    ).value;
+    const gloss: string = (
+      document.querySelector("select[name='gloss']") as HTMLSelectElement
+    ).value;
     //Get the ID
     const languageID: string | null = localStorage.getItem("project");
     // Create loader to wait for answer from the server
     setLoading(true);
     adapter
-      .post("/word", { word, translation, definition, example, pos, gloss, languageID })
+      .post("/word", {
+        word,
+        translation,
+        definition,
+        example,
+        pos,
+        gloss,
+        languageID,
+      })
       .then((res) => {
         dispatch(addWord(res.data));
         setLoading(false);
         // Reset values to default
-        (document.querySelector("input[name='word']") as HTMLInputElement).value = "";
-        (document.querySelector("input[name='translation']") as HTMLInputElement).value = "";
-        (document.querySelector("textarea[name='definition']") as HTMLTextAreaElement).value = "";
-        (document.querySelector("textarea[name='example']") as HTMLTextAreaElement).value = "";
-        (document.querySelector("select[name='pos']") as HTMLSelectElement).value = "";
-        (document.querySelector("select[name='gloss']") as HTMLSelectElement).value = "";
-        
+        (
+          document.querySelector("input[name='word']") as HTMLInputElement
+        ).value = "";
+        (
+          document.querySelector(
+            "input[name='translation']",
+          ) as HTMLInputElement
+        ).value = "";
+        (
+          document.querySelector(
+            "textarea[name='definition']",
+          ) as HTMLTextAreaElement
+        ).value = "";
+        (
+          document.querySelector(
+            "textarea[name='example']",
+          ) as HTMLTextAreaElement
+        ).value = "";
+        (
+          document.querySelector("select[name='pos']") as HTMLSelectElement
+        ).value = "";
+        (
+          document.querySelector("select[name='gloss']") as HTMLSelectElement
+        ).value = "";
+
         socket.emit("msg", res.data);
       })
       .catch((err) => {
         setLoading(false);
         if (err.response.status === 401) return navigate("/expired");
-        if (err.response.data === "Error empty field") return setErrorMessage(t("errorMessages.errorWord"));
-        if (err.response.data === "Error create word") return setErrorMessage(t("errorMessages.errorWordDb"));
+        if (err.response.data === "Error empty field")
+          return setErrorMessage(t("errorMessages.errorWord"));
+        if (err.response.data === "Error create word")
+          return setErrorMessage(t("errorMessages.errorWordDb"));
         else setErrorMessage(t("errorMessages.errorProblem"));
       });
   };
 
   // Handle the change to the word value to remove error message
   const handleWordChange = () => {
-    const word: string = (document.querySelector("input[name='word']") as HTMLInputElement).value;
+    const word: string = (
+      document.querySelector("input[name='word']") as HTMLInputElement
+    ).value;
     if (errorMessage === t("errorMessages.errorWord")) {
       if (word !== "") setErrorMessage("");
     }
@@ -86,7 +125,9 @@ const CreateWordMenu = () => {
   const widthWindow = useWindowResize();
   const [isMenuPhoneOpen, setIsMenuOpen] = useState<boolean>(false);
   // Display the menu fully or close it
-  const displayMobileView = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const displayMobileView = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     e.preventDefault();
     const width = window.innerWidth;
     if (width <= 950) {
@@ -100,7 +141,10 @@ const CreateWordMenu = () => {
     <aside className={styles["create-word"]}>
       <form className={styles["form-word"]}>
         {widthWindow <= 950 ? (
-          <button className={styles["button-show"]} onClick={(e) => displayMobileView(e)}>
+          <button
+            className={styles["button-show"]}
+            onClick={(e) => displayMobileView(e)}
+          >
             {isMenuPhoneOpen ? "-" : "+"}
           </button>
         ) : null}
@@ -133,7 +177,11 @@ const CreateWordMenu = () => {
         </select>
         {errorMessage === "" ? null : <ErrorMessage message={errorMessage} />}
         {!loading ? ( // Loader after word submission
-          <button type="submit" className={styles["btn-submit"]} onClick={(e) => createWord(e)}>
+          <button
+            type="submit"
+            className={styles["btn-submit"]}
+            onClick={(e) => createWord(e)}
+          >
             {t("newWord.addWordBtn")}
           </button>
         ) : (

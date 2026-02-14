@@ -21,7 +21,9 @@ const TopNav = () => {
   const logout = () => {
     const refreshToken: string | null = localStorage.getItem("refreshToken");
     axios
-      .delete(`${process.env.REACT_APP_BACKEND}/api/token`, { data: { refreshToken } })
+      .delete(`${import.meta.env.VITE_APP_BACKEND}/api/token`, {
+        data: { refreshToken },
+      })
       .then()
       .catch();
     localStorage.removeItem("refreshToken");
@@ -43,8 +45,8 @@ const TopNav = () => {
             {t("nav.current")} <em>{projectName}</em>
           </span>
         ) : null}
-        <Notification/>
-        <span>    
+        <Notification />
+        <span>
           {t("nav.welcome")}
           {useAppSelector((state) => state.auth.username)}
         </span>

@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updateWordList } from "../../features/arrayWordsSlice";
@@ -23,22 +29,35 @@ const ListWords = () => {
 
   const [filteredResults, setFilteredResults] = useState<IWordDb[]>();
 
-  const listWords: IWordDb[] = useAppSelector((state) => state.arrayWords.value);
-  const searchInput: string = useAppSelector((state) => state.search.searchInput);
+  const listWords: IWordDb[] = useAppSelector(
+    (state) => state.arrayWords.value,
+  );
+  const searchInput: string = useAppSelector(
+    (state) => state.search.searchInput,
+  );
   // Search bar input and filtering
-  const searchFilter: string = useAppSelector((state) => state.search.searchFilter);
-  const searchTypeFilter: string = useAppSelector((state) => state.search.searchTypeFilter);
+  const searchFilter: string = useAppSelector(
+    (state) => state.search.searchFilter,
+  );
+  const searchTypeFilter: string = useAppSelector(
+    (state) => state.search.searchTypeFilter,
+  );
   // View without search filtering
-  const displayTypeFilter: string = useAppSelector((state) => state.search.displayTypeFilter);
-  const isDescendingFilter: boolean = useAppSelector((state) => state.search.isDescendingFilter);
+  const displayTypeFilter: string = useAppSelector(
+    (state) => state.search.displayTypeFilter,
+  );
+  const isDescendingFilter: boolean = useAppSelector(
+    (state) => state.search.isDescendingFilter,
+  );
 
   // Display pages and number of items per pages
   const [numberItemsPerPage, setNumberItemsPerPage] = useState<number>(
-    parseInt(localStorage.getItem("nbItemPage")!) || 100
+    parseInt(localStorage.getItem("nbItemPage")!) || 100,
   );
   // Selection of items in array
   const [selectionFirst, setSelectionFirst] = useState<number>(0);
-  const [selectionSecond, setSelectionSecond] = useState<number>(numberItemsPerPage);
+  const [selectionSecond, setSelectionSecond] =
+    useState<number>(numberItemsPerPage);
   // Length of current array to display
   const [lengthArrayFiltered, setLengthArrayFiltered] = useState<number>();
 
@@ -47,28 +66,38 @@ const ListWords = () => {
     (array: IWordDb[], typeFilter: string) => {
       if (isDescendingFilter)
         return array.sort((a: any, b: any) =>
-          b[typeFilter] > a[typeFilter] ? 1 : b[typeFilter] === a[typeFilter] ? 0 : -1
+          b[typeFilter] > a[typeFilter]
+            ? 1
+            : b[typeFilter] === a[typeFilter]
+              ? 0
+              : -1,
         );
       else
         return array.sort((a: any, b: any) =>
-          a[typeFilter] > b[typeFilter] ? 1 : a[typeFilter] === b[typeFilter] ? 0 : -1
+          a[typeFilter] > b[typeFilter]
+            ? 1
+            : a[typeFilter] === b[typeFilter]
+              ? 0
+              : -1,
         );
     },
-    [isDescendingFilter]
+    [isDescendingFilter],
   );
 
   // Get the actual sorted array
   const sortedArray: IWordDb[] = useMemo(
     () => createSortedArray([...listWords], displayTypeFilter),
-    [listWords, displayTypeFilter, createSortedArray]
+    [listWords, displayTypeFilter, createSortedArray],
   );
 
   // Setting
-  const columnDisplay: boolean = useAppSelector((state) => state.settings.inLineDisplay);
+  const columnDisplay: boolean = useAppSelector(
+    (state) => state.settings.inLineDisplay,
+  );
   // Rerender when change in the settings
 
   useEffect(() => {
-    const socket = io(`${process.env.REACT_APP_ENDPOINT}`);
+    const socket = io(`${import.meta.env.VITE_APP_ENDPOINT}`);
     socket.emit("join", localStorage.getItem("project")!);
 
     socket.on("msg", (msg: any) => {
@@ -78,7 +107,11 @@ const ListWords = () => {
 
     socket.on("delete", (word: any) => {
       console.log(word);
-      dispatch(updateWordList([...listWords.filter((item: any) => item._id !== word.word._id)]));
+      dispatch(
+        updateWordList([
+          ...listWords.filter((item: any) => item._id !== word.word._id),
+        ]),
+      );
     });
 
     socket.on("update", (word: any) => {
@@ -96,10 +129,9 @@ const ListWords = () => {
                 pos: word.word.pos,
                 gloss: word.word.gloss,
               };
-            }
-            else return item;
+            } else return item;
           }),
-        ])
+        ]),
       );
     });
 
@@ -123,14 +155,18 @@ const ListWords = () => {
 
   useEffect(() => {
     if (searchFilter !== searchInput) {
-      const prevActive: Element | null = document.querySelector(`.${filterStyle.active}`);
+      const prevActive: Element | null = document.querySelector(
+        `.${filterStyle.active}`,
+      );
       prevActive?.classList.remove(filterStyle.active);
     }
     // If else statement solely for UI purposes depending on its size
     if (sortedArray.length < 100) {
       // Copy the sorted array to avoid reference issues & filter
       const filtered: IWordDb[] = [
-        ...sortedArray.filter((word: any) => word[searchTypeFilter].toLowerCase().startsWith(searchInput)),
+        ...sortedArray.filter((word: any) =>
+          word[searchTypeFilter].toLowerCase().startsWith(searchInput),
+        ),
       ];
       const slicedArray = filtered.slice(selectionFirst, selectionSecond);
       setLengthArrayFiltered(filtered.length);
@@ -139,18 +175,28 @@ const ListWords = () => {
     } else {
       startTransition(() => {
         const filtered: IWordDb[] = [
-          ...sortedArray.filter((word: any) => word[searchTypeFilter].toLowerCase().startsWith(searchInput)),
+          ...sortedArray.filter((word: any) =>
+            word[searchTypeFilter].toLowerCase().startsWith(searchInput),
+          ),
         ];
         const slicedArray = filtered.slice(selectionFirst, selectionSecond);
         setLengthArrayFiltered(filtered.length);
         setFilteredResults(slicedArray);
       });
     }
-  }, [sortedArray, searchInput, searchFilter, searchTypeFilter, selectionFirst, selectionSecond]);
+  }, [
+    sortedArray,
+    searchInput,
+    searchFilter,
+    searchTypeFilter,
+    selectionFirst,
+    selectionSecond,
+  ]);
 
   const filterResults = () => {
     if (filteredResults === undefined) return;
-    if (filteredResults.length === 0) return <p className={styles["no-result"]}>{t("main.noResult")}</p>;
+    if (filteredResults.length === 0)
+      return <p className={styles["no-result"]}>{t("main.noResult")}</p>;
 
     return filteredResults!.map((word: IWordDb) => (
       <Word
@@ -162,7 +208,7 @@ const ListWords = () => {
         example={word.example}
         pos={word.pos}
         gloss={word.gloss}
-        user = {word.user}
+        user={word.user}
       />
     ));
   };
@@ -184,7 +230,9 @@ const ListWords = () => {
             {/* Empty element to create space in the view but no need to edit titles*/}
             <div className={styles["wrapper-content"]}>
               <span className={styles.word}>{t("main.word")}</span>
-              <span className={styles.translation}>{t("main.translation")}</span>
+              <span className={styles.translation}>
+                {t("main.translation")}
+              </span>
               <span className={styles.definition}>{t("main.definition")}</span>
               <span className={styles.example}>{t("main.example")}</span>
               <span className={styles.pos}>{t("main.pos")}</span>

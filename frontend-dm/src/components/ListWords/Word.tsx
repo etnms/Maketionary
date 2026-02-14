@@ -18,7 +18,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import socketIOClient from "socket.io-client";
 
 const Word = (props: React.PropsWithChildren<IWord>) => {
-  const { _id, word, translation, definition, example, pos, gloss, user } = props;
+  const { _id, word, translation, definition, example, pos, gloss, user } =
+    props;
 
   const userid: string | null = sessionStorage.getItem("userid");
 
@@ -26,7 +27,9 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   // Setting
-  const columnDisplay: boolean = useAppSelector((state) => state.settings.inLineDisplay);
+  const columnDisplay: boolean = useAppSelector(
+    (state) => state.settings.inLineDisplay,
+  );
   // Rerender when change in the settings
   useEffect(() => {}, [columnDisplay]);
 
@@ -34,7 +37,9 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   // Using global state to determine the status of the edit mode
   // But also checking which word is currently select to show only one edit at a time (for current word)
   const editMode: boolean = useAppSelector((state) => state.editMode.value);
-  const wordToEdit: string = useAppSelector((state) => state.editMode.wordToEdit);
+  const wordToEdit: string = useAppSelector(
+    (state) => state.editMode.wordToEdit,
+  );
 
   const [wordObject, setWordObject] = useState<IWord>({
     word,
@@ -44,11 +49,20 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     pos,
     gloss,
     _id,
-    user
+    user,
   });
 
   useEffect(() => {
-    setWordObject({ word, translation, definition, example, pos, gloss, _id, user });
+    setWordObject({
+      word,
+      translation,
+      definition,
+      example,
+      pos,
+      gloss,
+      _id,
+      user,
+    });
   }, [word, translation, definition, example, pos, gloss, _id, user]);
 
   const resetValue = useRef(wordObject);
@@ -60,33 +74,41 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
     e:
       | React.MouseEvent<HTMLLIElement, MouseEvent>
       | React.KeyboardEvent<HTMLLIElement>
-      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     dispatch(setEditMode(false));
     dispatch(selectWordEdit(_id));
     const el = e.currentTarget;
 
     // Select previous selected element
-    const previousEl: Element | null = document.querySelector(`.${styles.selected}`);
+    const previousEl: Element | null = document.querySelector(
+      `.${styles.selected}`,
+    );
     // If same element then reset the edit values
     if (el === previousEl) cancelChange();
     // Add selected style to item
     el.classList.add(`${styles.selected}`);
-    el.children[0].children[0].classList.add(`${styles["wrapper-btns-reveal"]}`);
+    el.children[0].children[0].classList.add(
+      `${styles["wrapper-btns-reveal"]}`,
+    );
 
     // Remove from previous; order is important it allows to click on same item to deselect
     previousEl?.classList.remove(`${styles.selected}`);
-    previousEl?.children[0].children[0].classList.remove(`${styles["wrapper-btns-reveal"]}`);
+    previousEl?.children[0].children[0].classList.remove(
+      `${styles["wrapper-btns-reveal"]}`,
+    );
   };
 
   const deleteWord = () => {
-    const socket = socketIOClient(`${process.env.REACT_APP_ENDPOINT}`);
+    const socket = socketIOClient(`${import.meta.env.VITE_APP_ENDPOINT}`);
     setIsLoading(true);
     adapter
       .delete(`/word/${_id}`)
       .then((res) => {
         // Filter list to remove deleted item
-        const updatedList: IWordDb[] = listWord.filter((word: IWord) => word._id !== _id);
+        const updatedList: IWordDb[] = listWord.filter(
+          (word: IWord) => word._id !== _id,
+        );
         // Update the list for new render
         dispatch(updateWordList(updatedList));
         setIsLoading(false);
@@ -105,25 +127,46 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   };
 
   const updateWord = () => {
-    const socket = socketIOClient(`${process.env.REACT_APP_ENDPOINT}`);
+    const socket = socketIOClient(`${import.meta.env.VITE_APP_ENDPOINT}`);
 
     setIsLoading(true);
     // Updating a word function
     // This function does not uppercase/lowercase entries as opposed to the create word one
     // This is for the simple purpose of letting users change entries as they wish for scenarios where casing can be an issue
-    const word: string = (document.querySelector("input[name='edit-word']") as HTMLInputElement).value;
-    const translation: string = (document.querySelector("input[name='edit-translation']") as HTMLInputElement)
-      .value;
-    const definition: string = (
-      document.querySelector("textarea[name='edit-definition']") as HTMLTextAreaElement
+    const word: string = (
+      document.querySelector("input[name='edit-word']") as HTMLInputElement
     ).value;
-    const example: string = (document.querySelector("textarea[name='edit-example']") as HTMLTextAreaElement)
-      .value;
-    const pos: string = (document.querySelector("select[name='edit-pos']") as HTMLSelectElement).value;
-    const gloss: string = (document.querySelector("select[name='edit-gloss']") as HTMLSelectElement).value;
+    const translation: string = (
+      document.querySelector(
+        "input[name='edit-translation']",
+      ) as HTMLInputElement
+    ).value;
+    const definition: string = (
+      document.querySelector(
+        "textarea[name='edit-definition']",
+      ) as HTMLTextAreaElement
+    ).value;
+    const example: string = (
+      document.querySelector(
+        "textarea[name='edit-example']",
+      ) as HTMLTextAreaElement
+    ).value;
+    const pos: string = (
+      document.querySelector("select[name='edit-pos']") as HTMLSelectElement
+    ).value;
+    const gloss: string = (
+      document.querySelector("select[name='edit-gloss']") as HTMLSelectElement
+    ).value;
 
     adapter
-      .put(`/word/${_id}`, { word, translation, definition, example, pos, gloss })
+      .put(`/word/${_id}`, {
+        word,
+        translation,
+        definition,
+        example,
+        pos,
+        gloss,
+      })
       .then((res) => {
         resetValue.current.word = word;
         resetValue.current.definition = translation;
@@ -143,25 +186,46 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   };
 
   // Hangle the change of each tmp value: allows to see changes directly
-  const handleChange = (e: React.ChangeEvent<HTMLElement>, elementName: string) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLElement>,
+    elementName: string,
+  ) => {
     switch (elementName) {
       case "word":
-        setWordObject((prev: IWord) => ({ ...prev, word: (e.target as HTMLInputElement).value }));
+        setWordObject((prev: IWord) => ({
+          ...prev,
+          word: (e.target as HTMLInputElement).value,
+        }));
         break;
       case "translation":
-        setWordObject((prev: IWord) => ({ ...prev, translation: (e.target as HTMLInputElement).value }));
+        setWordObject((prev: IWord) => ({
+          ...prev,
+          translation: (e.target as HTMLInputElement).value,
+        }));
         break;
       case "definition":
-        setWordObject((prev: IWord) => ({ ...prev, definition: (e.target as HTMLTextAreaElement).value }));
+        setWordObject((prev: IWord) => ({
+          ...prev,
+          definition: (e.target as HTMLTextAreaElement).value,
+        }));
         break;
       case "example":
-        setWordObject((prev: IWord) => ({ ...prev, example: (e.target as HTMLTextAreaElement).value }));
+        setWordObject((prev: IWord) => ({
+          ...prev,
+          example: (e.target as HTMLTextAreaElement).value,
+        }));
         break;
       case "pos":
-        setWordObject((prev: IWord) => ({ ...prev, pos: (e.target as HTMLSelectElement).value }));
+        setWordObject((prev: IWord) => ({
+          ...prev,
+          pos: (e.target as HTMLSelectElement).value,
+        }));
         break;
       case "gloss":
-        setWordObject((prev: IWord) => ({ ...prev, gloss: (e.target as HTMLSelectElement).value }));
+        setWordObject((prev: IWord) => ({
+          ...prev,
+          gloss: (e.target as HTMLSelectElement).value,
+        }));
         break;
       default:
         return;
@@ -190,10 +254,11 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
   // Render list element
   return (
     <li
-      className={`${styles.listitem} ${user === userid? "" : styles.collabitem}` }
+      className={`${styles.listitem} ${user === userid ? "" : styles.collabitem}`}
       onDoubleClick={(e) => selectLine(e)}
       tabIndex={0}
-      onKeyDown={(e) => handleKeypress(e)}>
+      onKeyDown={(e) => handleKeypress(e)}
+    >
       <div className={styles["wrapper-edit"]}>
         <div className={styles["wrapper-btns"]}>
           {isLoading ? (
@@ -203,28 +268,32 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
               <button
                 className={`${styles["btn"]} ${styles["btn-delete"]}`}
                 onClick={deleteWord}
-                aria-label={t("ariaLabels.delete")}>
+                aria-label={t("ariaLabels.delete")}
+              >
                 <DeleteIcon />
               </button>
               {editMode ? (
                 <button
                   className={styles["btn"]}
                   onClick={updateWord}
-                  aria-label={t("ariaLabels.editConfirm")}>
+                  aria-label={t("ariaLabels.editConfirm")}
+                >
                   <CheckCircleIcon />
                 </button>
               ) : (
                 <button
                   className={styles["btn"]}
                   onClick={activateEditMode}
-                  aria-label={t("ariaLabels.edit")}>
+                  aria-label={t("ariaLabels.edit")}
+                >
                   <EditIcon />
                 </button>
               )}
               <button
                 className={styles["btn"]}
                 onClick={(e) => selectLine(e)}
-                aria-label={t("ariaLabels.edit")}>
+                aria-label={t("ariaLabels.edit")}
+              >
                 <CancelIcon />
               </button>
             </>
@@ -236,12 +305,20 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
       Repeat for every field.*/}
       {editMode && wordToEdit === _id ? (
         <div>
-          <div className={!columnDisplay ? styles["wrapper-content"] : styles["wrapper-content-block"]}>
+          <div
+            className={
+              !columnDisplay
+                ? styles["wrapper-content"]
+                : styles["wrapper-content-block"]
+            }
+          >
             <span className={styles.word}>
               <input
                 name="edit-word"
                 value={wordObject.word}
-                className={!columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`}
+                className={
+                  !columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`
+                }
                 onChange={(e) => handleChange(e, "word")}
               />
             </span>
@@ -249,7 +326,9 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
               <input
                 name="edit-translation"
                 value={wordObject.translation}
-                className={!columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`}
+                className={
+                  !columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`
+                }
                 onChange={(e) => handleChange(e, "translation")}
               />
             </span>
@@ -262,7 +341,8 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
                     ? `${styles.edit} ${styles["edit-example"]}`
                     : `${styles["edit-block"]} ${styles["edit-block-example"]}`
                 }
-                onChange={(e) => handleChange(e, "definition")}></textarea>
+                onChange={(e) => handleChange(e, "definition")}
+              ></textarea>
             </span>
             <span className={styles.example}>
               <textarea
@@ -273,23 +353,33 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
                     ? `${styles.edit} ${styles["edit-example"]}`
                     : `${styles["edit-block"]} ${styles["edit-block-example"]}`
                 }
-                onChange={(e) => handleChange(e, "example")}></textarea>
+                onChange={(e) => handleChange(e, "example")}
+              ></textarea>
             </span>
             <span className={styles.pos}>
               <select
                 name="edit-pos"
                 value={wordObject.pos}
-                className={!columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`}
-                onChange={(e) => handleChange(e, "pos")}>
+                className={
+                  !columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`
+                }
+                onChange={(e) => handleChange(e, "pos")}
+              >
                 <option disabled hidden></option>
                 <option value="noun">{t("selectPOS.noun")}</option>
                 <option value="verb">{t("selectPOS.verb")}</option>
                 <option value="pronoun">{t("selectPOS.pronoun")}</option>
                 <option value="adjective">{t("selectPOS.adjective")}</option>
                 <option value="adverb">{t("selectPOS.adverb")}</option>
-                <option value="interjection">{t("selectPOS.interjection")}</option>
-                <option value="preposition">{t("selectPOS.preposition")}</option>
-                <option value="conjunction">{t("selectPOS.conjunction")}</option>
+                <option value="interjection">
+                  {t("selectPOS.interjection")}
+                </option>
+                <option value="preposition">
+                  {t("selectPOS.preposition")}
+                </option>
+                <option value="conjunction">
+                  {t("selectPOS.conjunction")}
+                </option>
                 <option value="determiner">{t("selectPOS.determiner")}</option>
                 <option value="number">{t("selectPOS.number")}</option>
               </select>
@@ -298,8 +388,11 @@ const Word = (props: React.PropsWithChildren<IWord>) => {
               <select
                 name="edit-gloss"
                 value={wordObject.gloss}
-                className={!columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`}
-                onChange={(e) => handleChange(e, "gloss")}>
+                className={
+                  !columnDisplay ? `${styles.edit}` : `${styles["edit-block"]}`
+                }
+                onChange={(e) => handleChange(e, "gloss")}
+              >
                 {renderGlossOptions("edit")}
               </select>
             </span>

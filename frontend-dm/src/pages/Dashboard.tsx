@@ -20,9 +20,11 @@ const Dashboard = () => {
   const navigate: NavigateFunction = useNavigate();
 
   const username: string = useAppSelector((state) => state.auth.username);
-  const firstConnection: boolean = useAppSelector((state) => state.auth.firstConnection);
+  const firstConnection: boolean = useAppSelector(
+    (state) => state.auth.firstConnection,
+  );
 
-  const socket = socketIOClient(`${process.env.REACT_APP_ENDPOINT}`);
+  const socket = socketIOClient(`${import.meta.env.VITE_APP_ENDPOINT}`);
 
   useEffect(() => {
     document.title = "Maketionary";

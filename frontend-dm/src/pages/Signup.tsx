@@ -22,14 +22,28 @@ const Signup = () => {
 
   const signup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const email = (document.querySelector("input[name='email']") as HTMLInputElement).value;
-    const username = (document.querySelector("input[name='username']") as HTMLInputElement).value;
-    const password = (document.querySelector("input[name='password']") as HTMLInputElement).value;
-    const confirmPassword = (document.querySelector("input[name='confirm-password']") as HTMLInputElement)
-      .value;
+    const email = (
+      document.querySelector("input[name='email']") as HTMLInputElement
+    ).value;
+    const username = (
+      document.querySelector("input[name='username']") as HTMLInputElement
+    ).value;
+    const password = (
+      document.querySelector("input[name='password']") as HTMLInputElement
+    ).value;
+    const confirmPassword = (
+      document.querySelector(
+        "input[name='confirm-password']",
+      ) as HTMLInputElement
+    ).value;
 
     axios
-      .post(`${process.env.REACT_APP_BACKEND}/api/signup`, { email, username, password, confirmPassword })
+      .post(`${import.meta.env.VITE_APP_BACKEND}/api/signup`, {
+        email,
+        username,
+        password,
+        confirmPassword,
+      })
       .then((res) => {
         if (res.data.message === "User created") {
           // Remove project parameters for new connexion
@@ -69,11 +83,20 @@ const Signup = () => {
 
   // Handle change to check if fields corresponds to their supposed values
   const handleChange = () => {
-    const email = (document.querySelector("input[name='email']") as HTMLInputElement).value;
-    const username = (document.querySelector("input[name='username']") as HTMLInputElement).value;
-    const password = (document.querySelector("input[name='password']") as HTMLInputElement).value;
-    const confirmPassword = (document.querySelector("input[name='confirm-password']") as HTMLInputElement)
-      .value;
+    const email = (
+      document.querySelector("input[name='email']") as HTMLInputElement
+    ).value;
+    const username = (
+      document.querySelector("input[name='username']") as HTMLInputElement
+    ).value;
+    const password = (
+      document.querySelector("input[name='password']") as HTMLInputElement
+    ).value;
+    const confirmPassword = (
+      document.querySelector(
+        "input[name='confirm-password']",
+      ) as HTMLInputElement
+    ).value;
     switch (errorMessage) {
       case t("errorMessages.errorEmptyUsername"):
         if (username !== "") setErrorMessage("");
@@ -88,7 +111,9 @@ const Signup = () => {
         if (password.length > 6) setErrorMessage("");
         break;
       case t("errorMessages.errorPasswordCharacters"):
-        const regexPattern = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])");
+        const regexPattern = new RegExp(
+          "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])",
+        );
         const checkPattern = regexPattern.test(password);
         if (checkPattern) setErrorMessage("");
         break;
@@ -124,7 +149,10 @@ const Signup = () => {
               {t("signup.password")}
             </label>
             <span className={authStyle.tooltip}>
-              ?<span className={authStyle.tooltiptext}>{t("signup.tooltip")}</span>
+              ?
+              <span className={authStyle.tooltiptext}>
+                {t("signup.tooltip")}
+              </span>
             </span>
           </div>
           <input
@@ -133,7 +161,10 @@ const Signup = () => {
             className={authStyle["input-text"]}
             onChange={() => handleChange()}
           />
-          <label htmlFor="confirm-password" className={authStyle["input-label"]}>
+          <label
+            htmlFor="confirm-password"
+            className={authStyle["input-label"]}
+          >
             {t("signup.confirmPassword")}
           </label>
           <input
@@ -148,7 +179,10 @@ const Signup = () => {
           <button type="submit" className={buttons["btn-open"]}>
             {t("signup.signupBtn")}
           </button>
-          <button className={buttons["btn-cancel"]} onClick={() => navigate("/")}>
+          <button
+            className={buttons["btn-cancel"]}
+            onClick={() => navigate("/")}
+          >
             {t("signup.homeBtn")}
           </button>
         </span>

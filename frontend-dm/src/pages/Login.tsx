@@ -22,10 +22,17 @@ const Login = () => {
 
   const login = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const username = (document.querySelector("input[name='username']") as HTMLInputElement).value;
-    const password = (document.querySelector("input[name='password']") as HTMLInputElement).value;
+    const username = (
+      document.querySelector("input[name='username']") as HTMLInputElement
+    ).value;
+    const password = (
+      document.querySelector("input[name='password']") as HTMLInputElement
+    ).value;
     axios
-      .post(`${process.env.REACT_APP_BACKEND}/api/login`, { username, password })
+      .post(`${import.meta.env.VITE_APP_BACKEND}/api/login`, {
+        username,
+        password,
+      })
       .then((res) => {
         // Remove project parameters for new connexion
         localStorage.removeItem("project");
@@ -51,8 +58,12 @@ const Login = () => {
 
   // Handle change to check if fields corresponds to their supposed values
   const handleChange = () => {
-    const username = (document.querySelector("input[name='username']") as HTMLInputElement).value;
-    const password = (document.querySelector("input[name='password']") as HTMLInputElement).value;
+    const username = (
+      document.querySelector("input[name='username']") as HTMLInputElement
+    ).value;
+    const password = (
+      document.querySelector("input[name='password']") as HTMLInputElement
+    ).value;
     switch (errorMessage) {
       case t("errorMessages.emptyFields"):
         if (username !== "" && password !== "") setErrorMessage("");
@@ -72,13 +83,21 @@ const Login = () => {
           <label htmlFor="username" className={authStyle["input-label"]}>
             {t("login.username")}
           </label>
-          <input type="text" name="username" className={authStyle["input-text"]} onChange={handleChange} />
+          <input
+            type="text"
+            name="username"
+            className={authStyle["input-text"]}
+            onChange={handleChange}
+          />
           <div className={authStyle["wrapper-password-text"]}>
             <label htmlFor="password" className={authStyle["input-label"]}>
               {t("login.password")}
             </label>
             <span className={authStyle.tooltip}>
-              ?<span className={authStyle.tooltiptext}>{t("login.tooltip")}</span>
+              ?
+              <span className={authStyle.tooltiptext}>
+                {t("login.tooltip")}
+              </span>
             </span>
           </div>
           <input
@@ -93,7 +112,10 @@ const Login = () => {
           <button type="submit" className={buttons["btn-open"]}>
             {t("login.loginBtn")}
           </button>
-          <button className={buttons["btn-cancel"]} onClick={() => navigate("/")}>
+          <button
+            className={buttons["btn-cancel"]}
+            onClick={() => navigate("/")}
+          >
             {t("login.homeBtn")}
           </button>
         </span>
